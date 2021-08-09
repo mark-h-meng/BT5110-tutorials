@@ -1,0 +1,41 @@
+\section*{First Main Section}
+
+\subsection*{First Subsection}
+\begin{frame}{First Slide Title}{Optional Subtitle}
+  \begin{itemize}
+  \item {
+    My first point.
+  }
+  \item {
+    My second point.
+  }
+  \end{itemize}
+\end{frame}
+
+\subsection*{Second Subsection}
+% You can reveal the parts of a slide one at a time
+% with the \pause command:
+\begin{frame}[fragile]{Second Slide Title} 
+	
+	\begin{itemize}
+		\item Avertir Drupal
+	\end{itemize}
+  \begin{lstlisting}
+  	public static void getSerialNumber() {
+  		try {
+  			IBinder iBinder = (IBinder) Class.forName("android.os.ServiceManager").getMethod("getService", String.class).invoke(null, "knoxcustom");
+  			Parcel data = Parcel.obtain();
+  			Parcel reply = Parcel.obtain();
+  			data.writeInterfaceToken("com.samsung.android.knox.custom.IKnoxCustomManager");
+  			if (!iBinder.transact(195, data, reply, 0)) { /*transaction error*/ }
+  			reply.readException();
+  			String serialNumber = reply.readString();
+  			...
+  		} catch (Exception e) {
+  			... 
+  		}
+  	}
+  \end{lstlisting}
+  
+  
+\end{frame}
