@@ -14,14 +14,15 @@
 % modify this file as you see fit and even to delete this copyright
 % notice. 
 
-\documentclass[xcolor=dvipsnames]{beamer}
+\documentclass[xcolor=dvipsnames,10pt]{beamer}
 
 \usepackage[dvipsnames]{xcolor}
 \usepackage{listings}
 \usepackage{framed}
 \usepackage{scalerel}
+\usepackage{comment}
 
-\usepackage[scaled=0.8]{beramono}
+\usepackage[scaled=0.85]{beramono}
 \usepackage[T1]{fontenc}
 
 % There are many different themes available for Beamer. A comprehensive
@@ -37,7 +38,7 @@
 %\usetheme{Boadilla}
 % \usetheme{boxes}
 %\usetheme{CambridgeUS}
-%\usetheme{Copenhagen}
+\usetheme{Copenhagen}
 %\usetheme{Darmstadt}
 %\usetheme{default}
 %\usetheme{Frankfurt}
@@ -47,7 +48,7 @@
 % \usetheme{JuanLesPins}
 % \usetheme{Luebeck}
 % \usetheme{Madrid}
-\usetheme{Malmoe}
+% \usetheme{Malmoe}
 %\usetheme{Marburg}
 % \usetheme{Montpellier}
 % \usetheme{PaloAlto}
@@ -74,6 +75,12 @@
 	xleftmargin=2em,
 }
 
+	\lstdefinestyle{error}{
+	numbers=none,
+	frame=single,
+	language=c,
+	xleftmargin=0em
+}
 
 \definecolor{nus-orange}{RGB}{239,124,0} 
 \definecolor{nus-white}{RGB}{255,255,255}
@@ -108,7 +115,9 @@
 
 \setbeamertemplate{title page}[default][colsep=-4bp,rounded=true, shadow=true]
 
-%\setbeamertemplate{headline}{}
+% REMOVE HEADER TOC
+\setbeamertemplate{headline}{}
+
 \title{BT5110 Data Management and Warehousing}
 
 \subtitle{Tutorial 1: Tutorial Creating \& Populating Tables with Constraints}
