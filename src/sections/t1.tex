@@ -1,41 +1,202 @@
-\section*{First Main Section}
+\section*{Question 1}
 
-\subsection*{First Subsection}
-\begin{frame}{First Slide Title}{Optional Subtitle}
-  \begin{itemize}
-  \item {
-    My first point.
-  }
-  \item {
-    My second point.
-  }
-  \end{itemize}
+\begin{frame}{Question 1 (a-b)}
+    (a) Download the following files from Luminus ``Files > Cases > Book Exchange''.
+			\begin{itemize}
+				\item[] \texttt{NUNStASchema.sql},
+				\item[] \texttt{NUNStAStudent.sql},
+				\item[] \texttt{NUNStABook.sql},
+				\item[] \texttt{NUNStACopy.sql},
+				\item[] \texttt{NUNStALoan.sql}, and \texttt{NUNStAClean.sql}.
+			\end{itemize}
+			
+    (b) Read the SQL files. What are they doing? 
+    
+    (c) Use the files to create and populate a database (they may need some bug fixing).
 \end{frame}
 
-\subsection*{Second Subsection}
-% You can reveal the parts of a slide one at a time
-% with the \pause command:
+\begin{frame}{Answer 1 (b)}
+	The first file to be run is \texttt{NUNStASchema.sql}. It creates the different tables. The referential integrity constraints (\texttt{FOREIGN KEY}) impose that the table \texttt{copy} and the table \texttt{loan} are created after the tables \texttt{student} and \texttt{book} and in that order.
+	
+	The table \texttt{student} is populated using \texttt{NUNStAStudent.sql}. 
+	
+	The table \texttt{book} is populated using \texttt{NUNStABook.sql}. 
+	
+	\textbf{\textit{These two tables can be populated in any order.}} 
+\end{frame}
+
+\begin{frame}{Answer 1 (b) Cont.}
+	The table \texttt{copy} is populated using \texttt{NUNStACopy.sql}. 
+	
+	The table \texttt{loan} is populated using \texttt{NUNStALoan.sql}. 
+	
+	\textit{\textbf{The table \texttt{copy} and the table \texttt{loan} can only be populated after the tables \texttt{student} and \texttt{book} are populated and in that order because of the referential integrity constraints (\texttt{FOREIGN KEY}).} }
+	
+	The referential integrity constraints (\texttt{FOREIGN KEY}) impose that the table \texttt{loan} and the table \texttt{copy} are deleted before the tables \texttt{student} and \texttt{book} and in that order in \texttt{NUNStAClean.sql} matters.
+\end{frame}
+
+\begin{frame}{Answer 1 (c)}
+
+    There is a bug in \texttt{NUNStASchema.sql}, as the populating order of table \texttt{loan} (line 29-39) and \texttt{copy} (line 41-47) are wrong. 
+    
+    You can fix it by \textbf{\textit{swapping}} these two code sections.
+    
+    Then execute all SQL files except \texttt{NUNStAClean.sql} through PgAdmin.
+\end{frame}
+
+\section*{Question 2}
+
+\begin{frame}{Question 2 (a)}
+    Insert the following new book.
+	
+	\begin{lstlisting}
+		INSERT INTO book VALUES (
+		'An Introduction to Database Systems',
+		'paperback' , 
+		640 , 
+		'English' , 
+		'C. J. Date' , 
+		'Pearson',
+		'2003-01-01' , 
+		'0321197844' , 
+		'978-0321197849');
+    \end{lstlisting}
+\end{frame}
+
+\begin{frame}{Answer 2 (a)}
+    Notice the implicit order of the fields.
+
+	You can check that the insertion was effective with the following query.
+	\begin{lstlisting}
+		SELECT * FROM book;
+    \end{lstlisting}
+
+\end{frame}
+
+\begin{frame}{Question 2 (b)}
+Insert the same book with a different \texttt{ISBN13}, for instance \texttt{'978-0201385908'}.
+\end{frame}
+
+\begin{frame}{Answer 2 (b)}
+\begin{lstlisting}
+		INSERT INTO book VALUES (
+		'An Introduction to Database Systems', 
+		'paperback', 
+		640,
+		'English',
+		'C.J. Date', 
+		'Pearson', 
+		'2003-01-01', 
+		'0321197844',  
+		'978-0201385908');
+\end{lstlisting}
+	
+	The command yields an error  because \texttt{ISBN10} must be unique. PostgreSQL returns the following error message.
+	
+	\begin{verbatim}
+		ERROR:  duplicate key value violates unique constraint "book_isbn10_key"
+		DETAIL:  Key (isbn10)=(0321197844) already exists.
+		SQL state: 23505
+	\end{verbatim}
+	
+\end{frame}
+
+\begin{frame}{Answer 2 (b) Cont.}
+    \textcolor{red}{All messages emitted by the PostgreSQL server are assigned five-character error codes that follow the SQL standard's conventions for ``SQLSTATE'' codes. Applications that need to know which error condition has occurred should usually test the error code, rather than looking at the textual error message.}
+		See \url{www.postgresql.org/docs/13/errcodes-appendix.html}
+\end{frame}
+
+\begin{frame}{Question 2 (c)}
+Insert the same book  with the original \texttt{ISBN13} but with a different \texttt{ISBN10}, for instance \texttt{'0201385902'}.
+\end{frame}
+
+
+\begin{frame}{Answer 2 (c)}
+\begin{lstlisting}
+		INSERT INTO book VALUES (
+		'An Introduction to Database Systems', 
+		'hardcover',
+		938,
+		'English',
+		'C.J. Date',
+		'Addison Wesley Longman',
+		'2000-01-01',
+		'0201385902',
+		'978-0321197849');
+\end{lstlisting}
+	
+	The command yields an error  because  \texttt{ISBN13} is a primary key and therefore unique. PostgreSQL returns the following error message.
+	
+	\begin{verbatim}
+		ERROR:  duplicate key value violates unique constraint "book_pkey"
+		DETAIL:  Key (isbn13)=(978-0321197849) already exists.
+		SQL state: 23505
+	\end{verbatim}
+\end{frame}
+
+
 \begin{frame}[fragile]{Second Slide Title} 
 	
 	\begin{itemize}
 		\item Avertir Drupal
 	\end{itemize}
   \begin{lstlisting}
-  	public static void getSerialNumber() {
-  		try {
-  			IBinder iBinder = (IBinder) Class.forName("android.os.ServiceManager").getMethod("getService", String.class).invoke(null, "knoxcustom");
-  			Parcel data = Parcel.obtain();
-  			Parcel reply = Parcel.obtain();
-  			data.writeInterfaceToken("com.samsung.android.knox.custom.IKnoxCustomManager");
-  			if (!iBinder.transact(195, data, reply, 0)) { /*transaction error*/ }
-  			reply.readException();
-  			String serialNumber = reply.readString();
-  			...
-  		} catch (Exception e) {
-  			... 
-  		}
-  	}
+  	ERROR:  relation "copy" does not exist
+    SQL state: 42P01
   \end{lstlisting}
   
+  2-b
+  \begin{lstlisting}
+  ERROR:  duplicate key value violates unique constraint "book_isbn10_key"
+DETAIL:  Key (isbn10)=(0321197844) already exists.
+SQL state: 23505
+  \end{lstlisting}
   
+  2-c
+  \begin{lstlisting}
+  ERROR:  duplicate key value violates unique constraint "book_pkey"
+DETAIL:  Key (isbn13)=(978-0321197849) already exists.
+SQL state: 23505
+  \end{lstlisting}
+  
+  2-d
+  \begin{lstlisting}
+  ERROR:  duplicate key value violates unique constraint "student_pkey"
+DETAIL:  Key (email)=(tikki@gmail.com) already exists.
+SQL state: 23505
+  \end{lstlisting}
+  
+  2-e (extra)
+  \begin{lstlisting}
+  ERROR:  null value in column "email" of relation "student" violates not-null constraint
+DETAIL:  Failing row contains (RIKKI TAVI , null, 2010-01-01, School of Computing , CS, null).
+SQL state: 23502
+  \end{lstlisting}
+  
+  2-g
+  \begin{lstlisting}
+  ERROR:  update or delete on table "student" violates foreign key constraint "loan_borrower_fkey" on table "loan"
+DETAIL:  Key (email)=(xiexin2011@gmail.com) is still referenced from table "loan".
+SQL state: 23503
+  \end{lstlisting}
+  
+  3-b (case 1: IMMEDIATE)
+  \begin{lstlisting}
+  ERROR:  current transaction is aborted, commands ignored until end of transaction block
+SQL state: 25P02
+  \end{lstlisting}
+  
+  3-b (case 2: DEFFERED)
+  \begin{lstlisting}
+  ERROR:  syntax error at or near "DEFERRED"
+LINE 1: DEFERRED
+        ^
+SQL state: 42601
+Character: 1
+  \end{lstlisting}
+  
+  2-g
+  \begin{lstlisting}
+  
+  \end{lstlisting}
 \end{frame}
