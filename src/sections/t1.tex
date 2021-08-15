@@ -1,3 +1,19 @@
+\section*{Greeting!}
+
+\begin{frame}[fragile]{Greeting!}
+Welcome to BT5110!\vspace{15pt}
+
+\textbf{Mark MENG Huasong} \vspace{15pt}
+
+B.Eng.(Hons), Computer Science, Nanyang Technological University
+
+M.Comp., Infocomm Security, National University of Singapore\vspace{15pt}
+
+Been in cyber-security R&D industry since 2014, came back NUS for PhD in 2019\vspace{15pt}
+
+I will be your TA for the first half of the semester!
+\end{frame}
+
 \section*{Question 1}
 
 \begin{frame}[fragile]{Question 1 (a-b)}
@@ -17,6 +33,16 @@
 \end{frame}
 
 \begin{frame}[fragile]{Solution 1 (b)}
+\begin{figure}
+\includegraphics[width=0.6\textwidth]{src/sections/images/t1-0.png}
+\caption{ER Diagram of NUNStASchema}
+\end{figure}
+\end{frame}
+
+\begin{frame}[fragile]{Solution 1 (b) Cont.}
+
+\begin{columns}
+\column{0.65\textwidth}
 The first file to be run is \texttt{NUNStASchema.sql}. It creates the different tables. The referential integrity constraints (\texttt{FOREIGN KEY}) impose that the table \texttt{copy} and the table \texttt{loan} are created after the tables \texttt{student} and \texttt{book} and in that order.\vspace{10pt}
 
 The table \texttt{student} is populated using \texttt{NUNStAStudent.sql}. \vspace{10pt}
@@ -24,9 +50,16 @@ The table \texttt{student} is populated using \texttt{NUNStAStudent.sql}. \vspac
 The table \texttt{book} is populated using \texttt{NUNStABook.sql}. \vspace{10pt}
 
 \textbf{\textit{These two tables can be populated in any order.}} 
+
+\column{0.35\textwidth}
+\includegraphics[width=\textwidth]{src/sections/images/t1-0.png}
+\end{columns}
 \end{frame}
 
 \begin{frame}[fragile]{Solution 1 (b) Cont.}
+
+\begin{columns}
+\column{0.65\textwidth}
 The table \texttt{copy} is populated using \texttt{NUNStACopy.sql}. \vspace{10pt}
 
 The table \texttt{loan} is populated using \texttt{NUNStALoan.sql}. \vspace{10pt}
@@ -34,6 +67,11 @@ The table \texttt{loan} is populated using \texttt{NUNStALoan.sql}. \vspace{10pt
 \textit{\textbf{The table \texttt{copy} and the table \texttt{loan} can only be populated after the tables \texttt{student} and \texttt{book} are populated and in that order because of the referential integrity constraints (\texttt{FOREIGN KEY}).} } \vspace{10pt}
 
 The referential integrity constraints (\texttt{FOREIGN KEY}) impose that the table \texttt{loan} and the table \texttt{copy} are deleted before the tables \texttt{student} and \texttt{book} and in that order in \texttt{NUNStAClean.sql} matters.
+
+\column{0.35\textwidth}
+\includegraphics[width=\textwidth]{src/sections/images/t1-0.png}
+\end{columns}
+
 \end{frame}
 
 \begin{frame}[fragile]{Solution 1 (c)}
@@ -43,6 +81,10 @@ There is a bug in \texttt{NUNStASchema.sql}, as the populating order of table \t
 You can fix it by \textbf{\textit{swapping}} these two code sections.\vspace{10pt}
 
 Then execute all SQL files except \texttt{NUNStAClean.sql} through PgAdmin.
+
+\begin{alertblock}{Notice}
+You need to execute all those SQL files except \texttt{NUNStAClean.sql} for the sequential quesitons.
+\end{alertblock}
 \end{frame}
 
 \section*{Question 2}
