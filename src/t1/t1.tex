@@ -1,3 +1,25 @@
+\title{BT5110 Data Management and Warehousing}
+
+\subtitle{Tutorial 1: Tutorial Creating \& Populating Tables with Constraints}
+
+\author{Mark Meng Huasong}
+
+\institute[National University of Singapore] % (optional, but mostly needed)
+{
+	School of Computing\\
+	National University of Singapore
+}
+
+\titlegraphic{
+	\includegraphics[width=2cm]{nus-logo}
+}
+
+\date{Aug 2021}
+
+\begin{frame}
+	\titlepage
+\end{frame}
+
 \section*{Greeting!}
 
 \begin{frame}[fragile]{Greeting!}
@@ -9,7 +31,7 @@ B.Eng.(Hons), Computer Science, Nanyang Technological University
 
 M.Comp., Infocomm Security, National University of Singapore\vspace{15pt}
 
-Been in cyber-security R&D industry since 2014, came back NUS for PhD in 2019\vspace{15pt}
+Been in cyber-security R\&D industry since 2014, came back NUS for PhD in 2019\vspace{15pt}
 
 I will be your TA for the first half of the semester!
 \end{frame}
@@ -34,7 +56,7 @@ I will be your TA for the first half of the semester!
 
 \begin{frame}[fragile]{Solution 1 (b)}
 \begin{figure}
-\includegraphics[width=0.6\textwidth]{src/sections/images/t1-0.png}
+\includegraphics[width=0.6\textwidth]{t1/images/t1-0.png}
 \caption{ER Diagram of NUNStASchema}
 \end{figure}
 \end{frame}
@@ -52,7 +74,7 @@ The table \texttt{book} is populated using \texttt{NUNStABook.sql}. \vspace{10pt
 \textbf{\textit{These two tables can be populated in any order.}} 
 
 \column{0.35\textwidth}
-\includegraphics[width=\textwidth]{src/sections/images/t1-0.png}
+\includegraphics[width=\textwidth]{t1/images/t1-0.png}
 \end{columns}
 \end{frame}
 
@@ -69,7 +91,7 @@ The table \texttt{loan} is populated using \texttt{NUNStALoan.sql}. \vspace{10pt
 The referential integrity constraints (\texttt{FOREIGN KEY}) impose that the table \texttt{loan} and the table \texttt{copy} are deleted before the tables \texttt{student} and \texttt{book} and in that order in \texttt{NUNStAClean.sql} matters.
 
 \column{0.35\textwidth}
-\includegraphics[width=\textwidth]{src/sections/images/t1-0.png}
+\includegraphics[width=\textwidth]{t1/images/t1-0.png}
 \end{columns}
 
 \end{frame}
@@ -330,6 +352,11 @@ END TRANSACTION;
 
 In the first transaction, the statement \texttt{SET CONSTRAINTS ALL IMMEDIATE;} checks the reference from the table \texttt{copy} to the table \texttt{book} checkable after each operation. The first deletion of the transaction violates the constraint.
 
+\begin{lstlisting}[style=error]
+ERROR:  current transaction is aborted, commands ignored until end of transaction block
+SQL state: 25P02
+\end{lstlisting}
+
 \end{frame}
 
 
@@ -345,7 +372,7 @@ WHERE book = '978-0321197849';
 END TRANSACTION;
 \end{lstlisting}
 
-When the execution is interrupted, you need to run \texttt{END TRANSACTION;} manually. \vspace{10pt}
+When the execution is interrupted, you need to run ``\texttt{END TRANSACTION;}'' {\color{red} \textbf{\textit{manually}}}. \vspace{10pt}
 
 You can also use commands like \texttt{BEGIN}, \texttt{COMMIT} as well as  \texttt{SAVEPOINT my\_savepoint} and 
 
@@ -456,74 +483,13 @@ ADD FOREIGN KEY (department) REFERENCES department(department);
 \end{frame}
 
 
-\begin{comment}
-\begin{frame}[fragile]{Second Slide Title} 
-
-\begin{itemize}
-\item Avertir Drupal
-\end{itemize}
-\begin{lstlisting}
-ERROR:  relation "copy" does not exist
-SQL state: 42P01
-\end{lstlisting}
-
-2-b
-\begin{lstlisting}
-ERROR:  duplicate key value violates unique constraint "book_isbn10_key"
-DETAIL:  Key (isbn10)=(0321197844) already exists.
-SQL state: 23505
-\end{lstlisting}
-
-2-c
-\begin{lstlisting}
-ERROR:  duplicate key value violates unique constraint "book_pkey"
-DETAIL:  Key (isbn13)=(978-0321197849) already exists.
-SQL state: 23505
-\end{lstlisting}
-
-2-d
-\begin{lstlisting}
-ERROR:  duplicate key value violates unique constraint "student_pkey"
-DETAIL:  Key (email)=(tikki@gmail.com) already exists.
-SQL state: 23505
-\end{lstlisting}
-
-2-e (extra)
-\begin{lstlisting}
-ERROR:  null value in column "email" of relation "student" violates not-null constraint
-DETAIL:  Failing row contains (RIKKI TAVI , null, 2010-01-01, School of Computing , CS, null).
-SQL state: 23502
-\end{lstlisting}
-
-2-g
-\begin{lstlisting}
-ERROR:  update or delete on table "student" violates foreign key constraint "loan_borrower_fkey" on table "loan"
-DETAIL:  Key (email)=(xiexin2011@gmail.com) is still referenced from table "loan".
-SQL state: 23503
-\end{lstlisting}
-
-3-b (case 1: IMMEDIATE)
-\begin{lstlisting}
-ERROR:  current transaction is aborted, commands ignored until end of transaction block
-SQL state: 25P02
-\end{lstlisting}
-
-3-b (case 2: DEFFERED)
-\begin{lstlisting}
-ERROR:  syntax error at or near "DEFERRED"
-LINE 1: DEFERRED
-^
-SQL state: 42601
-Character: 1
-\end{lstlisting}
-
-2-g
-\begin{lstlisting}
-
-\end{lstlisting}
+\begin{frame}[fragile]{End of Tutorial 1}
+	Below is what your database (should) be like by the end of this tutorial:
+	
+	\begin{figure}
+		\includegraphics[width=0.6\textwidth]{t1/images/t1-0.png}
+	\end{figure}
 \end{frame}
-
-\end{comment}
 
 \begin{frame}{}
 \centering  
