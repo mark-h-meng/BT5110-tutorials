@@ -1,6 +1,6 @@
 \title{BT5110 Data Management and Warehousing}
 
-\subtitle{Tutorial 1: Tutorial Creating \& Populating Tables with Constraints}
+\subtitle{Tutorial 1: Creating \& Populating Tables with Constraints}
 
 \author{Mark Meng Huasong}
 
@@ -25,7 +25,7 @@
 \begin{frame}[fragile]{Greeting!}
 Welcome to BT5110!\vspace{15pt}
 
-\textbf{Mark MENG Huasong} \vspace{15pt}
+\textbf{Mark MENG Huasong} (\includegraphics[height=\fontcharht\font`\B]{t1/images/chn-chars.png}) \vspace{15pt}
 
 B.Eng.(Hons), Computer Science, Nanyang Technological University
 
@@ -38,7 +38,7 @@ I will be your TA for the first half of the semester!
 
 \section*{Question 1}
 
-\begin{frame}[fragile]{Question 1 (a-b)}
+\begin{frame}[fragile]{Question 1 (a-c)}
 (a) Download the following files from Luminus ``Files > Cases > Book Exchange''.
 \begin{itemize}
 	\item[] \texttt{NUNStASchema.sql},
@@ -155,11 +155,12 @@ INSERT INTO book VALUES (
 	'978-0201385908');
 \end{lstlisting}
 
+\textcolor{brown}{Can you spot the problem in this code?}
 \end{frame}
 
 \begin{frame}[fragile]{Solution 2 (b) Cont.}
 
-The command yields an error  because \texttt{ISBN10} must be unique. PostgreSQL returns the following error message.
+The command yields an error because \texttt{ISBN10} must be unique. PostgreSQL returns the following error message.
 
 \begin{lstlisting}[style=error]
 ERROR:  duplicate key value violates unique constraint "book_isbn10_key"
@@ -192,6 +193,7 @@ INSERT INTO book VALUES (
 	'978-0321197849');
 \end{lstlisting}
 
+\textcolor{brown}{Will this code work?}
 \end{frame}
 
 \begin{frame}[fragile]{Solution 2 (c) Cont.}
@@ -239,7 +241,7 @@ Notice how we explicitly indicate the order of the fields in the insertion comma
 \end{frame}
 
 \begin{frame}[fragile]{Question \& Solution 2 (e) Cont.}
-Try the following insertion.
+\textbf{Extra}: How about the following code (insertion).
 \begin{lstlisting}
 INSERT INTO student (name, year, faculty, department) 
 	VALUES (
@@ -248,6 +250,11 @@ INSERT INTO student (name, year, faculty, department)
 	'School of Computing', 
 	'CS');
 \end{lstlisting}
+
+\textcolor{brown}{Is this code okay?}
+\end{frame}
+
+\begin{frame}[fragile]{Question \& Solution 2 (e) Cont.}
 The command does not work because \texttt{email} is a primary key and therefore cannot be null.
 
 \begin{lstlisting}[style=error]
@@ -299,8 +306,12 @@ DELETE FROM student
 WHERE department = 'Chemistry';
 \end{lstlisting}
 
+\textcolor{brown}{Will this code work?}
+\end{frame}
 
-Nothing is deleted because a constraint is violated. It is not a programming error. It is part of the control of the access to the data.
+\begin{frame}[fragile]{Question \& Solution 2 (h) Cont.}
+
+Nothing is deleted because a constraint is \textbf{violated}. It is not a programming error. It is part of the control of the access to the data.
 \begin{lstlisting}[style=error]
 ERROR:  update or delete on table "student" violates foreign key constraint "loan_borrower_fkey" on table "loan"
 DETAIL:  Key (email)=(xiexin2011@gmail.com) is still referenced from table "loan".
@@ -316,11 +327,11 @@ Some constraints in PostgreSQL are \texttt{DEFERRABLE}. What does it mean? \vspa
 
 Upon creation, a \texttt{UNIQUE}, \texttt{PRIMARY KEY}, or \texttt{FOREIGN KEY} constraint is given one of three characteristics: \texttt{DEFERRABLE} \texttt{INITIALLY IMMEDIATE}, \texttt{DEFERRABLE INITIALLY DEFERRED}, and \texttt{NOT DEFERRABLE}.  \vspace{10pt}
 
-By default the above constraints and all others are \texttt{NOT DEFERRABLE}. A \texttt{NOT DEFERRABLE} constraint is always \texttt{IMMEDIATE}. By default a \texttt{DEFERRABLE} constraint is \texttt{INITIALLY IMMEDIATE}. \vspace{10pt}
+By default the above constraints and all others are \textcolor{red}{\texttt{NOT DEFERRABLE}}. A \texttt{NOT DEFERRABLE} constraint is always \texttt{IMMEDIATE}. By default a \texttt{DEFERRABLE} constraint is \texttt{INITIALLY IMMEDIATE}. \vspace{10pt}
 
 These qualifications refers to when the constraint is checked: immediately after each operation (\texttt{INSERT}, \texttt{DELETE}, \texttt{UPDATE}), or at the end of the transaction executing the operation. \vspace{10pt}
 
-Although this is not the default setting, it is preferable that all constraints be deferred. Unfortunately, this is only possible for \texttt{UNIQUE}, \texttt{PRIMARY KEY}, and \texttt{FOREIGN KEY} constraints and not for \texttt{CHECK} constraints in the current version of PostgreSQL.
+Although this is not the default setting, it is preferable that all constraints be \textcolor{red}{deferred}. Unfortunately, this is only possible for \texttt{UNIQUE}, \texttt{PRIMARY KEY}, and \texttt{FOREIGN KEY} constraints and not for \texttt{CHECK} constraints in the current version of PostgreSQL.
 \end{frame}
 
 
@@ -336,6 +347,26 @@ INSERT INTO copy VALUES (
 \end{lstlisting}
 
 What is the difference between the following two SQL programs?
+\end{frame}
+
+
+\begin{frame}[fragile]{Question \& Solution 3 (b) Cont.}
+	\begin{lstlisting}
+		BEGIN TRANSACTION;
+		SET CONSTRAINTS ALL IMMEDIATE;
+		DELETE FROM book WHERE ISBN13 = '978-0321197849' ;
+		DELETE FROM copy WHERE book = '978-0321197849' ;
+		END TRANSACTION;
+	\end{lstlisting}
+	
+	\begin{lstlisting}
+		BEGIN TRANSACTION;
+		SET CONSTRAINTS ALL DEFERRED;
+		DELETE FROM book WHERE ISBN13 = '978-0321197849' ;
+		DELETE FROM copy WHERE book = '978-0321197849' ;
+		END TRANSACTION;
+	\end{lstlisting}
+\textcolor{brown}{What is the difference between these two SQL programs?}
 \end{frame}
 
 
@@ -374,9 +405,7 @@ END TRANSACTION;
 
 When the execution is interrupted, you need to run ``\texttt{END TRANSACTION;}'' {\color{red} \textbf{\textit{manually}}}. \vspace{10pt}
 
-You can also use commands like \texttt{BEGIN}, \texttt{COMMIT} as well as  \texttt{SAVEPOINT my\_savepoint} and 
-
-\texttt{ROLLBACK TO my\_savepoint;} to control the flow of transactions.
+You can also use commands like \texttt{BEGIN}, \texttt{COMMIT} as well as  \texttt{SAVEPOINT my\_savepoint} and \texttt{ROLLBACK TO my\_savepoint;} to control the flow of transactions.
 
 \end{frame}
 
@@ -399,8 +428,20 @@ Note that SQLite has a pragma called \texttt{defer\_foreign\_keys} to control de
 \section*{Question 4}
 
 \begin{frame}[fragile]{Question \& Solution 4 (a)}
-Argue that there is no need for the \texttt{available} field of the table \texttt{copy}. Make the necessary changes. \vspace{10pt}
+Argue that there is no need for the \texttt{available} field of the table \texttt{copy}. Make the necessary changes.
+\begin{columns}
+	\column{0.45\textwidth}
+\textcolor{brown}{Do you agree with that? Why?}\\
+\textcolor{brown}{Any potential issue if we keep it?}
+\column{0.5\textwidth}
+\begin{figure}
+	\includegraphics[width=1\textwidth]{t1/images/t1-0.png}
+\end{figure}
+\end{columns}
 
+\end{frame}
+
+\begin{frame}[fragile]{Question \& Solution 4 (a) Cont.}
 \textbf{Solution}:
 The availability of a copy can be derived. \vspace{10pt}
 The following query finds the copies loaned but not returned and therefore not available.
@@ -420,7 +461,7 @@ DROP COLUMN available;
 \end{frame}
 
 \begin{frame}[fragile]{Question \& Solution 4 (a) Cont.}
-We could even create a view \texttt{copy\_view} with the field restored.
+\textbf{Extra}: We could even create a view \texttt{copy\_view} with the field restored.
 
 \begin{lstlisting}
 CREATE OR REPLACE VIEW copy_view (owner, book, copy, available) 
@@ -462,6 +503,11 @@ DROP VIEW copy_view;
 \begin{frame}[fragile]{Question \& Solution 4 (b)}
 Argue that the table \texttt{student} should not contain both the fields \texttt{department} and \texttt{faculty}. Make the necessary changes. \vspace{10pt}
 
+\textcolor{brown}{Do you agree with that? Why?}\\
+\end{frame}
+
+\begin{frame}[fragile]{Question \& Solution 4 (b) Cont.}
+
 \textbf{Solution}:
 The faculty is determined by the department. This information can be stored once and for all in a separate table. The student table needs only to store the department. \vspace{10pt}
 
@@ -488,6 +534,26 @@ ADD FOREIGN KEY (department) REFERENCES department(department);
 	
 	\begin{figure}
 		\includegraphics[width=0.6\textwidth]{t1/images/t1-0.png}
+	\end{figure}
+\end{frame}
+
+\section*{Project 1}
+
+\begin{frame}[fragile]{Submission due this week}
+	(a) Your project 1 (Generating fake but realistic data) is due on this Friday 5:00PM (SGT)
+	\\ \textcolor{red}{\scriptsize(not Anytime on Earth, not 11:59PM, not sure the LumiNus and Internet work well at the last minute)}.\vspace{10pt}
+	
+	(b) Double check your code! Never lose any mark due to \textbf{typo} and \textbf{missing semicolons} (;) \vspace{10pt}
+	
+	(c) Creativity and ``code cleanness'' are always appreciated.
+	\\ \textcolor{red}{\scriptsize(extremely important since you are business students :D)}.\vspace{10pt}
+\end{frame}
+\section*{Project 1}
+
+\begin{frame}[fragile]{Submission due this week: Code Cleanness}
+	Just an example! There are lots of free tools online for you to take advantage... \vspace{10pt}
+	\begin{figure}
+		\includegraphics[width=0.75\textwidth]{t1/images/code_format.png}
 	\end{figure}
 \end{frame}
 
