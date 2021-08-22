@@ -1,4 +1,4 @@
-// "\! cls" to clear the screen
+// "\! cls" (Windows) or "\! clear" (Mac/Ubuntu) to clear the screen
 
 psql -U postgres -h localhost
 
@@ -20,13 +20,14 @@ create table student (
 	CHECK(graduate >= year)
 );
 
-\d students
+\d student
 
 \i 'C:\\Users\\mark\\Desktop\\NUNStAStudent.sql'
+// On Mac, you can just drag the file to the terminal. The command is like "abc=# \i /Users/mark/Documents/NUNStAStudent.sql"
 
 select * from student;
 
 \c postgres
-drop database 5110ABC;
+drop database abc;
 
 \q

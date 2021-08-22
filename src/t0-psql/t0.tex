@@ -67,10 +67,14 @@ Open ``Command Line''/``Windows Terminal'', and type in the command below to con
 \end{frame}
 
 \begin{frame}[fragile]{Connect to psql server on Mac}
-	On Mac, you can just connect to a server by double clicking the specific icon on Postgres app.
+	On Mac, you can just connect to a server by double clicking the specific icon on Postgres app. \vspace{5pt}
 	\begin{figure}
-		\includegraphics[width=0.7\textwidth]{t0-psql/images/1.png}
+		\includegraphics[width=0.4\textwidth]{t0-psql/images/mac1.png}
 	\end{figure}
+
+	If you want to launch it manually on terminal, enter command below (for Postgres 13 only):
+	
+	{\scriptsize \texttt{mark@mac \% /Applications/Postgres.app/Contents/Versions/13/bin/psql -p5432 ``postgres''}}
 \end{frame}
 
 \begin{frame}[fragile]{Create a new database}
@@ -129,9 +133,9 @@ Open ``Command Line''/``Windows Terminal'', and type in the command below to con
 \end{frame}
 
 \begin{frame}[fragile]{Execute an SQL script from files (Cont.)}
-	On Mac, you can just drag the file to the terminal, the path is automatically formatted.
+	On Mac, you can just drag the file to the terminal, the path is automatically formatted.\vspace{20pt}
 	
-	E.g., 
+	E.g., \texttt{abc=\# \textbackslash i /Users/mark/Documents/NUNStAStudent.sql}
 	
 \end{frame}
 
