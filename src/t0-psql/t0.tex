@@ -53,7 +53,7 @@
 
 \section*{Basic database operations}
 
-\begin{frame}[fragile]{Connect to psql server}
+\begin{frame}[fragile]{Connect to psql server on Windows PC}
 
 Open ``Command Line''/``Windows Terminal'', and type in the command below to connect PostgreSQL.
 \begin{figure}
@@ -64,6 +64,13 @@ Open ``Command Line''/``Windows Terminal'', and type in the command below to con
 	Don't just enter ``\texttt{psql}'' as it assumes you are connecting with your Windows login account (e.g., \texttt{\textbf{mark}} in this case). However, in a fresh installed PostgreSQL, there is no such user but only ``\texttt{\textbf{postgres}}''. 
 \end{alertblock}
 
+\end{frame}
+
+\begin{frame}[fragile]{Connect to psql server on Mac}
+	On Mac, you can just connect to a server by double clicking the specific icon on Postgres app.
+	\begin{figure}
+		\includegraphics[width=0.7\textwidth]{t0-psql/images/1.png}
+	\end{figure}
 \end{frame}
 
 \begin{frame}[fragile]{Create a new database}
@@ -115,9 +122,16 @@ Open ``Command Line''/``Windows Terminal'', and type in the command below to con
 		\includegraphics[trim=0 5cm 0 0, clip, width=0.65\textwidth]{t0-psql/images/7.png}
 	\end{figure}
 	
-	\begin{alertblock}{Caution}
+	\begin{alertblock}{Caution (Windows only)}
 		Please be cautious that the file path on Windows must be formatted with double `//' and enclosed within single-quote symbols (``\textit{C:\textbackslash\textbackslash Users\textbackslash\textbackslash mark\textbackslash\textbackslash Desktop\textbackslash\textbackslash NUNStAStudent.sql }'' in this case). Otherwise a \texttt{Permission Denied} error will be returned.
 	\end{alertblock}
+	
+\end{frame}
+
+\begin{frame}[fragile]{Execute an SQL script from files (Cont.)}
+	On Mac, you can just drag the file to the terminal, the path is automatically formatted.
+	
+	E.g., 
 	
 \end{frame}
 
