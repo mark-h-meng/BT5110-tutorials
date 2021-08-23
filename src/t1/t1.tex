@@ -306,7 +306,14 @@ DELETE FROM student
 WHERE department = 'Chemistry';
 \end{lstlisting}
 
-\textcolor{brown}{Will this code work?}
+\begin{columns}
+	\column{0.45\textwidth}	
+	\textcolor{brown}{Will this code work?}
+	\column{0.45\textwidth}
+	\begin{figure}
+		\includegraphics[width=1\textwidth]{t1/images/t1-0.png}
+	\end{figure}
+\end{columns}
 \end{frame}
 
 \begin{frame}[fragile]{Question \& Solution 2 (h) Cont.}
@@ -501,9 +508,16 @@ DROP VIEW copy_view;
 \end{frame}
 
 \begin{frame}[fragile]{Question \& Solution 4 (b)}
-Argue that the table \texttt{student} should not contain both the fields \texttt{department} and \texttt{faculty}. Make the necessary changes. \vspace{10pt}
+Argue that the table \texttt{student} should not contain both the fields \texttt{department} and \texttt{faculty}. Make the necessary changes. 
 
-\textcolor{brown}{Do you agree with that? Why?}\\
+\begin{columns}
+	\column{0.45\textwidth}
+	\textcolor{brown}{Do you agree with that? Why?}
+	\column{0.5\textwidth}
+	\begin{figure}
+		\includegraphics[width=1\textwidth]{t1/images/t1-0.png}
+	\end{figure}
+\end{columns}
 \end{frame}
 
 \begin{frame}[fragile]{Question \& Solution 4 (b) Cont.}
@@ -533,7 +547,7 @@ ADD FOREIGN KEY (department) REFERENCES department(department);
 	Below is what your database (should) be like by the end of this tutorial:
 	
 	\begin{figure}
-		\includegraphics[width=0.6\textwidth]{t1/images/t1-0.png}
+		\includegraphics[width=0.95\textwidth]{t1/images/t1-end.png}
 	\end{figure}
  (plotted by DbVisualizer)
 \end{frame}
