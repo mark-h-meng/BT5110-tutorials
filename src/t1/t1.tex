@@ -362,11 +362,14 @@ INSERT INTO copy VALUES (
 	'TRUE') ;
 \end{lstlisting}
 
-What is the difference between the following two SQL programs?
+What is the difference between the following two SQL programs? (cont. on the next page)
 \end{frame}
 
 
 \begin{frame}[fragile]{Question \& Solution 3 (b) Cont.}
+	
+	What is the difference between the following two SQL programs?\vspace{10pt}
+	
 	\begin{lstlisting}
 		BEGIN TRANSACTION;
 		SET CONSTRAINTS ALL IMMEDIATE;
@@ -385,15 +388,39 @@ What is the difference between the following two SQL programs?
 \textcolor{brown}{What is the difference between these two SQL programs?}
 \end{frame}
 
+\begin{frame}[fragile]{Question \& Solution 3 (b) Cont.}
+\begin{columns}
+	\column{0.45\textwidth}
+	\begin{figure}
+		\includegraphics[width=1\textwidth]{t1/images/t1-0.png}
+	\end{figure}
+		
+	\column{0.55\textwidth}
+\begin{lstlisting}
+CREATE TABLE IF NOT EXISTS book (...
+	ISBN13 CHAR(14) PRIMARY KEY
+...);
+		
+CREATE TABLE IF NOT EXISTS  copy (...
+	book CHAR(14) REFERENCES book(ISBN13) DEFERRABLE,
+...);
+		
+CREATE TABLE IF NOT EXISTS loan (...
+	book CHAR(14),
+...);
+\end{lstlisting}
+\end{columns}
+\vspace{10pt}
+\textcolor{brown}{Book is a foreign key of \texttt{copy}, but NOT a foreign key of \texttt{loan}.}
+\end{frame}
+
 
 \begin{frame}[fragile]{Question \& Solution 3 (b) Cont.}
 \begin{lstlisting}
 BEGIN TRANSACTION;
 SET CONSTRAINTS ALL IMMEDIATE;
-DELETE FROM book 
-WHERE ISBN13 = '978-0321197849' ;
-DELETE FROM copy 
-WHERE book = '978-0321197849' ;
+DELETE FROM book WHERE ISBN13 = '978-0321197849' ;
+DELETE FROM copy WHERE book = '978-0321197849' ;
 END TRANSACTION;
 \end{lstlisting}
 
@@ -412,10 +439,8 @@ This is the default, so the code below has the same issue.
 
 \begin{lstlisting}
 BEGIN TRANSACTION;
-DELETE FROM book 
-WHERE ISBN13 = '978-0321197849';
-DELETE FROM copy 
-WHERE book = '978-0321197849';
+DELETE FROM book WHERE ISBN13 = '978-0321197849';
+DELETE FROM copy WHERE book = '978-0321197849';
 END TRANSACTION;
 \end{lstlisting}
 
