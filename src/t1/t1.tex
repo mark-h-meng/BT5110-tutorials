@@ -14,7 +14,7 @@
 	\includegraphics[width=2cm]{nus-logo}
 }
 
-\date{Aug 2021}
+\date{23 - 27 Aug 2021}
 
 \begin{frame}
 	\titlepage
@@ -336,11 +336,20 @@ Upon creation, a \texttt{UNIQUE}, \texttt{PRIMARY KEY}, or \texttt{FOREIGN KEY} 
 
 By default the above constraints and all others are \textcolor{red}{\texttt{NOT DEFERRABLE}}. A \texttt{NOT DEFERRABLE} constraint is always \texttt{IMMEDIATE}. By default a \texttt{DEFERRABLE} constraint is \texttt{INITIALLY IMMEDIATE}. \vspace{10pt}
 
-These qualifications refers to when the constraint is checked: immediately after each operation (\texttt{INSERT}, \texttt{DELETE}, \texttt{UPDATE}), or at the end of the transaction executing the operation. \vspace{10pt}
+\textbf{These qualifications refers to when the constraint is checked}: immediately after each operation (\texttt{INSERT}, \texttt{DELETE}, \texttt{UPDATE}), or at the end of the transaction executing the operation. \vspace{10pt}
 
 Although this is not the default setting, it is preferable that all constraints be \textcolor{red}{deferred}. Unfortunately, this is only possible for \texttt{UNIQUE}, \texttt{PRIMARY KEY}, and \texttt{FOREIGN KEY} constraints and not for \texttt{CHECK} constraints in the current version of PostgreSQL.
 \end{frame}
 
+\begin{frame}[fragile]{Question \& Solution 3 (a) Cont.}
+Ext. Reading (Optional):\\\vspace{20pt}
+
+\textbf{Deferrable SQL Constraints in Depth}\\
+https://begriffs.com/posts/2017-08-27-deferrable-sql-constraints.html\vspace{10pt}
+
+\textbf{DEFERRED CONSTRAINTS in PostgreSQL}\\
+http://dbadailystuff.com/deferred-constraints-in-postgresql
+\end{frame}
 
 \begin{frame}[fragile]{Question \& Solution 3 (b)}
 Insert the following copy of 'An Introduction to Database Systems' owned by Tikki. \vspace{10pt}
@@ -410,9 +419,11 @@ WHERE book = '978-0321197849';
 END TRANSACTION;
 \end{lstlisting}
 
-When the execution is interrupted, you need to run ``\texttt{END TRANSACTION;}'' {\color{red} \textbf{\textit{manually}}}. \vspace{10pt}
+When the execution is interrupted, you need to run ``\texttt{END TRANSACTION;}'' {\color{red} \textbf{\textit{manually}}}. \vspace{5pt}
 
-You can also use commands like \texttt{BEGIN}, \texttt{COMMIT} as well as  \texttt{SAVEPOINT my\_savepoint} and \texttt{ROLLBACK TO my\_savepoint;} to control the flow of transactions.
+You can also use commands like \texttt{BEGIN}, \texttt{COMMIT} as well as  \texttt{SAVEPOINT my\_savepoint} and \texttt{ROLLBACK TO my\_savepoint;} to control the flow of transactions.\vspace{5pt}
+
+\textbf{Extra}: END is a PostgreSQL extension that provides functionality equivalent to COMMIT, which is specified in the SQL standard.
 
 \end{frame}
 
