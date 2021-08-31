@@ -158,14 +158,20 @@ SELECT book, ((CASE	WHEN returned ISNULL
 \begin{frame}[fragile]{Question 1 (e)}
 
 For each loan of a book published by Wiley that has not been returned, print the title of the book, the name and faculty of the owner and the name and faculty of the borrower. Use \textbf{CROSS JOIN}.
+\vspace{15pt}
+%\begin{figure}
+%	\includegraphics[width=1\textwidth]{t1/images/t1-end.png}
+%\end{figure}
 
-\begin{figure}
-	\includegraphics[width=1\textwidth]{t1/images/t1-end.png}
-\end{figure}
-
-\textcolor{brown}{\scriptsize How many conditions given?\\
-	Which tables are needed to be included in this query? \\
-	how many instances of those tables are needed (e.g., how many students/departments are involved in per query result)?}
+\textcolor{red}{Let's do 4 steps to form your query as follows:\\\vspace{5pt}
+Step (1) FIND all output columns;\\
+Step (2) IDENTIFY all value constraints;\\
+Step (3) CONFIRM all tables involved;\\
+Step (4) CONNECT tables involved (w. necessary relation constraints).}
+\vspace{15pt}
+\begin{center}
+*** LIVE DEMO ***
+\end{center}
 \end{frame}
 
 \begin{comment}
@@ -291,29 +297,6 @@ WHERE b.publisher ='Wiley'
 	
 \end{frame}
 
-
-\begin{frame}[fragile]{Solution 2 (a) Cont.}
-\begin{lstlisting}
-SELECT b.title ,
-	s1. name AS ownername ,
-	d1. faculty AS ownerFaculty ,
-	s2. name AS borrowername ,
-	d2. faculty AS borrowerfaculty
-FROM loan l
-	INNER JOIN book b ON l. book =b. ISBN13
-	INNER JOIN copy c ON c. book = l. book
-		AND c. copy = l. copy AND c. owner = l. owner
-	INNER JOIN student s1 ON l. owner = s1. email
-	INNER JOIN student s2 ON l. borrower = s2. email
-	INNER JOIN department d1 ON s1. department = d1. department
-	INNER JOIN department d2 ON s2. department = d2. department
-WHERE b. publisher ='Wiley'
-	AND l. returned ISNULL ;
-\end{lstlisting} 
-
-\textcolor{red}{\textbf{10}} rows are returned.
-\end{frame}
-
 \begin{frame}[fragile]{Solution 2 (a) Cont.}
 
 You can omit the table \texttt{copy} and the \texttt{copy} column since the existence of the corresponding rows and values is guaranteed by design and by the foreign and primary key constraints.
@@ -333,8 +316,33 @@ FROM loan l
 WHERE  b.publisher ='Wiley'
 	AND l.returned ISNULL;
 \end{lstlisting} 
+
+\textcolor{red}{\textbf{10}} rows are returned.
 \end{frame}
 
+\begin{frame}[fragile]{Solution 2 (a) Cont.}
+	
+	The code below is without omitting table \texttt{copy}. The simplified version is shown on the previous slide.	
+	
+	\begin{lstlisting}
+		SELECT b.title ,
+		s1. name AS ownername ,
+		d1. faculty AS ownerFaculty ,
+		s2. name AS borrowername ,
+		d2. faculty AS borrowerfaculty
+		FROM loan l
+		INNER JOIN book b ON l. book = b. ISBN13
+		INNER JOIN copy c ON c. book = l. book
+		AND c. copy = l. copy AND c. owner = l. owner
+		INNER JOIN student s1 ON l. owner = s1. email
+		INNER JOIN student s2 ON l. borrower = s2. email
+		INNER JOIN department d1 ON s1. department = d1. department
+		INNER JOIN department d2 ON s2. department = d2. department
+		WHERE b. publisher ='Wiley'
+		AND l. returned ISNULL ;
+	\end{lstlisting} 
+	
+\end{frame}
 	
 \begin{frame}[fragile]{Question 2 (b)}
 Print the emails of the different students who borrowed or lent a copy of a book on the day that they joined the university. Use an algebra\"{\i}c query.\\
