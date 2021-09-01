@@ -129,14 +129,22 @@ For each copy that has been borrowed and returned, print the \textbf{duration} o
 \texttt{ASC} is the default, but it is strongly recommended to indicate it for clarity.
 \end{block}	
 
-\textbf{Result}: \textcolor{red}{4871} rows are returned ($\neq$ number of rows in table \texttt{loan}).\\\vspace{10pt}
-\textcolor{brown}{\textbf{Is this result good enough?}} We do have loan records with NULL returned value!
+\textbf{Result}: \textcolor{red}{4871} rows are returned ($\neq$ number of rows in table \texttt{loan}).
+
+\end{frame}
+
+\begin{frame}[fragile]{Solution 1 (d) Cont.}
+
+\textcolor{brown}{\textbf{What if the question ask like follows:}} \\ \vspace{5pt}
+
+For each copy \textcolor{red}{\st{that has been borrowed and returned}}~\textcolor{ForestGreen}{record in the \texttt{loan} table}, print the \textbf{duration} of the loan. Order the results in \textbf{ascending} order of the ISBN13 and \textbf{descending} order of duration.  \\ \vspace{15pt}
+% We do have loan records with NULL returned value! We need to count them in.
 	
 \end{frame}
 
 \begin{frame}[fragile]{Solution 1 (d) Cont.}
 	
-Notice that the duration can be \textbf{null} if the book has not been returned yet. For a complete answer, you need to calculate the duration until a specific date (e.g., December 31, 2010) to include the books that have not been returned yet. \vspace{10pt}
+Notice that the duration can be \textbf{null} if the book has not been returned yet. To answer this question, you need to calculate the duration until a specific date (e.g., December 31, 2010) to include the books that have not been returned yet. \vspace{10pt}
 	
 \begin{lstlisting}
 SELECT book, ((CASE	WHEN returned ISNULL 
@@ -322,7 +330,7 @@ WHERE  b.publisher ='Wiley'
 
 \begin{frame}[fragile]{Solution 2 (a) Cont.}
 	
-	The code below is without omitting table \texttt{copy}. The simplified version is shown on the previous slide.	
+	The code below is \textbf{without omitting table \texttt{copy}}. The simplified version is shown on the previous slide.	
 	
 	\begin{lstlisting}
 		SELECT b.title ,
