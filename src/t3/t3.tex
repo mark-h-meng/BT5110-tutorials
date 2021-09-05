@@ -47,7 +47,7 @@
 
 \section*{Question 1 Aggregate Queries}
 
-\begin{frame}[fragile]{Question 1 (a)}
+\begin{frame}[fragile]{Question 1 Aggregate Queries (a)}
 \underline{How many} loans involve an owner \underline{and} a borrower from the same department?\\ \vspace{10pt}
 
 \textbf{Solution:}\\
@@ -67,6 +67,17 @@ You should have \textcolor{red}{\textbf{502}} observed in the output.
 For \underline{each} faculty, print the \underline{number of loans} that involve an owner \underline{and} a borrower from this faculty?
 \vspace{10pt}
 
+\textcolor{brown}{Which tables are involved in this query?}
+\begin{figure}
+	\includegraphics[width=1\textwidth]{t1/images/t1-end.png}
+\end{figure}\vspace{-10pt}
+{\tiny(plotted by DbVisualizer)}
+\end{frame}
+
+\begin{frame}[fragile]{Question 1 (b) Cont.}
+For \underline{each} faculty, print the \underline{number of loans} that involve an owner \underline{and} a borrower from this faculty?
+\vspace{10pt}
+
 \textbf{Solution:}\\
 \begin{lstlisting}
 SELECT d1.faculty, COUNT(*)
@@ -83,7 +94,7 @@ GROUP by d1.faculty;
 \begin{frame}[fragile]{Question 1 (b) Cont.}
 
 The output should be like as follows (for your reference).\\ \vspace{10pt}
-\begin{lstlisting}[style=terminial]
+\begin{lstlisting}[style=terminal]
              faculty               | count
 -----------------------------------+-------
 Faculty of Arts and Social Science |   379
@@ -98,7 +109,7 @@ School of Computing                |   529
 \begin{frame}[fragile]{Question 1 (c)}
 What are the \underline{average} and the \underline{standard deviation} of the \underline{duration} of a loan? \textcolor{brown}{(assume today is 2010-12-31)}\\ \vspace{10pt}
 
-Recap of Q1 (d) of Tutorial 2: print the duration of each loan:
+\textbf{Recap}: Q1 (d) of Tutorial 2: print the duration of each loan:
 \begin{lstlisting}
 SELECT l.book, ((CASE WHEN l.returned ISNULL 
 	THEN '2010-12-31'
@@ -115,7 +126,7 @@ ORDER BY l.book ASC, l.duration ASC;
 	
 \textbf{Solution:}
 
-\begin{lstlisting}
+\begin{lstlisting}[style=sql-small]
 SELECT AVG((CASE WHEN l.returned ISNULL 
 		THEN '2010-12-31'
 		ELSE l.returned END) - borrowed + 1),
@@ -126,13 +137,19 @@ FROM loan l;
 \end{lstlisting}
 \vspace{5pt}
 The output should be as follows.
-\begin{lstlisting}[style=terminial]	
+\begin{lstlisting}[style=terminal-tiny]	
          avg         |     stddev_pop
 ---------------------+---------------------
  41.4963826366559486 | 38.4206806387009364
 (1 row)	
 \end{lstlisting}
 \vspace{5pt}
+
+\begin{alertblock}{Attention}
+STDDEV\_SAMP and STDDEV are equivalent, which calculate Sample Covariance. 
+While STDDEV\_POP calculate Population Covariance. Here we need to use the latter.
+\end{alertblock}
+
 \textbf{Extra}: \textcolor{brown}{Can we use nested query to simplify it?}
 \end{frame}
 
@@ -152,7 +169,7 @@ FROM (SELECT ((CASE
 
 \section*{Question 2 Nested Queries}
 
-\begin{frame}[fragile]{Question 2 (a)}
+\begin{frame}[fragile]{Question 2 Nested Queries (a)}
 Print the titles of different books that have \underline{never been borrowed}. Use a nested query.\\ \vspace{5pt}
 
 \textcolor{brown}{Which tables are involved in this nested query?}
@@ -259,13 +276,20 @@ HAVING count(*) >= ALL
 	AND s.department = s1.department
 	GROUP BY s1.email);
 \end{lstlisting}\vspace{5pt}
+
+\begin{block}{}
+It is better to add ``ORDER BY s.department'' at the end for better output display, although it is not required by the question.	
+\end{block}
 \end{frame}
 
 
 
 \begin{frame}[fragile]{Question 2 (c) Cont.}
 You should observe the output as follows.\\
-\begin{lstlisting}[style=terminial-tiny]	
+
+\begin{columns}[t]
+\column{0.45\textwidth}
+\begin{lstlisting}[style=terminal-tiny]	
 department |     name      | count
 -----------+---------------+-------
 Geography  | SEAH TECK KEE |    64
@@ -284,22 +308,48 @@ Economics  | LI YUZHAO     |    60
 Physics    | NI HANRAN     |    60
 Chemistry  | XIE XIN       |    56
 (15 rows)
-\end{lstlisting}\vspace{5pt}
+\end{lstlisting}
+(without ORDER BY)\\
+
+\column{0.45\textwidth}
+\begin{lstlisting}[style=terminal-tiny]	
+   department    |     name      | count 
+-----------------+---------------+-------
+Biology          | PENG JIAYUAN  |    80
+CE               | TAY YONG MING |    68
+Chemistry        | XIE XIN       |    56
+Computer Science | LIU ZHENCAI   |    76
+EE               | WANG NA       |    60
+Economics        | LI YUZHAO     |    60
+Geography        | SEAH TECK KEE |    64
+Geography        | ZHANG YUZHAO  |    64
+Geography        | DAVID HALL    |    64
+History          | ZENG YIHUI    |    60
+IS               | ZHANG HONG    |    88
+Language         | NEELAM DEOL   |    68
+ME               | GE DUO        |    64
+Math             | HUANG WENXIN  |    76
+Physics          | NI HANRAN     |    60
+(15 rows)
+\end{lstlisting}
+(with ORDER BY s.department)
+
+\end{columns}
+
 \begin{alertblock}{Warning}
 	Notice that there are three such students in the department of \textbf{Geography}  (that is why one should almost never use TOP N queries). 	
 \end{alertblock}
 \end{frame}
 
-\begin{frame}[fragile]{Question 2 (c) Cont.}
+\begin{frame}[fragile]{Question 2 (c) Cont. - \textcolor{red}{\textit{\textbf{Extra(1)}}}}
 	
-	
-\textbf{Extra:} What if I insert the query below before we execute the solution?
-\begin{lstlisting}
+\textbf{Extra(1):} What if I insert the query below before we execute the solution?
+\begin{lstlisting}[style=sql-small]
 INSERT INTO department VALUES('Business Analytics', 'School of Computing');
-INSERT INTO student VALUES('MARK MENG', 'markmeng@biz.nus.edu.sg', '2010-01-01', 'Business Analytics', '2014-01-01');
+INSERT INTO student VALUES('MARK MENG', 'mark@biz.edu', '2010-01-01', 'Business Analytics', '2014-01-01');
 \end{lstlisting}
 We expect the output to be like:\\
-\begin{lstlisting}[style=terminial-tiny]	
+\begin{lstlisting}[style=terminal-tiny]	
 	department         |     name      | count
 	-------------------+---------------+-------
 	Geography          | SEAH TECK KEE |    64
@@ -320,7 +370,220 @@ We expect the output to be like:\\
 	Business Analytics | MARK MENG     |    0
 	(16 rows)
 \end{lstlisting}
-	\textcolor{brown}{For you to think about it... (out of scope of this tutorial)}
+
+\textcolor{brown}{For you to think about it... (out of scope of this tutorial)}
+\end{frame}
+
+\begin{frame}[fragile]{Question 2 (c) Cont. - Extra(1)}
+	
+To simplify this question, let's create a VIEW first:
+\begin{lstlisting}[style=sql-small]
+CREATE VIEW lender AS
+SELECT  s.department, s.name, count(*) AS count
+FROM student s, loan l
+WHERE l.owner = s.email
+GROUP BY s.department, s.email;
+\end{lstlisting}\vspace{3pt}
+
+How to print those departments \& students without any student lending a book?
+\begin{lstlisting}[style=sql-small]
+SELECT s.department, s.name
+FROM student s LEFT OUTER JOIN loan l 
+ON l.owner = s.email
+WHERE l.borrower ISNULL;
+\end{lstlisting}\vspace{3pt}
+
+The output will be like follows.
+\begin{lstlisting}[style=terminal-tiny]
+     department     |      name      
+--------------------+----------------
+ Computer Science   | RIKKI TAVI
+ Computer Science   | TIKKI TAVI
+ Business Analytics | MARK MENG
+ Computer Science   | ADELINE WONG
+ IS                 | GERALDINE LEE
+ IS                 | TANG CHEE YONG
+\end{lstlisting}
+
+\end{frame}
+
+\begin{frame}[fragile]{Question 2 (c) Cont. \textcolor{red}{\textit{\textbf{Extra(1)}}}}
+
+Let's create the view that includes those department without a lender?
+\begin{lstlisting}
+DROP VIEW lender;
+\end{lstlisting}
+\begin{lstlisting}
+CREATE VIEW lender AS
+(SELECT  s.department, s.name, count(*) AS count
+	FROM student s, loan l
+	WHERE l.owner = s.email
+	GROUP BY s.department, s.email)
+UNION
+(SELECT s.department, s.name, 0 AS count
+	FROM student s LEFT OUTER JOIN loan l 
+	ON l.owner = s.email
+	WHERE l.borrower ISNULL);
+\end{lstlisting}
+
+\end{frame}
+
+\begin{frame}[fragile]{Question 2 (c) Cont. \textcolor{red}{\textit{\textbf{Extra(1)}}}}
+Now let's recap the solution of Q2(c) (on the \textbf{left}), and convert it to the code on the \textbf{right}.
+
+\begin{columns}[t]
+	
+\column{0.49\textwidth}
+\begin{lstlisting}[style=sql-small]
+SELECT  s.department, s.name, count(*)
+FROM student s, loan l
+WHERE l.owner = s.email
+GROUP BY s.department, s.email
+HAVING count(*) >= ALL
+	(SELECT  count(*) 
+	FROM student s1, loan l1
+	WHERE l1.owner = s1.email
+	AND s.department = s1.department
+	GROUP BY s1.email)
+ORDER BY s.department;
+\end{lstlisting}
+
+\column{0.49\textwidth}
+\begin{lstlisting}[style=sql-small]
+SELECT  l.department, l.name, l.count
+FROM lender l
+GROUP BY l.department, l.name, l.count
+HAVING l.count >= ALL
+	(SELECT l2.count 
+	FROM lender l2
+	WHERE l.department = l2.department)
+ORDER BY l.department;
+\end{lstlisting}
+
+\end{columns}
+
+The output below is better, and is in fact the CORRECT one. (see next slide)
+
+\end{frame}
+
+\begin{frame}[fragile]{Question 2 (c) \textcolor{red}{\textit{\textbf{Extra(1)}}}}
+The output:
+
+\begin{lstlisting}[style=terminal-tiny]
+    department     |     name      | count 
+-------------------+---------------+-------
+Biology            | PENG JIAYUAN  |    80
+Business Analytics | MARK MENG     |     0
+CE                 | TAY YONG MING |    68
+Chemistry          | XIE XIN       |    56
+Computer Science   | LIU ZHENCAI   |    76
+EE                 | WANG NA       |    60
+Economics          | LI YUZHAO     |    60
+Geography          | DAVID HALL    |    64
+Geography          | SEAH TECK KEE |    64
+Geography          | ZHANG YUZHAO  |    64
+History            | ZENG YIHUI    |    60
+IS                 | ZHANG HONG    |    88
+Language           | NEELAM DEOL   |    68
+ME                 | GE DUO        |    64
+Math               | HUANG WENXIN  |    76
+Physics            | NI HANRAN     |    60
+(16 rows)
+\end{lstlisting}
+
+\begin{alertblock}{Notice}
+	If you have run those code, don't forget to delete ME from student, as those record are not in the scope of our tutorials.\\
+	E.g., DELETE FROM student WHERE name='MARK MENG';\\
+	DELETE FROM department WHERE department='Business Analytics';
+\end{alertblock}
+\end{frame}
+
+\begin{frame}[fragile]{Question 2 (c) \textcolor{red}{\textit{\textbf{Extra(2)}}}}
+	
+\textbf{Extra(2):} What if the question asks to print the top \textcolor{red}{\textbf{3}} lenders in each department?
+
+\textbf{Hint}: This time we may seek help from the troublesome ``LEFT OUTER JOIN''.
+\end{frame}
+
+\begin{frame}[fragile]{Question 2 (c) \textcolor{red}{\textit{\textbf{Extra(2)}}}}
+	
+\textbf{Solution of Extra(2)}:
+\begin{lstlisting}
+SELECT winner.department, winner.name, winner.count 
+FROM lender winner LEFT OUTER JOIN lender loser
+	ON winner.department=loser.department 
+	AND winner.name<>loser.name 
+	AND winner.count<loser.count
+GROUP BY winner.department, winner.name, winner.count 
+HAVING COUNT(loser.name) < 3
+ORDER BY winner.department;
+\end{lstlisting}
+ 
+\end{frame}
+
+\begin{frame}[fragile]{Question 2 (c) \textcolor{red}{\textit{\textbf{Extra(2)}}}}
+The output will be as follows.
+
+\begin{columns}[t]
+	
+\column{0.49\textwidth}
+\begin{lstlisting}[style=terminal-tiny]
+   department    |          name          | count 
+-----------------+------------------------+-------
+Biology          | CHOY YI TING           |    56
+Biology          | GOH HUI YING           |    72
+Biology          | PENG JIAYUAN           |    80
+CE               | ANUPAMA ANGHAN         |    64
+CE               | DING KUAN CHONG        |    60
+CE               | TAY YONG MING          |    68
+Chemistry        | LISA SMITH             |    40
+Chemistry        | LIU ZHANPENG           |    52
+Chemistry        | XIE XIN                |    56
+Computer Science | ANG JIA YI             |    64
+Computer Science | LIU ZHENCAI            |    76
+Computer Science | SIOW CAO KHOA          |    72
+EE               | LIU JUN                |    48
+EE               | WANG NA                |    60
+EE               | ZHANG CONG             |    48
+Economics        | JERRY BROWN            |    56
+Economics        | LI YUZHAO              |    60
+Economics        | LIU LINXI              |    44
+Geography        | DAVID HALL             |    64
+Geography        | SEAH TECK KEE          |    64
+Geography        | ZHANG YUZHAO           |    64
+\end{lstlisting}
+
+\column{0.49\textwidth}
+\begin{lstlisting}[style=terminal-tiny]
+(Continue)
+Geography        | ZHANG YUZHAO           |    64
+History          | DING YANG              |    56
+History          | ZENG YIHUI             |    60
+History          | ZHU CHANG              |    48
+IS               | HUANG QI               |    60
+IS               | SUBRAMANIAM GHANTASALA |    76
+IS               | ZHANG HONG             |    88	
+Language         | ANNIE CHAPMAN          |    60
+Language         | NEELAM DEOL            |    68
+Language         | NEHAL KANWAT           |    64
+ME               | DENNIS PALMER          |    32
+ME               | GE DUO                 |    64
+ME               | LIU DANNI              |    32
+ME               | NG ANH QUANG           |    32
+Math             | HUANG WENXIN           |    76
+Math             | ZHANG ZHANPENG         |    72
+Math             | ZHANG ZHUO             |    52
+Physics          | GE YUWEI               |    52
+Physics          | NI HANRAN              |    60
+Physics          | TAN CHENG HAN          |    44
+Physics          | TSO HUI LIN            |    44
+(41 rows)
+\end{lstlisting}
+\end{columns}
+\begin{center}	
+\textcolor{red}{Nightmare ends here!}
+\end{center}
+
 \end{frame}
 
 \begin{frame}[fragile]{Question 2 (d)}
@@ -342,7 +605,7 @@ WHERE NOT EXISTS (
 		FROM loan l
 		WHERE l.book = b.isbn13 AND l.borrower = s.email));
 \end{lstlisting}\vspace{5pt}
-\begin{lstlisting}[style=terminial]	
+\begin{lstlisting}[style=terminal]	
           email          |    name
 -------------------------+-------------
  yeojiahao1989@yahoo.com | YEO JIA HAO
@@ -352,11 +615,38 @@ WHERE NOT EXISTS (
 
 \begin{frame}[fragile]{Question 2 (d) Cont.}
 
+\textbf{Interpretation}: We are going to print the emails and the names of students who have borrowed all Adam's book.\\ \vspace{5pt}
+
+Our query must start with:\\
+SELECT s.email, s.name FROM student s... \\ \vspace{5pt}
+
+Then how to use DOUBLE NEGATION to describe this student?
+
+\begin{lstlisting}[style=sql-small]
+SELECT s.email, s.name
+FROM student s  -- if the student has not missed borrowing any book of Adam, that means the student has borrowed all Adam's books. 
+-- next, let's describe the student by using double negation
+WHERE NOT EXISTS ( -- it means ''no such a book by Adam Smith ...''
+	SELECT * 
+	FROM book b
+	WHERE authors = 'Adam Smith' 
+	AND NOT EXISTS ( -- ''... has not been borrowed by the student''
+		SELECT * 
+		FROM loan l
+		WHERE l.book = b.isbn13 AND l.borrower = s.email));
+\end{lstlisting}\vspace{5pt}
+\end{frame}
+
+\begin{frame}[fragile]{Question 2 (d) - \textcolor{red}{\textbf{Extra}}}
+
+\begin{center}
+	\textcolor{red}{Nightmare comes again!!!}
+\end{center}
+
 \textbf{Extra}: Can you spot the difference between the 2 queries below:
 \begin{columns}[t]
 \column{0.49\textwidth}
-	
-\begin{lstlisting}
+\begin{lstlisting}[style=sql-small]
 SELECT s.email, s.name
 FROM student s
 WHERE NOT EXISTS (
@@ -369,14 +659,15 @@ WHERE NOT EXISTS (
 		WHERE l.book = b.isbn13 
 		AND l.borrower = s.email));
 \end{lstlisting}
-\begin{lstlisting}[style=terminial-tiny]	
+\begin{lstlisting}[style=terminal-tiny]	
           email          |    name
 -------------------------+-------------
  yeojiahao1989@yahoo.com | YEO JIA HAO
  (1 row)	
 \end{lstlisting}
+
 \column{0.5\textwidth}
-\begin{lstlisting}
+\begin{lstlisting}[style=sql-small]
 SELECT s.email, s.name
 FROM student s
 WHERE NOT EXISTS (
@@ -390,7 +681,7 @@ WHERE NOT EXISTS (
 		AND l.book = b.isbn13));
 \end{lstlisting}
 
-\begin{lstlisting}[style=terminial-tiny]
+\begin{lstlisting}[style=terminal-tiny]
           email          |      name
 -------------------------+----------------
  glee@msn.com            | GERALDINE LEE
@@ -401,17 +692,70 @@ WHERE NOT EXISTS (
  (5 rows)
 \end{lstlisting}
 \end{columns}
+
 \end{frame}
+
+\begin{comment}
+\end{comment}
+\begin{frame}[fragile]{Question 2 (d) - \textcolor{red}{\textbf{Extra}}}
+
+How to interpret the RHS query?
+\begin{columns}[t]
+\column{0.49\textwidth}
+\begin{lstlisting}[style=sql-small]
+SELECT s.email, s.name
+FROM student s
+WHERE NOT EXISTS (
+	SELECT * 
+	FROM book b
+	WHERE authors = 'Adam Smith' 
+	AND NOT EXISTS (
+		SELECT * 
+		FROM loan l
+		WHERE l.book = b.isbn13 
+		AND l.borrower = s.email));
+\end{lstlisting}
+
+\column{0.5\textwidth}
+\begin{lstlisting}[style=sql-small]
+SELECT s.email, s.name
+FROM student s
+WHERE NOT EXISTS (
+	SELECT * 
+	FROM loan l
+	WHERE l.borrower = s.email
+	AND NOT EXISTS (
+		SELECT *
+		FROM book b
+		WHERE b.authors = 'Adam Smith'
+		AND l.book = b.isbn13));
+\end{lstlisting}
+
+\end{columns}
+
+\textcolor{brown}{Print the names and emails of students who have left NO borrowing record in the loan table, of any book NOT written by Adam Smith}\\
+Output 5 students who actually have never borrowed any book according to the loan table.
+\end{frame}
+
+\begin{frame}[fragile]{Question 2 (d) - \textcolor{red}{\textbf{Extra (2)}}}
+There always exists alternative solution, either simpler or more complicated.\\ \vspace{5pt}
+Can you guy come up with another solution (or idea) to solve this question rather then using DOUBLE NEGATION.\\\vspace{5pt}
+
+\textcolor{brown}{First of all, we may calculate how many books are written by Adam Smith -> 2 books}\\\vspace{5pt}
+\textcolor{brown}{Then select distinct those students who has borrowed at least one book of Adam Smith (i.e., the email of student has ever appeared in loan table as the borrower of Adam Smith's books)}\\\vspace{5pt}
+\textcolor{brown}{Wrap the first two queries into a bigger query, that using HAVING to enforce the aggregate condition to print students who has borrow (2) different books written by Adam Smith according to all records of the loan table}
+
+\end{frame}
+
 \begin{frame}{}
-\centering  
-For any further question, please feel free to email me:\vspace{10pt}
-
-huasong.meng@u.nus.edu \vspace{20pt}
-
-\begin{tcolorbox}
-	\begin{center}
-		\textcolor{red}{Copyright 2021 Mark H. Meng. All rights reserved.}
-	\end{center}
-\end{tcolorbox}
-
+	\centering  
+	For any further question, please feel free to email me:\vspace{10pt}
+	
+	huasong.meng@u.nus.edu \vspace{20pt}
+	
+	\begin{tcolorbox}
+		\begin{center}
+			\textcolor{red}{Copyright 2021 Mark H. Meng. All rights reserved.}
+		\end{center}
+	\end{tcolorbox}
 \end{frame}
