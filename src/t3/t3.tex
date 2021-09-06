@@ -1,6 +1,6 @@
 \title{BT5110 Data Management and Warehousing}
 
-\subtitle{Tutorial 3: Aggregate and Nested Queries}
+\subtitle{Tutorial 3: Aggregate and Nested Queries\\(DRAFT VERSION)}
 
 \author{Mark Meng Huasong}
 
@@ -532,7 +532,19 @@ Physics            | NI HANRAN     |    60
 
 \begin{frame}[fragile]{Question 2 (c) \textcolor{red}{\textit{\textbf{Extra(2)}}}}
 	
-\textbf{Extra(2):} What if the question asks to print the top \textcolor{red}{\textbf{3}} lenders in each department?
+\textbf{Extra(2):} What if the question asks to print the top \textcolor{red}{\textbf{3}} lenders in each department? \\\vspace{5pt}
+
+Suppose we have dropped the VIEW \texttt{lender} or Extra (1).
+And let's create the view again, as the code below:
+
+\begin{lstlisting}[style=sql-small]
+CREATE VIEW lender AS
+SELECT  s.department, s.name, count(*) AS count
+FROM student s, loan l
+WHERE l.owner = s.email
+GROUP BY s.department, s.email;
+\end{lstlisting}\vspace{3pt}
+
 
 \textbf{Hint}: This time we may seek help from the troublesome ``LEFT OUTER JOIN''.
 \end{frame}
@@ -541,16 +553,16 @@ Physics            | NI HANRAN     |    60
 	
 \textbf{Solution of Extra(2)}:
 \begin{lstlisting}
-SELECT winner.department, winner.name, winner.count 
-FROM lender winner LEFT OUTER JOIN lender loser
+SELECT loser.department, loser.name, loser.count 
+FROM lender loser LEFT OUTER JOIN lender winner
 	ON winner.department=loser.department 
 	AND winner.name<>loser.name 
-	AND winner.count<loser.count
-GROUP BY winner.department, winner.name, winner.count 
-HAVING COUNT(loser.name) < 3
-ORDER BY winner.department;
+	AND winner.count>loser.count
+GROUP BY loser.department, loser.name, loser.count -- We only show these three columns, and discard the RHS (winner' details) 
+HAVING COUNT(loser.name) < 3 -- only those students have less than 3 times lending less number of books within the same department are counted as ``top 3'' (in fact those losers are not real losers)
+ORDER BY loser.department;
 \end{lstlisting}
- 
+  
 \end{frame}
 
 \begin{frame}[fragile]{Question 2 (c) \textcolor{red}{\textit{\textbf{Extra(2)}}}}
