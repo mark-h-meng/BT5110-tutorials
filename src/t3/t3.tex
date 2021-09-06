@@ -258,6 +258,10 @@ We can always use ``\texttt{<> ALL}'' as an equivalence of ``\texttt{NOT IN}''. 
 
 \begin{frame}[fragile]{Question 2 (c)}
 For each department, print the names of the students who lent the \underline{most}.
+\begin{figure}
+	\includegraphics[width=1\textwidth]{t1/images/t1-end.png}
+\end{figure}\vspace{-10pt}
+{\tiny(plotted by DbVisualizer)}
 \end{frame}
 
 
@@ -348,6 +352,32 @@ Physics          | NI HANRAN     |    60
 INSERT INTO department VALUES('Business Analytics', 'School of Computing');
 INSERT INTO student VALUES('MARK MENG', 'mark@biz.edu', '2010-01-01', 'Business Analytics', '2014-01-01');
 \end{lstlisting}
+
+\begin{columns}[t]
+\column{0.45\textwidth}
+We observe the output as:\\
+\begin{lstlisting}[style=terminal-tiny]	
+	department         |     name      | count
+	-------------------+---------------+-------
+	Geography          | SEAH TECK KEE |    64
+	Geography          | ZHANG YUZHAO  |    64
+	EE                 | WANG NA       |    60
+	CE                 | TAY YONG MING |    68
+	Math               | HUANG WENXIN  |    76
+	CS                 | LIU ZHENCAI   |    76
+	Geography          | DAVID HALL    |    64
+	ME                 | GE DUO        |    64
+	Language           | NEELAM DEOL   |    68
+	Biology            | PENG JIAYUAN  |    80
+	IS                 | ZHANG HONG    |    88
+	History            | ZENG YIHUI    |    60
+	Economics          | LI YUZHAO     |    60
+	Physics            | NI HANRAN     |    60
+	Chemistry          | XIE XIN       |    56
+	(15 rows)
+\end{lstlisting}
+
+\column{0.49\textwidth}
 We expect the output to be like:\\
 \begin{lstlisting}[style=terminal-tiny]	
 	department         |     name      | count
@@ -371,10 +401,12 @@ We expect the output to be like:\\
 	(16 rows)
 \end{lstlisting}
 
-\textcolor{brown}{For you to think about it... (out of scope of this tutorial)}
+\end{columns}
+
+\textcolor{brown}{Let's think about it... (out of scope of this tutorial)}
 \end{frame}
 
-\begin{frame}[fragile]{Question 2 (c) Cont. - Extra(1)}
+\begin{frame}[fragile]{Question 2 (c) Cont. \textcolor{red}{\textit{\textbf{Extra(1)}}}}
 	
 To simplify this question, let's create a VIEW first:
 \begin{lstlisting}[style=sql-small]
@@ -590,6 +622,11 @@ Physics          | TSO HUI LIN            |    44
 Print the emails and the names of the different students who borrowed \underline{all} the books authored by Adam Smith.
 
 \textcolor{brown}{Can we make use of negation with nested query?}
+
+\begin{figure}
+	\includegraphics[width=1\textwidth]{t1/images/t1-end.png}
+\end{figure}\vspace{-10pt}
+{\tiny(plotted by DbVisualizer)}
 \end{frame}
 
 \begin{frame}[fragile]{Question 2 (d) Cont.}
