@@ -1,6 +1,6 @@
 \title{BT5110 Data Management and Warehousing}
 
-\subtitle{Tutorial 3: Aggregate and Nested Queries\\(DRAFT VERSION)}
+\subtitle{Tutorial 3: Aggregate and Nested Queries}
 
 \author{Mark Meng Huasong}
 
@@ -28,9 +28,9 @@
 
 \begin{frame}[fragile]{Quick Recap: End of Last Tutorial}
 	What we have done in the last week:\\\vspace{5pt}
-	(1) Write simple a query with arithmetic, comparison \& logical operators;\\
-	(2) Write a table joining query (CROSS JOIN and INNER JOIN);\\
-	(4) Write simple a query with the set operators.\\\vspace{5pt}
+	(1) Write simple queries with arithmetic, comparison \& logical operators;\\
+	(2) Write table joining queries (CROSS JOIN and INNER JOIN);\\
+	(4) Write simple queries with the set operators.\\\vspace{5pt}
 	
 	Summary of our database (\# of rows):\\\vspace{5pt}
 	\centering
@@ -203,6 +203,16 @@ WHERE b.ISBN13 <> ALL (
 You should observe \textcolor{red}{\textbf{no}} record given in the output. 
 \end{frame}
 
+\begin{frame}[fragile]{Question 2 (a) Cont.}
+\textbf{Extra}: How many different queries you can write for this question (if nested query is not required)?\\ \vspace{10pt}
+
+(1) (Native) Cross Joining\\
+(2)	Inner Joining\\
+(3) Out Joining (refer to Tutorial 2 Q2 (e))\\
+(4) Set Operation (refer to Tutorial 2 Q2 (e))\\
+(5) Nested Queries (logical equivalence, ``NOT IN'' and ``<> ALL'')
+\end{frame}
+
 \begin{frame}[fragile]{Question 2 (b)}
 Print the name of the different students who \underline{own} a copy of a book that they have \underline{never lent} to anybody.\\ \vspace{5pt}
 
@@ -272,13 +282,13 @@ For each department, print the names of the students who lent the \underline{mos
 SELECT  s.department, s.name, count(*)
 FROM student s, loan l
 WHERE l.owner = s.email
-GROUP BY s.department, s.email
+GROUP BY s.department, s.name
 HAVING count(*) >= ALL
 	(SELECT  count(*) 
 	FROM student s1, loan l1
 	WHERE l1.owner = s1.email
 	AND s.department = s1.department
-	GROUP BY s1.email);
+	GROUP BY s1.name);
 \end{lstlisting}\vspace{5pt}
 
 \begin{block}{}
@@ -403,7 +413,7 @@ We expect the output to be like:\\
 
 \end{columns}
 
-\textcolor{brown}{Let's think about it... (out of scope of this tutorial)}
+%\textcolor{brown}{Let's think about it... (out of scope of this tutorial)}
 \end{frame}
 
 \begin{frame}[fragile]{Question 2 (c) Cont. \textcolor{red}{\textit{\textbf{Extra(1)}}}}
@@ -624,9 +634,9 @@ Physics          | TSO HUI LIN            |    44
 (41 rows)
 \end{lstlisting}
 \end{columns}
-\begin{center}	
-\textcolor{red}{Nightmare ends here!}
-\end{center}
+%\begin{center}	
+%\textcolor{red}{Nightmare ends here!}
+%\end{center}
 
 \end{frame}
 
@@ -688,9 +698,9 @@ WHERE NOT EXISTS ( -- it means ''no such a book by Adam Smith ...''
 
 \begin{frame}[fragile]{Question 2 (d) - \textcolor{red}{\textbf{Extra}}}
 
-\begin{center}
-	\textcolor{red}{Nightmare comes again!!!}
-\end{center}
+%\begin{center}
+%	\textcolor{red}{Nightmare comes again!!!}
+%\end{center}
 
 \textbf{Extra}: Can you spot the difference between the 2 queries below:
 \begin{columns}[t]
@@ -744,11 +754,30 @@ WHERE NOT EXISTS (
 
 \end{frame}
 
+\begin{frame}[fragile]{Question 2 (d) - \textcolor{red}{\textbf{Extra}}}
+
+\begin{lstlisting}[style=sql-small]
+SELECT s.email, s.name
+FROM student s
+WHERE NOT EXISTS (
+	SELECT * 
+	FROM loan l
+	WHERE l.borrower = s.email
+	AND NOT EXISTS (
+		SELECT *
+		FROM book b
+		WHERE b.authors = 'Adam Smith'
+		AND l.book = b.isbn13));
+\end{lstlisting}
+
+\textcolor{brown}{Print the names and emails of students who have left NO borrowing record in the loan table, of any book NOT written by Adam Smith}\\
+Output 5 students who actually have never borrowed any book according to the loan table.
+\end{frame}
 \begin{comment}
 \end{comment}
 \begin{frame}[fragile]{Question 2 (d) - \textcolor{red}{\textbf{Extra}}}
 
-How to interpret the RHS query?
+How to interpret the LHS query and the RHS query?
 \begin{columns}[t]
 \column{0.49\textwidth}
 \begin{lstlisting}[style=sql-small]
@@ -765,6 +794,8 @@ WHERE NOT EXISTS (
 		AND l.borrower = s.email));
 \end{lstlisting}
 
+\textcolor{red}{There is NO SUCH a book written by Adam Smith ... NOT been borrowed by the student}\\
+
 \column{0.5\textwidth}
 \begin{lstlisting}[style=sql-small]
 SELECT s.email, s.name
@@ -780,10 +811,10 @@ WHERE NOT EXISTS (
 		AND l.book = b.isbn13));
 \end{lstlisting}
 
+\textcolor{red}{There is NO SUCH a borrowing record in the loan table ... of any book NOT written by Adam Smith}\\
+
 \end{columns}
 
-\textcolor{brown}{Print the names and emails of students who have left NO borrowing record in the loan table, of any book NOT written by Adam Smith}\\
-Output 5 students who actually have never borrowed any book according to the loan table.
 \end{frame}
 
 \begin{frame}[fragile]{Question 2 (d) - \textcolor{red}{\textbf{Extra (2)}}}
@@ -794,6 +825,7 @@ Can you guy come up with another solution (or idea) to solve this question rathe
 \textcolor{brown}{Then select distinct those students who has borrowed at least one book of Adam Smith (i.e., the email of student has ever appeared in loan table as the borrower of Adam Smith's books)}\\\vspace{5pt}
 \textcolor{brown}{Wrap the first two queries into a bigger query, that using HAVING to enforce the aggregate condition to print students who has borrow (2) different books written by Adam Smith according to all records of the loan table}
 
+Please feel free to let me know (through email or Forum) your (own) solution!
 \end{frame}
 
 \begin{frame}{}
