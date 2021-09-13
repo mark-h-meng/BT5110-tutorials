@@ -26,6 +26,26 @@
 	\end{tcolorbox}
 \end{frame}
 
+\begin{frame}[fragile]{\textcolor{red}{Correction of Q 2(c) of Tutorial 3}}
+\begin{lstlisting}
+	SELECT  s.department, s.name, count(*)
+	FROM student s, loan l
+	WHERE l.owner = s.email
+	-- The line below is buggy, but tolerated by Postgres. 
+	-- GROUP BY s.department, s.email
+	-- The output is correct because s.name is not the primary key 
+	--   so it does affect the group by result. The correct code is
+	--   shown below:
+	GROUP BY s.department, s.email, s.name
+	HAVING count(*) >= ALL
+	(SELECT  count(*) 
+	FROM student s1, loan l1
+	WHERE l1.owner = s1.email
+	AND s.department = s1.department
+	GROUP BY s1.name);
+\end{lstlisting}\vspace{5pt}
+\end{frame}
+
 \begin{frame}[fragile]{Quick Recap: End of Last Tutorial}
 	What we have done in the last week:\\\vspace{5pt}
 	(1) Write simple queries with aggregation;\\
@@ -35,6 +55,12 @@
 \end{frame}
 
 \section*{Question 1 Entity-relationship Design}
+
+\begin{frame}[fragile]{Question 1}
+\begin{figure}
+	\includegraphics[width=0.75\textwidth, trim=0 0 0 0, clip]{t4/images/step1.png}
+\end{figure}
+\end{frame}
 
 \begin{frame}[fragile]{Question 1 (a-b)}
 (a) Identify the entity sets. Justify your choice by quoting the sentences in the text that support it.\\ \vspace{5pt}
@@ -51,22 +77,7 @@
 (d) For each entity set, identify its keys.\\ \vspace{5pt}
 \textbf{Solution}: For the entity set \texttt{member}, there are three attributes: name, address and card number. The card number is the primary key.\\\vspace{3pt}
 For the entity set \texttt{wine}, there are 7 attributes. Three attributes appellation, name and vintage are (composite) keys; four remaining attributes are country of origin, degree of alcohol, certification and bottled details.\\\vspace{3pt}
-For the entity set \texttt{bottle}, there are \textcolor{red}{\textbf{5}} attributes, including in cellar, bottle number and three foreign keys to identify a wine instance. The bottle number is the primary key, and the primary key(s) of the entity set \texttt{wine} is/are the referencing foreign keys. (The Boolean attribute can be derived by in cellar, therefore is not necessary.)
-\end{frame}
-
-\begin{frame}[fragile]{\textcolor{red}{Temp. slide}}
-
-How may attributes for the entity set ``bottle''?
-\begin{figure}
-\begin{columns}
-	\column{0.31\textwidth}
-	\includegraphics[width=1\textwidth]{t4/images/bottle_entity.png}
-	\column{0.31\textwidth}
-	\includegraphics[width=1\textwidth]{t4/images/bottle_entity_1fk.png}
-	\column{0.31\textwidth}
-	\includegraphics[width=1\textwidth]{t4/images/bottle_entity_3fk.png}
-\end{columns}
-\end{figure}	
+For the entity set \texttt{bottle}, there are \textcolor{red}{\textbf{3 or 5}} (let me explain later) attributes, including in cellar, bottle number and three foreign keys to identify a wine instance. The bottle number is the primary key, and the primary key(s) of the entity set \texttt{wine} is/are the referencing foreign keys. (The Boolean attribute can be derived by in cellar, therefore is not necessary.)
 \end{frame}
 
 \begin{frame}[fragile]{Question 1 (a-d) Cont.}
@@ -101,13 +112,16 @@ Let's find the supporting text from the background information provided.\\ \vspa
 
 \begin{frame}[fragile]{Question 1 (a-d) Cont.}
 \begin{columns}
-	\column{0.75\textwidth}
+	\column{0.77\textwidth}
 	\begin{exampleblock}{Entity \textit{bottle} (Paragraph 4)}
 		\textbf{For each wine}, the bottles in the wine cellar of VINO are numbered. For instance, the cellar has 20 bottles \underline{numbered} 1 to 20 of a Semillon from 1996 named Rumbalara. ... The bottles are either available \underline{in the cellar} or they have been tasted and emptied.
 	\end{exampleblock}
-	\column{0.25\textwidth}
+	\column{0.22\textwidth}
 	\begin{figure}
-		\includegraphics[width=0.8\textwidth, trim=0 0 0 0, clip]{t4/images/bottle_entity.png}
+		\includegraphics[width=0.8\textwidth, trim=0 2cm 0 0.3cm, clip]{t4/images/bottle_entity_1fk.png}
+	\end{figure}
+	\begin{figure}
+		\includegraphics[width=0.8\textwidth, trim=0 1.5cm 0 0.3cm, clip]{t4/images/bottle_entity_3fk.png}
 	\end{figure}
 \end{columns}
 \end{frame}
@@ -118,7 +132,7 @@ Let's find the supporting text from the background information provided.\\ \vspa
 \end{exampleblock}
 
 \begin{figure}
-	\includegraphics[width=0.8\textwidth]{t4/images/taste_relationship.png}
+	\includegraphics[width=0.7\textwidth]{t4/images/taste_relationship.png}
 \end{figure}
 \end{frame}
 
@@ -135,9 +149,24 @@ Let's find the supporting text from the background information provided.\\ \vspa
 \end{columns}
 \end{frame}
 
+\begin{frame}[fragile]{Question 1 (a-d) Cont.}
+	
+	How many attributes for the entity set ``bottle''?
+	\begin{figure}
+		\begin{columns}
+			\column{0.31\textwidth}
+			\includegraphics[width=0.8\textwidth]{t4/images/bottle_entity.png}
+			\column{0.31\textwidth}
+			\includegraphics[width=0.8\textwidth]{t4/images/bottle_entity_1fk.png}
+			\column{0.34\textwidth}
+			\includegraphics[width=0.85\textwidth]{t4/images/bottle_entity_3fk.png}
+		\end{columns}
+	\end{figure}	
+\end{frame}
+
 \begin{frame}[fragile]{Question 1 (e)}
 For each entity set and each relationship set in which it participates, indicate the minimum and maximum participation constraints.\\ \vspace{10pt}
-\textbf{Solution}: The relationship \textbf{taste} is an optional many-to-many relationship: both pairs of cardinality constraints are (0, n).\\ \vspace{5pt}
+\textbf{Solution}: The relationship \textbf{taste} is an optional many-to-many relationship: both pairs of cardinality constraints are (0, n). \textcolor{brown}{(number of \{minimum, maximum\} \textbf{outgoing} links)}\\ \vspace{5pt}
 The relationship \textbf{contain} is a one-to-many relationship from wine to bottle. It is mandatory for the bottle entities and optional for the optional for the wine entities. The participation constraints for the entity set \textbf{wine} is (0, n). The participation constraints for the entity set \textbf{bottle} is (1, 1). It could not be otherwise since the entity set bottle is a weak entity (is weakly identified under the relationship set \textbf{contain} and the dominant entity set \textbf{wine}).
 \end{frame}
 
@@ -152,8 +181,14 @@ Draw the corresponding entity-relationship diagram with the key and participatio
 \end{frame}
 
 
+\section*{Question 2 Logical Design \& SQL DDL Code}
+
 \begin{frame}[fragile]{Question 2}
-Translate your entity-relationship diagram into a relational schema. Give the SQL data description language (DDL) statements to create the schema. Declare the necessary integrity constraints. Indicate in English the constraints that cannot be captured, if any.
+Translate your entity-relationship diagram into a relational schema. Give the SQL data description language (DDL) statements to create the schema. Declare the necessary integrity constraints. Indicate in English the constraints that cannot be captured, if any.\\ \vspace{15pt}
+
+\begin{figure}
+	\includegraphics[width=0.75\textwidth, trim=0 0 0 0, clip]{t4/images/step2.png}
+\end{figure}
 \end{frame}
 
 \begin{frame}[fragile]{Question 2 Cont.}
@@ -182,11 +217,14 @@ CREATE TABLE IF NOT EXISTS wines (
 \begin{frame}[fragile]{Question 2 Cont.}
 \begin{lstlisting}[style=sql-small, firstnumber=17]
 -- CONTINUED WITH THE LAST SLIDE
+
+-- Here we merge ``bottles'' and ``contain'' because ``bottles'' is a weak entity. 
 CREATE TABLE IF NOT EXISTS bottles (
 	wine_name VARCHAR(20),
 	vintage DATE,
 	appellation VARCHAR(20),
 	number INTEGER,
+	-- Here we omit the attribute ``in_cellar'' because it can be derived.
 	PRIMARY KEY (number, wine_name, vintage, appellation),
 	FOREIGN KEY (wine_name, vintage, appellation)
 	REFERENCES wines (name, vintage, appellation)
@@ -213,6 +251,18 @@ Logical diagram of tables created:
 
 \begin{figure}
 	\includegraphics[width=0.85\textwidth, trim=0 0 0 0, clip]{t4/images/logical_diagram.jpg}
+\end{figure}
+\end{frame}
+
+\section*{Extra: Participation vs. Logical Design}
+\begin{frame}[fragile]{Extra: Participation vs. Logical Design}
+Can you spot the difference among the 4 cases below? Can you explain what they look like in the logical design? Can you give an example from the real world for each case?\\ \vspace{4pt}
+	
+\begin{figure}
+	\includegraphics[width=0.65\textwidth, trim=0 0 0 0, clip]{t4/images/case1.png}
+	\includegraphics[width=0.65\textwidth, trim=0 0 0 0, clip]{t4/images/case2.png}
+	\includegraphics[width=0.65\textwidth, trim=0 0 0 0, clip]{t4/images/case3.png}
+	\includegraphics[width=0.65\textwidth, trim=0 0 0 0, clip]{t4/images/case4.png}
 \end{figure}
 \end{frame}
 	
