@@ -62,7 +62,7 @@
 \end{figure}
 \end{frame}
 
-\begin{frame}[fragile]{Question 1 (a-b)}
+\begin{frame}[fragile]{Question 1 (a-d)}
 (a) Identify the entity sets. Justify your choice by quoting the sentences in the text that support it.\\ \vspace{5pt}
 \textbf{Solution}: There are three entity sets: \texttt{member}, \texttt{bottle} and \texttt{wine}.\\ \vspace{10pt}
 
@@ -70,7 +70,7 @@
 \textbf{Solution}: There are two relationship sets: \texttt{taste} and \texttt{contain}. The relationship set \texttt{taste} links the entity set \texttt{member} with the entity set \texttt{bottle}. The relationship set \texttt{contain} links the entity set \texttt{wine} with the entity set \texttt{bottle}.
 \end{frame}
 
-\begin{frame}[fragile]{Question 1 (a-b) Cont.}
+\begin{frame}[fragile]{Question 1 (a-d) Cont.}
 (c) For each entity set and relationship set identify its attributes. Justify your choice by quoting the sentences in the text that support it.\\ \vspace{5pt}
 \textbf{Solution}: The relationship set \texttt{taste} has two attributes: date and rating. The relationship set \texttt{contain} has \textbf{\textit{no}} attribute. \\ \vspace{10pt}
 	
@@ -254,8 +254,8 @@ Logical diagram of tables created:
 \end{figure}
 \end{frame}
 
-\section*{Extra: Participation vs. Logical Design}
-\begin{frame}[fragile]{Extra: Participation vs. Logical Design}
+\section*{Extra Practice}
+\begin{frame}[fragile]{Extra Practice: Participation vs. Logical Design}
 Can you spot the difference among the 4 cases below? Can you explain what they look like in the logical design? Can you give an example from the real world for each case?\\ \vspace{4pt}
 	
 \begin{figure}
@@ -265,6 +265,184 @@ Can you spot the difference among the 4 cases below? Can you explain what they l
 	\includegraphics[width=0.65\textwidth, trim=0 0 0 0, clip]{t4/images/case4.png}
 \end{figure}
 \end{frame}
+
+\begin{frame}[fragile]{Extra Practice (Case 1)}
+\begin{figure}
+	\includegraphics[width=0.65\textwidth, trim=0 0 0 0, clip]{t4/images/case1.png}
+\end{figure}
+
+\begin{columns}
+\column{0.5\textwidth}
+\begin{figure}
+	\centering
+	E1 as \textbf{political\_party},\\E2 as \textbf{secretary\_general},\\R as \textbf{led\_by}\vspace{10pt}
+	\scriptsize
+	\begin{tikzpicture}[ele/.style={fill=black,minimum size=1pt,circle}, node distance=5pt]
+		\node[ele,label=left:People's Action] (a1) {};    
+		\node[ele,label=left:Workers (S'pore)] (a2) [below=of a1] {};    
+		\node[ele,label=left:Progress Singapore] (a3) [below=of a2] {};
+		\node[ele,label=left:Reform (S'pore)] (a4) [below=of a3]  {};
+		
+		\node[ele,,label=right:Lee Hsien Loong] (b1) [right=of a1,xshift=15pt] {};
+		\node[ele,,label=right:Francis Yuen] (b2) [below=of b1] {};
+		\node[ele,,label=right:Pritam Singh] (b3) [below=of b2] {};
+		\node[ele,,label=right:Kenneth Jeyaretnam] (b4) [below=of b3] {};
+		
+		%\node[draw,fit= (a1) (a2) (a3) (a4),minimum width=2cm] {} ;
+		%\node[draw,fit= (b1) (b2) (b3) (b4),minimum width=2cm] {} ;  
+		\draw[-,thick,shorten <=2pt,shorten >=2pt] (a1) -- (b1);
+		\draw[-,thick,shorten <=2pt,shorten >=2] (a2) -- (b3);
+		\draw[-,thick,shorten <=2pt,shorten >=2] (a3) -- (b2);
+		\draw[-,thick,shorten <=2pt,shorten >=2] (a4) -- (b4);
+	\end{tikzpicture}
+\end{figure}
+
+\column{0.01\textwidth}
+\column{0.47\textwidth}
+\underline{\textbf{Table E1}}: \\\faIcon{key} name,\\ secretary\_general \\\vspace{5pt}
+\textit{or alternatively, we define}\\\vspace{5pt}
+\underline{\textbf{Table E2}}:\\\faIcon{key} name\\ leading\_party,
+\end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Extra Practice (Case 2)}
+	\begin{figure}
+		\includegraphics[width=0.58\textwidth, trim=0 0 0 0, clip]{t4/images/case2.png}
+	\end{figure}
+	
+	\begin{columns}
+		\column{0.52\textwidth}
+		\begin{figure}
+			\centering
+			E1 as \textbf{parliament\_member},\\E2 as \textbf{political\_party},\\R as \textbf{belongs\_to}\vspace{10pt}
+			\scriptsize
+			\begin{tikzpicture}[ele/.style={fill=black,minimum size=1pt,circle}, node distance=5pt]
+				\node[ele,label=left:Pritam Singh] (a1) {};    
+				\node[ele,label=left:Lee Hsien Loong] (a2) [below=of a1] {};    
+				\node[ele,label=left:K Shanmugam] (a3) [below=of a2] {};
+				\node[ele,label=left:Hazel Poa] (a4) [below=of a3]  {};
+				\node[ele,label=left:Lawrence Wong] (a5) [below=of a4]  {};
+				\node[ele,label=left:Hoon Hian Teck] (a6) [below=of a5]  {};
+				\node[ele,label=left:Jamus Lin] (a7) [below=of a6]  {};
+				\node[ele,label=left:Chan Chun Sing] (a8) [below=of a7]  {};
+				
+				\node[ele,,label=right:People's Action] (b1) [right=of a3,xshift=30pt] {};
+				\node[ele,,label=right:Workers (S'pore)] (b2) [below=of b1] {};
+				\node[ele,,label=right:Reform (S'pore)] (b3) [below=of b2] {};
+				\node[ele,,label=right:Progress S'pore] (b4) [below=of b3] {};
+				
+				%\node[draw,fit= (a1) (a2) (a3) (a4),minimum width=2cm] {} ;
+				%\node[draw,fit= (b1) (b2) (b3) (b4),minimum width=2cm] {} ;  
+				\draw[-,thick,shorten <=2pt,shorten >=2pt] (a1) -- (b2);  
+				\draw[-,thick,shorten <=2pt,shorten >=2pt] (a7) -- (b2);
+				\draw[-,thick,shorten <=2pt,shorten >=2] (a2) -- (b1);
+				\draw[-,thick,shorten <=2pt,shorten >=2] (a3) -- (b1);
+				\draw[-,thick,shorten <=2pt,shorten >=2] (a5) -- (b1);
+				\draw[-,thick,shorten <=2pt,shorten >=2] (a8) -- (b1);
+				\draw[-,thick,shorten <=2pt,shorten >=2] (a4) -- (b4);
+			\end{tikzpicture}
+		\end{figure}
+		
+		\column{0.48\textwidth}
+		\underline{\textbf{Table E1}}: \\\faIcon{key} name \\\vspace{5pt}
+		\underline{\textbf{Table E2}}: \\\faIcon{key} name \\\vspace{5pt}
+		\underline{\textbf{Table R}}: \\\faIcon{key}~\faIcon{arrow-right} member\_name (E1.name), \\
+		\faIcon{key}~\faIcon{arrow-right} affiliation\_party (E2.name)
+		\vspace{5pt}
+	\end{columns}
+\end{frame}
+
+
+\begin{frame}[fragile]{Extra Practice (Case 3)}
+	\begin{figure}
+		\includegraphics[width=0.65\textwidth, trim=0 0 0 0, clip]{t4/images/case3.png}
+	\end{figure}
+	
+	\begin{columns}
+		\column{0.5\textwidth}
+		\begin{figure}
+			\centering
+			E1 as \textbf{government},\\E2 as \textbf{parliament\_member},\\R as \textbf{head}\vspace{10pt}
+			\scriptsize
+			\begin{tikzpicture}[ele/.style={fill=black,minimum size=1pt,circle}, node distance=5pt] 
+				\node[ele,label=left:Prime Minister Office] (a1) {};    
+				\node[ele,label=left:Ministry of Finance] (a2) [below=of a1] {};    
+				\node[ele,label=left:Ministry of Law] (a3) [below=of a2] {};
+				\node[ele,label=left:Ministry of Home Affairs] (a4) [below=of a3]  {};
+				
+				\node[ele,label=right:Pritam Singh] (b1) [right=of a1, above=of a1,xshift=25pt] {};
+				\node[ele,,label=right:K Shanmugam] (b2) [below=of b1] {};
+				\node[ele,,label=right:Lawrence Wong] (b3) [below=of b2] {};
+				\node[ele,,label=right:Jamus Lim] (b4) [below=of b3] {};
+				\node[ele,,label=right:Lee Hsien Loong] (b5) [below=of b4] {};
+				\node[ele,,label=right:Patrick Tay] (b6) [below=of b5] {};
+				
+				%\node[draw,fit= (a1) (a2) (a3) (a4),minimum width=2cm] {} ;
+				%\node[draw,fit= (b1) (b2) (b3) (b4),minimum width=2cm] {} ;  
+				\draw[-,thick,shorten <=1pt,shorten >=1pt] (a1) -- (b5);
+				\draw[-,thick,shorten <=1pt,shorten >=1] (a2) -- (b3);
+				\draw[-,thick,shorten <=1pt,shorten >=1] (a3) -- (b2);
+				\draw[-,thick,shorten <=1pt,shorten >=1] (a4) -- (b2);
+			\end{tikzpicture}
+		\end{figure}
+		
+		\column{0.42\textwidth}
+		
+		\underline{\textbf{Table E1}}: \\\faIcon{key} government\_name\\ \faIcon{arrow-right} name (E2.name) \\\vspace{5pt}
+		\underline{\textbf{Table E2}}: \\\faIcon{key} name
+	\end{columns}
+\end{frame}
+
+
+\begin{frame}[fragile]{Extra Practice (Case 4)}
+	\begin{figure}
+		\includegraphics[width=0.65\textwidth, trim=0 0 0 0, clip]{t4/images/case4.png}
+	\end{figure}
+	
+	\begin{columns}
+		\column{0.5\textwidth}
+		\begin{figure}
+			\centering
+			E1 as \textbf{party},\\E2 as \textbf{country},\\R as \textbf{belongs\_to}\vspace{10pt}
+			\scriptsize
+			\begin{tikzpicture}[ele/.style={fill=black,minimum size=1pt,circle}, node distance=5pt]
+				\node[ele,label=left:People's Action] (a1) {};    
+				\node[ele,label=left:Workers (S'pore)] (a2) [below=of a1] {}; 
+				\node[ele,label=left:Workers (India)] (a3) [below=of a2] {};
+				\node[ele,label=left:Workers (Hungary)] (a4) [below=of a3] {};     
+				\node[ele,label=left:Progress Singapore] (a5) [below=of a4] {};
+				\node[ele,label=left:Reform (S'pore)] (a6) [below=of a5]  {};
+				\node[ele,label=left:Reform (Canada)] (a7) [below=of a6]  {};
+				\node[ele,label=left:Reform (USA)] (a8) [below=of a7]  {};
+				
+				\node[ele,,label=right:Hungary] (b1) [right=of a2,xshift=25pt] {};
+				\node[ele,,label=right:Singapore] (b2) [below=of b1] {};
+				\node[ele,,label=right:Canada] (b3) [below=of b2] {};
+				\node[ele,,label=right:India] (b4) [below=of b3] {};
+				\node[ele,,label=right:Malaysia] (b5) [below=of b4] {};
+				\node[ele,,label=right:USA] (b6) [below=of b5] {};
+				
+				%\node[draw,fit= (a1) (a2) (a3) (a4),minimum width=2cm] {} ;
+				%\node[draw,fit= (b1) (b2) (b3) (b4),minimum width=2cm] {} ;  
+				\draw[-,thick,shorten <=2pt,shorten >=2pt] (a1) -- (b2);
+				\draw[-,thick,shorten <=2pt,shorten >=2] (a2) -- (b2);
+				\draw[-,thick,shorten <=2pt,shorten >=2] (a5) -- (b2);
+				\draw[-,thick,shorten <=2pt,shorten >=2] (a6) -- (b2);
+				\draw[-,thick,shorten <=2pt,shorten >=2] (a3) -- (b4);
+				\draw[-,thick,shorten <=2pt,shorten >=2] (a4) -- (b1);
+				\draw[-,thick,shorten <=2pt,shorten >=2] (a7) -- (b3);
+				\draw[-,thick,shorten <=2pt,shorten >=2] (a8) -- (b6);
+			\end{tikzpicture}
+		\end{figure}
+		
+		\column{0.02\textwidth}
+		\column{0.45\textwidth}
+	
+		\underline{\textbf{Table E1}}: \\\faIcon{key} party\_name\\ \faIcon{key}~\faIcon{arrow-right} country (E2.name) \\\vspace{5pt}
+		\underline{\textbf{Table E2}}: \\\faIcon{key} name
+	\end{columns}
+\end{frame}
+
 	
 \begin{frame}{}
 	\centering  
@@ -274,7 +452,7 @@ Can you spot the difference among the 4 cases below? Can you explain what they l
 	
 	\begin{tcolorbox}
 		\begin{center}
-			\textcolor{red}{Copyright 2021 Mark H. Meng. All rights reserved.}
+			\textcolor{red}{Cases in the extra practice are contributed by our students.\\\vspace{5pt}Copyright 2021 Mark H. Meng. All rights reserved.}
 		\end{center}
 	\end{tcolorbox}
 \end{frame}
