@@ -16,11 +16,11 @@ user='postgres'
 password='admin'
 host='localhost'
 
-EXECUTE_QUERY = True
+EXECUTE_QUERY = False
 KEEP_LINE_BREAK = True
 
 regex = re.compile(r'[\n\r\t]')
-initialize_connecconnection_commandtion_command = "dbname='" + dbname + "' user='" + user + "' host='" + host + "' password='" + password + "'"
+initialize_connecconnection_commandtion_command = "dbname='" + dbname + "' user='" + user + "' host='" + host + "' password='" + password + "'" # + 'connect_timeout = 10'
 
 default_question_pattern = '/* Question '
 
@@ -76,12 +76,19 @@ def extract_student_answers(submission_files, project_questions, csv_format = ['
     header = ['student']
     for qn in project_questions:
         header.append(qn)
+        if EXECUTE_QUERY:
+            header.append('output')
         for col in csv_format:
             header.append(col)
 
     writer.writerow(header)
+
+    total_num_files = len(student_file_lst)
+    file_count = 1
+    
     for index, item in enumerate(student_file_lst):
         student_row = [student_id_lst[index]]
+        print("[" + "{:.2%}".format(file_count/total_num_files) + "] Reading submission: " + student_id_lst[index], end = "")
 
         input_file = open(item, 'r', encoding="utf8")
         reader_lines = input_file.readlines()
@@ -90,7 +97,8 @@ def extract_student_answers(submission_files, project_questions, csv_format = ['
         question_index = -1 # Each submission file always starts with student's info
         solution_string = ''
 
-        only_export_partial_result = False
+        extra_comment = ''
+
         # Strips the newline character
         for line in reader_lines:
             line_count += 1
@@ -102,13 +110,20 @@ def extract_student_answers(submission_files, project_questions, csv_format = ['
                     student_row.append(solution_string.strip())
 
                     if EXECUTE_QUERY:
-                        psql_execute_query(solution_string.replace('\n', ' '))
+                        # rows = psql_execute_query(solution_string.replace('\n', ' '), question="("+project_questions[question_index]+")")
+                        rows = psql_execute_query(solution_string, question="("+project_questions[question_index]+")")
+                        student_row.append(summarize_sql_output(rows)) 
+
+                    if solution_string.find(';') < 0:
+                        extra_comment = 'Missing semicolon, CHECK CODE.'
 
                     # Leave an empty cell for comments and/or grading                    
                     for col in csv_format:
-                        student_row.append(" ") 
-
+                        student_row.append(extra_comment) 
+                    
+                    extra_comment = ''
                     solution_string = ''
+                print('.', end = "")
                 question_index += 1
                 logging.debug("SOLUTION OF " + project_questions[question_index] + " IS SHOWN BELOW:")
 
@@ -125,13 +140,15 @@ def extract_student_answers(submission_files, project_questions, csv_format = ['
                         comment_loc_end = line.find('*/')
                         line_without_comment = line[0:comment_loc_start] + line[comment_loc_end + 2:]
                         line = line_without_comment
+                    
+                    if line.find('--') >= 0:
+                        line = ""
 
                     if KEEP_LINE_BREAK:
                         if len(line.strip()) == 0:
                             line = ""
                     else:
                         line = line.strip()
-    
     
                     logging.info("Line{}: {}".format(line_count, line))
 
@@ -140,16 +157,22 @@ def extract_student_answers(submission_files, project_questions, csv_format = ['
         student_row.append(solution_string.strip())
         
         if EXECUTE_QUERY:
-            psql_execute_query(solution_string.replace('\n', ' '))
+            rows = psql_execute_query(solution_string, question="("+project_questions[question_index]+")")
+            student_row.append(summarize_sql_output(rows)) 
+        
+        if solution_string.find(';') < 0:
+            extra_comment = 'Missing semicolon, CHECK CODE.'  
 
-        # Leave an empty cell for comments and/or grading                    
         for col in csv_format:
-            student_row.append(" ") 
+            student_row.append(extra_comment) 
         
         writer.writerow(student_row)
+        
+        print('.')
+        file_count += 1
     output_file.close()
 
-def psql_execute_query(query):
+def psql_execute_query(query, question=""):
     try:     
         rows = []
         conn = psycopg2.connect(initialize_connecconnection_commandtion_command)
@@ -162,14 +185,24 @@ def psql_execute_query(query):
             
             rows.append(cur.fetchall())
         except psycopg2.Error as errorMsg:
-            print(errorMsg)        
+            print(errorMsg, question, end="")        
             conn.rollback()
-        for index, row in enumerate(rows):
-            print(len(row), "row(s) returned")
+        #for index, row in enumerate(rows):
+        #    print(len(row), "row(s) returned")
         return rows
     except Exception as error:
-        print("Database query error: ", error)
-        print("Exception TYPE:", type(error))
+        print("Database query error: ", error, question, end="")
+        print("Exception TYPE:", type(error), question, end="")
+
+def summarize_sql_output(rows):
+    if rows is None or len(rows) < 1:
+        return "No output"
+    output_summary = str(len(rows[0])) + ", " 
+    if len(rows[0]) > 3:
+        output_summary = output_summary + str(rows[0][:3])
+    else:
+        output_summary = output_summary + str(rows[0])
+    return output_summary
 
 
 def validate_sql_output(query_output_rows, num_rows, rows_checklist=[], sorted=False):
