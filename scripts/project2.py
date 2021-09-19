@@ -114,8 +114,9 @@ def extract_student_answers(submission_files, project_questions, csv_format = ['
                         rows = psql_execute_query(solution_string, question="("+project_questions[question_index]+")")
                         student_row.append(summarize_sql_output(rows)) 
 
-                    if solution_string.find(';') < 0:
-                        extra_comment = 'Missing semicolon, CHECK CODE.'
+                        extra_comment = check_semicolons(solution_string, extra_comment)
+                        if question_index == 5 or question_index == 6:
+                            extra_comment = check_aggregation_free(solution_string, extra_comment)
 
                     # Leave an empty cell for comments and/or grading                    
                     for col in csv_format:
@@ -160,8 +161,9 @@ def extract_student_answers(submission_files, project_questions, csv_format = ['
             rows = psql_execute_query(solution_string, question="("+project_questions[question_index]+")")
             student_row.append(summarize_sql_output(rows)) 
         
-        if solution_string.find(';') < 0:
-            extra_comment = 'Missing semicolon, CHECK CODE.'  
+        extra_comment = check_semicolons(solution_string, extra_comment)
+        if question_index == 5 or question_index == 6:
+            extra_comment = check_aggregation_free(solution_string, extra_comment)
 
         for col in csv_format:
             student_row.append(extra_comment) 
@@ -300,6 +302,37 @@ def generate_auditing_creteria():
         ('87-5899014', 'Nicolas, Olson and Krajcik')])
 
     return list_num_rows, list_rows_checklist, list_sorted
+
+
+def check_aggregation_free(solution, comment=''):
+    clue_str = ''
+    if re.search('having ', solution, re.IGNORECASE):
+        clue_str += ' HAVING '
+    if re.search('group by ', solution, re.IGNORECASE):
+        clue_str += ' GROUP-BY '
+    if re.search(' sum(', solution, re.IGNORECASE):
+        clue_str += ' SUM '
+    if re.search(' count(', solution, re.IGNORECASE):
+        clue_str += ' COUNT '
+    if re.search(' avg(', solution, re.IGNORECASE):
+        clue_str += ' AVG '
+    if re.search(' min(', solution, re.IGNORECASE):
+        clue_str += ' MIN '
+    if re.search(' max(', solution, re.IGNORECASE):
+        clue_str += ' MAX '
+    
+    if len(clue_str) > 0:
+        if len(comment) > 0:
+            comment += '\n' 
+        comment = 'Aggregation is used, CHECK CODE.'  
+    return comment
+
+def check_semicolons(solution, comment=''):
+    if solution.find(';') < 0:
+        if len(comment) > 0:
+            comment += '\n' 
+        comment = 'Missing semicolon, CHECK CODE.'  
+    return comment
 
 dirpath=('submission\\project2\\')
 arr = retrieve_all_submission_files(dirpath)
