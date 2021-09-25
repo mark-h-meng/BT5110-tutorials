@@ -1,0 +1,390 @@
+student,2.a,output,comment,grade,2.b,output,comment,grade,2.c,output,comment,grade,3,output,comment,grade
+A0232009U,"SELECT per.empid, per.lname
+FROM employee per RIGHT OUTER JOIN payroll pay 
+    ON per.empid = pay.empid
+WHERE pay.salary = 189170
+ORDER BY per.empid, per.lname;","4, [(' 02883   ', 'YFXUNCRKRJRKCRJ')]",,,"SELECT per.empid, per.lname
+FROM employee per, (SELECT pay.empid FROM payroll pay WHERE pay.salary = 189170) AS temp
+WHERE per.empid = temp.empid
+ORDER BY per.empid, per.lname;","4, [(' 02883   ', 'YFXUNCRKRJRKCRJ')]",,,"SELECT per.empid, per.lname
+FROM employee per
+WHERE NOT EXISTS (
+    SELECT *
+    FROM payroll pay
+    WHERE pay.salary <> 189170 and pay.empid = per.empid)
+ORDER BY per.empid, per.lname;","4, [(' 02883   ', 'YFXUNCRKRJRKCRJ')]",,,"SELECT per.empid, per.lname
+FROM employee per
+GROUP BY per.empid, per.lname
+HAVING per.empid = ANY(
+	SELECT pay.empid
+	FROM payroll pay
+	WHERE pay.empid = per.empid and pay.salary = 189170)
+ORDER BY per.empid, per.lname;",,
+A0232012E,"SELECT per.empid, per.lname
+FROM employee per RIGHT OUTER JOIN payroll pay 
+    ON per.empid = pay.empid AND pay.salary = 189170
+WHERE pay.salary = 189170
+ORDER BY per.empid, per.lname;","4, [(' 02883   ', 'YFXUNCRKRJRKCRJ')]",,,"SELECT per.empid, per.lname
+FROM employee per, (SELECT * FROM payroll pay WHERE pay.salary = 189170) AS temp
+	WHERE per.empid = temp.empid
+ORDER BY per.empid, per.lname;","4, [(' 02883   ', 'YFXUNCRKRJRKCRJ')]",,,"SELECT per.empid, per.lname
+FROM employee per
+WHERE NOT EXISTS (
+    SELECT pay.empid FROM payroll pay WHERE pay.salary <> 189170 AND pay.empid = per.empid)
+ORDER BY per.empid, per.lname;","4, [(' 02883   ', 'YFXUNCRKRJRKCRJ')]",,,"SELECT per.empid, per.lname
+ FROM employee per
+ WHERE per.empid NOT IN(
+	 SELECT pay.empid
+	 FROM payroll pay
+	 WHERE pay.salary < 189170
+ 	 OR pay.empid NOT IN(
+ 	 SELECT pay2.empid
+	 FROM payroll pay2
+	 WHERE pay2.salary <= 189170));",,
+A0232013A,"SELECT per.empid, per.lname
+FROM employee per RIGHT OUTER JOIN payroll pay 
+    ON per.empid = pay.empid AND pay.salary = 189170
+WHERE per.empid IS NOT NULL
+ORDER BY per.empid, per.lname;","4, [(' 02883   ', 'YFXUNCRKRJRKCRJ')]",,,"SELECT per.empid, per.lname
+FROM employee per, (SELECT * FROM payroll) AS temp
+	WHERE per.empid = temp.empid AND temp.salary = 189170
+ORDER BY per.empid, per.lname;","4, [(' 02883   ', 'YFXUNCRKRJRKCRJ')]",,,"SELECT per.empid, per.lname
+FROM employee per
+WHERE NOT EXISTS (
+    SELECT pay.empid
+	FROM payroll pay
+	WHERE pay.salary != 189170 AND per.empid = pay.empid)
+ORDER BY per.empid, per.lname;","4, [(' 02883   ', 'YFXUNCRKRJRKCRJ')]",,,"SELECT main.empid, main.lname
+FROM ( SELECT per.lname, per.fname, per.address, per.city, per.state, per.zip, pay.empid, pay.bonus, pay.salary
+FROM employee per RIGHT OUTER JOIN payroll pay ON pay.empid >= per.empid
+GROUP BY per.lname, per.fname, per.address, per.city, per.state, per.zip, pay.empid, pay.bonus, pay.salary
+HAVING MIN(pay.salary) >= 189170
+INTERSECT
+SELECT per.lname, per.fname, per.address, per.city, per.state, per.zip, pay.empid, pay.bonus, pay.salary
+FROM employee per
+RIGHT OUTER JOIN (SELECT * FROM payroll) AS pay
+ON pay.empid <= per.empid
+GROUP BY per.lname, per.fname, per.address, per.city, per.state, per.zip, pay.empid, pay.bonus, pay.salary
+HAVING MAX(pay.salary) <= 189170 ) AS main
+WHERE main.empid IS NOT NULL
+ORDER BY main.empid, main.lname;",,
+A0232015Y,"SELECT per.empid, per.lname
+FROM employee per RIGHT OUTER JOIN payroll pay 
+    ON per.empid=pay.empid AND pay.salary = 189170
+WHERE per.empid notnull
+ORDER BY per.empid, per.lname;
+select test (
+'SELECT per.empid, per.lname
+FROM employee per RIGHT OUTER JOIN payroll pay 
+    ON per.empid=pay.empid AND pay.salary = 189170
+WHERE per.empid notnull
+ORDER BY per.empid, per.lname;',100)","4, [(' 02883   ', 'YFXUNCRKRJRKCRJ')]","Multiple semicolons detected, CHECK CODE. 
+Test function invocation found in answer, CHECK CODE. ",,"SELECT per.empid, per.lname
+FROM employee per, (SELECT pay.empid
+					from payroll pay 
+					where pay.salary = 189170) AS temp
+	WHERE per.empid=temp.empid
+ORDER BY per.empid, per.lname;
+select test (
+'SELECT per.empid, per.lname
+FROM employee per, (SELECT pay.empid
+					from payroll pay 
+					where pay.salary = 189170) AS temp
+	WHERE per.empid=temp.empid
+ORDER BY per.empid, per.lname;',100)","4, [(' 02883   ', 'YFXUNCRKRJRKCRJ')]","Multiple semicolons detected, CHECK CODE. 
+Test function invocation found in answer, CHECK CODE. ",,"SELECT per.empid, per.lname
+FROM employee per
+WHERE NOT EXISTS (
+    SELECT pay.empid from payroll pay
+    where pay.salary <> 189170
+    and per.empid=pay.empid)
+ORDER BY per.empid, per.lname;
+select test (
+'SELECT per.empid, per.lname
+FROM employee per
+WHERE NOT EXISTS (
+    SELECT pay.empid from payroll pay
+    where pay.salary <> 189170
+    and per.empid=pay.empid)
+ORDER BY per.empid, per.lname;',100)","4, [(' 02883   ', 'YFXUNCRKRJRKCRJ')]","Multiple semicolons detected, CHECK CODE. 
+Test function invocation found in answer, CHECK CODE. ",,"SELECT per.empid, per.lname
+FROM employee per,payroll pay1
+where per.empid=pay1.empid
+and pay1.salary <=ALL (
+    SELECT pay3.salary from payroll pay3
+    where pay3.salary >=189170)
+and pay1.salary >=ALL (
+    SELECT pay2.salary from payroll pay2
+    where pay2.salary <=189170)
+ORDER BY per.empid, per.lname;
+select test (
+'SELECT per.empid, per.lname
+FROM employee per,payroll pay1
+where per.empid=pay1.empid
+and pay1.salary <=ALL (
+    SELECT pay3.salary from payroll pay3
+    where pay3.salary >=189170)
+and pay1.salary >=ALL (
+    SELECT pay2.salary from payroll pay2
+    where pay2.salary <=189170)
+ORDER BY per.empid, per.lname;',20)","Multiple semicolons detected, CHECK CODE. 
+Test function invocation found in answer, CHECK CODE. ",
+A0232016X,"SELECT per.empid, per.lname
+FROM employee per RIGHT OUTER JOIN payroll pay 
+    ON per.empid = pay.empid AND pay.salary = 189170
+WHERE per.empid IS NOT NULL
+ORDER BY per.empid, per.lname;","4, [(' 02883   ', 'YFXUNCRKRJRKCRJ')]",,,"SELECT per.empid, per.lname
+FROM employee per, (
+	SELECT pay.empid, pay.salary 
+	FROM payroll pay
+	WHERE pay.salary = 189170)	AS temp
+	WHERE per.empid = temp.empid
+ORDER BY per.empid, per.lname;","4, [(' 02883   ', 'YFXUNCRKRJRKCRJ')]",,,"SELECT per.empid, per.lname
+FROM employee per
+WHERE NOT EXISTS (
+    SELECT pay.empid
+	FROM payroll pay
+	WHERE per.empid = pay.empid
+	AND pay.salary <>189170)
+ORDER BY per.empid, per.lname;","4, [(' 02883   ', 'YFXUNCRKRJRKCRJ')]",,,"SELECT per.empid, per.lname
+FROM employee per
+WHERE NOT EXISTS (
+    SELECT *
+	FROM payroll pay
+	WHERE pay.empid IS NOT NULL
+	AND NOT EXISTS(
+		SELECT *
+		FROM payroll pay
+		WHERE pay.salary = 189170
+		AND per.empid = pay.empid))
+ORDER BY per.empid, per.lname;",,
+A0232022A,"SELECT per.empid , per. lname
+FROM employee per RIGHT OUTER JOIN payroll pay
+ON True AND pay. salary = 189170
+WHERE per.empid = pay.empid
+ORDER BY per.empid , per. lname ;","4, [(' 02883   ', 'YFXUNCRKRJRKCRJ')]",,,"SELECT per.empid, per.lname
+FROM employee per, 
+(SELECT empid,salary from payroll
+where salary = 189170) AS temp
+WHERE per.empid = temp.empid
+ORDER BY per.empid, per.lname;","4, [(' 02883   ', 'YFXUNCRKRJRKCRJ')]",,,"SELECT per.empid, per.lname
+FROM employee per
+WHERE NOT EXISTS (
+    SELECT  empid,salary from payroll
+where salary = 189170 and per.empid <> empid)
+ORDER BY per.empid, per.lname;","0, []",,,"select empid, lname 
+from employee t1
+where t1.empid 
+<> all (select empid from payroll t2
+   where t2.salary+1 <> 189171 );",,
+A0232060Y,"SELECT per.empid, per.lname
+FROM employee per RIGHT OUTER JOIN payroll pay 
+    ON per.empid = pay.empid AND pay.salary = 189170
+WHERE per.empid = pay.empid
+ORDER BY per.empid, per.lname;
+SELECT test('SELECT per.empid, per.lname
+FROM employee per RIGHT OUTER JOIN payroll pay 
+    ON per.empid = pay.empid AND pay.salary = 189170
+WHERE per.empid = pay.empid
+ORDER BY per.empid, per.lname;', 100);","4, [(' 02883   ', 'YFXUNCRKRJRKCRJ')]","Multiple semicolons detected, CHECK CODE. 
+Test function invocation found in answer, CHECK CODE. ",,"SELECT per.empid, per.lname
+FROM employee per, (SELECT empid, salary from payroll) AS temp
+	WHERE per.empid = temp.empid and temp.salary = 189170
+ORDER BY per.empid, per.lname;
+SELECT test('SELECT per.empid, per.lname
+FROM employee per, (SELECT empid, salary from payroll) AS temp
+	WHERE per.empid = temp.empid and temp.salary = 189170
+ORDER BY per.empid, per.lname;', 100);","4, [(' 02883   ', 'YFXUNCRKRJRKCRJ')]","Multiple semicolons detected, CHECK CODE. 
+Test function invocation found in answer, CHECK CODE. ",,"SELECT per.empid, per.lname
+FROM employee per
+WHERE NOT EXISTS (
+    SELECT pay.empid,pay.salary from payroll pay where pay.empid = per.empid and pay.salary <> 189170)
+ORDER BY per.empid, per.lname;
+SELECT test('SELECT per.empid, per.lname
+FROM employee per
+WHERE NOT EXISTS (
+    SELECT pay.empid,pay.salary from payroll pay where pay.empid = per.empid and pay.salary <> 189170)
+ORDER BY per.empid, per.lname;', 100);","4, [(' 02883   ', 'YFXUNCRKRJRKCRJ')]","Multiple semicolons detected, CHECK CODE. 
+Test function invocation found in answer, CHECK CODE. ",,"SELECT per.empid, per.lname
+FROM employee per
+WHERE NOT EXISTS (
+    SELECT pay.empid,pay.salary from payroll pay 
+	where pay.empid = per.empid 
+	and not exists (select pay.salary from payroll pay where pay.salary = 189170 and pay.empid = per.empid ))
+ORDER BY per.empid, per.lname;
+SELECT test('SELECT per.empid, per.lname
+FROM employee per
+WHERE NOT EXISTS (
+    SELECT pay.empid,pay.salary from payroll pay 
+	where pay.empid = per.empid 
+	and not exists (select pay.salary from payroll pay where pay.salary = 189170 and pay.empid = per.empid ))
+ORDER BY per.empid, per.lname;', 20);","Multiple semicolons detected, CHECK CODE. 
+Test function invocation found in answer, CHECK CODE. ",
+A0232193L,"SELECT per.empid, per.lname
+FROM employee per RIGHT OUTER JOIN payroll pay 
+    ON per.empid = pay.empid AND pay.salary = 189170
+WHERE per.empid is not null
+ORDER BY per.empid, per.lname;","4, [(' 02883   ', 'YFXUNCRKRJRKCRJ')]",,,"SELECT per.empid, per.lname
+FROM employee per, (SELECT empid from payroll where salary = 189170) AS temp
+	WHERE per.empid = temp.empid
+ORDER BY per.empid, per.lname;","4, [(' 02883   ', 'YFXUNCRKRJRKCRJ')]",,,"SELECT per.empid, per.lname
+FROM employee per
+WHERE NOT EXISTS (
+    SELECT empid
+    from payroll pay
+    where per.empid = pay.empid
+    and pay.salary <> 189170)
+ORDER BY per.empid, per.lname;","4, [(' 02883   ', 'YFXUNCRKRJRKCRJ')]",,,"select temp.empid, temp.lname
+from (
+(select per.empid, per.lname
+from employee per join payroll pay
+on per.empid = pay.empid
+where per.empid is not null
+order by per.empid, per.lname)  
+intersect 
+(select per.empid as empid, per.lname 
+from employee per join payroll pay 
+on per.empid = pay.empid
+where per.empid is not null  
+and not exists (
+    select *
+	from payroll pay where per.empid = pay.empid and pay.salary <> 189170)
+order by per.empid, per.lname)) temp
+order by temp.empid, temp.lname;",,
+A0232194J,"SELECT per.empid, per.lname
+FROM employee per 
+RIGHT OUTER JOIN payroll pay 
+    ON per.empid = pay.empid AND pay.salary = 189170
+WHERE per.empid NOTNULL
+ORDER BY per.empid, per.lname;","4, [(' 02883   ', 'YFXUNCRKRJRKCRJ')]",,,"SELECT per.empid, per.lname
+FROM employee per, (SELECT empid, salary FROM payroll) AS temp
+    WHERE per.empid = temp.empid AND temp.salary = 189170
+ORDER BY per.empid, per.lname;","4, [(' 02883   ', 'YFXUNCRKRJRKCRJ')]",,,"SELECT per.empid, per.lname
+FROM employee per
+WHERE NOT EXISTS (
+    SELECT pay.empid, pay.salary
+    FROM payroll pay
+    WHERE pay.empid = per.empid
+    AND pay.salary <> 189170)
+ORDER BY per.empid, per.lname;","4, [(' 02883   ', 'YFXUNCRKRJRKCRJ')]",,,"SELECT emp.empid, emp.lname
+FROM employee emp
+WHERE emp.empid NOT IN (
+(
+SELECT per.empid
+FROM employee per
+WHERE per.empid NOT IN (
+    SELECT pay.empid
+    FROM payroll pay
+    WHERE pay.salary >= 189170)
+ORDER BY per.empid
+)
+UNION
+(
+SELECT per.empid
+FROM employee per
+WHERE per.empid NOT IN (
+    SELECT pay.empid
+    FROM payroll pay
+    WHERE pay.salary <= 189170)
+ORDER BY per.empid
+)
+);",,
+A0232195H,"SELECT per . empid , per . lname
+FROM employee per RIGHT OUTER JOIN payroll pay
+ON per . empid = pay . empid AND pay . salary = 189170
+WHERE per . empid is not NULL
+ORDER BY per . empid , per . lname ;","4, [(' 02883   ', 'YFXUNCRKRJRKCRJ')]",,,"SELECT per . empid , per . lname
+FROM employee per , ( SELECT empid FROM payroll WHERE salary = 189170 ) AS temp
+WHERE per . empid = temp . empid
+ORDER BY per . empid , per . lname ;","4, [(' 02883   ', 'YFXUNCRKRJRKCRJ')]",,,"SELECT per.empid, per.lname
+FROM employee per
+WHERE NOT EXISTS (
+    SELECT 1
+	FROM payroll pay
+	WHERE per . empid = pay . empid  AND pay . salary <> 189170
+	)
+ORDER BY per.empid, per.lname;","4, [(' 02883   ', 'YFXUNCRKRJRKCRJ')]",,,"SELECT per.empid, per.lname
+FROM employee per
+WHERE per . empid NOT IN (
+	SELECT pay . empid
+	FROM payroll pay
+	WHERE pay . salary <> 189170
+	ORDER BY pay.salary
+)
+ORDER BY per.empid, per.lname;",,
+A0232196E,"SELECT per.empid , per.lname
+FROM employee per RIGHT OUTER JOIN payroll pay ON per.empid = pay.empid AND pay.salary = 189170
+WHERE per.empid is not null
+ORDER BY per.empid , per.lname;","4, [(' 02883   ', 'YFXUNCRKRJRKCRJ')]",,,"SELECT per.empid, per.lname
+FROM employee per, (SELECT empid, salary from payroll) AS temp
+	WHERE temp.empid = per.empid and temp.salary = 189170
+ORDER BY per.empid, per.lname;","4, [(' 02883   ', 'YFXUNCRKRJRKCRJ')]",,,"SELECT per.empid, per.lname
+FROM employee per
+WHERE NOT EXISTS (
+ SELECT *
+ FROM payroll pay 
+ WHERE per.empid = pay.empid  
+ AND pay.salary <> 189170 
+)
+ORDER BY per.empid, per.lname;","4, [(' 02883   ', 'YFXUNCRKRJRKCRJ')]",,,"select per.empid, per.lname
+FROM employee per, payroll pay
+where cast(per.empid as int) - cast(pay.empid as int) = 0
+and
+pay.salary < all
+(select pay.salary from employee per 
+right join payroll pay on per.empid = pay.empid 
+where pay.salary > 189170)
+and 
+pay.salary > all
+(select pay.salary from employee per 
+right join payroll pay on per.empid = pay.empid 
+where pay.salary < 189170)
+ORDER BY per.empid, per.lname;",,
+A0232321Y,"SELECT per.empid, per.lname
+FROM employee per RIGHT OUTER JOIN payroll pay 
+    ON per.empid = pay.empid AND pay.salary = 189170
+WHERE per.empid IS NOT NULL
+ORDER BY per.empid, per.lname;","4, [(' 02883   ', 'YFXUNCRKRJRKCRJ')]",,,"SELECT per.empid, per.lname
+FROM employee per, 
+	(SELECT pay.empid, pay.salary FROM payroll pay) AS temp
+	WHERE per.empid = temp.empid and temp.salary = 189170
+ORDER BY per.empid, per.lname;","4, [(' 02883   ', 'YFXUNCRKRJRKCRJ')]",,,"SELECT per.empid, per.lname
+FROM employee per
+WHERE NOT EXISTS (
+    SELECT pay.empid, pay.salary FROM payroll pay
+	WHERE per.empid = pay.empid
+	AND pay.salary <> 189170)
+ORDER BY per.empid, per.lname;","4, [(' 02883   ', 'YFXUNCRKRJRKCRJ')]",,,"SELECT per.empid, per.lname
+FROM employee per
+WHERE per.empid <> ALL (
+    SELECT pay.empid
+	FROM payroll pay
+	WHERE pay.salary <> 189170)
+ORDER BY per.empid, per.lname;",,
+sample,"SELECT per.empid, per.lname 
+FROM employee per RIGHT OUTER JOIN payroll pay 
+    ON per.empid=pay.empid AND  pay.salary=189170
+WHERE per.empid IS NOT NULL
+ORDER BY per.empid, per.lname;","4, [(' 02883   ', 'YFXUNCRKRJRKCRJ')]",,,"SELECT per.empid, per.lname 
+FROM employee per, (SELECT pay.empid, pay.salary FROM payroll pay) AS temp
+    WHERE per.empid=temp.empid AND temp.salary=189170
+ORDER BY per.empid, per.lname;","4, [(' 02883   ', 'YFXUNCRKRJRKCRJ')]",,,"SELECT per.empid, per.lname
+FROM employee per
+WHERE NOT EXISTS (
+    SELECT * 
+    FROM payroll pay 
+    WHERE per.empid=pay.empid AND pay.salary<>189170)
+ORDER BY per.empid, per.lname;","4, [(' 02883   ', 'YFXUNCRKRJRKCRJ')]",,,"SELECT per.empid, per.lname 
+FROM employee per, payroll pay 
+WHERE per.empid=pay.empid AND pay.salary<=189170
+INTERSECT
+SELECT per.empid, per.lname 
+FROM employee per, payroll pay 
+WHERE per.empid=pay.empid AND pay.salary>=189170;
+SELECT per.empid, per.lname 
+FROM employee per, payroll pay 
+WHERE per.empid=pay.empid AND pay.salary<=189170
+EXCEPT
+SELECT per.empid, per.lname 
+FROM employee per, payroll pay 
+WHERE per.empid=pay.empid AND pay.salary<189170;","Multiple semicolons detected, CHECK CODE. ",
