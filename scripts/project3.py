@@ -211,9 +211,9 @@ def extract_student_answers(submission_files, project_questions, csv_format = ['
         print('.')
         file_count += 1
     output_file.close()
-    
+
     with open('question3.json', 'w') as json_file:
-        json.dump(q3_answers_dict, json_file)
+        json.dump(q3_answers_dict, json_file, indent=4, sort_keys=True)
     # print(json.dumps(q3_answers_dict, indent = 4, sort_keys=True))
 
 def psql_execute_query(query, question="", time_out='10000'):
