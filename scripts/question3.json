@@ -124,18 +124,7 @@
         "SELECT per.empid, per.lname\nFROM employee per\nWHERE (per.empid, per.lname) IN \n(SELECT per1.empid, per1.lname \n FROM employee per1, payroll pay\n WHERE per1.empid=pay.empid  AND pay.salary NOT IN \n(SELECT pay1.salary FROM payroll pay1\n WHERE pay1.empid=pay.empid AND pay1.empid=per1.empid AND pay1.empid=per.empid AND pay1.salary<>189170))\nORDER BY per.empid, per.lname ;"
     ],
     "A0218968J": [
-        "CREATE OR REPLACE FUNCTION find_emp()\nRETURNS TABLE(\n\tempid char(9),\n\tlname char(15))\nAS $$\nDECLARE\n\tpay RECORD;",
-        "emp RECORD;",
-        "BEGIN\n\tFOR emp in EXECUTE 'SELECT * FROM employee' LOOP\n\t\tFOR pay in EXECUTE 'SELECT * FROM payroll' LOOP\n\t\t\tIF emp.empid = pay.empid THEN\n\t\t\t\tIF pay.salary = 189170 THEN\n\t\t\t\t\tempid := emp.empid;",
-        "lname := emp.lname;",
-        "RETURN NEXT;",
-        "END IF;",
-        "END IF;",
-        "END LOOP;",
-        "END LOOP;",
-        "END;",
-        "$$ LANGUAGE plpgsql;",
-        "SELECT * \nFROM find_emp() AS r\nORDER BY r.empid , r.lname;"
+        "CREATE OR REPLACE FUNCTION find_emp() RETURNS TABLE(empid char(9), lname char(15)) AS $$ DECLARE pay RECORD; emp RECORD; \nBEGIN \nFOR emp in EXECUTE 'SELECT * FROM employee' LOOP \nFOR pay in EXECUTE 'SELECT * FROM payroll' LOOP \nIF emp.empid = pay.empid THEN \bIF pay.salary = 189170 THEN empid := emp.empid; \nlname := emp.lname; \nRETURN NEXT; END IF; END IF; END LOOP; END LOOP; END;\n $$ LANGUAGE plpgsql; \nSELECT * FROM find_emp() AS r ORDER BY r.empid , r.lname;"
     ],
     "A0231847B": [
         "SELECT per.empid, per.lname \nFROM employee per \nWHERE per.empid IN (\n\tSELECT pay.empid FROM payroll pay WHERE pay.salary > ALL (SELECT pay1.salary FROM payroll pay1 WHERE pay1.salary < 189170)\n\tINTERSECT\n\tSELECT pay.empid FROM payroll pay WHERE pay.salary < ALL (SELECT pay2.salary FROM payroll pay2 WHERE pay2.salary > 189170))\nORDER BY per.empid, per.lname;"

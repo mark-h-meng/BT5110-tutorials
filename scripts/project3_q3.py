@@ -17,6 +17,13 @@ json_filepath = 'question3.json'
 
 initialize_connection_command = "dbname='" + dbname + "' user='" + user + "' host='" + host + "' password='" + password + "'" 
 
+long_query_list = ['A0041688X', 'A0119430N', 'A0179033E (LATE)',
+                    'A0218877L', 'A0218915Y', 
+                    'A0231857Y', 'A0231863E', 'A0231872E', 
+                    'A0231902R', 'A0231906J', 'A0231907H', 
+                    'A0231909A','A0231921N', 'A0232004A', 'A0232013A']
+
+
 def read_json_from_file(filename):
     with open(filename) as f:
         data = json.load(f)
@@ -67,7 +74,8 @@ if __name__ == "__main__":
     
     output_dict = {}
 
-    for index,key in enumerate(query_dict):
+    # for index,key in enumerate(query_dict):
+    for index,key in enumerate(long_query_list): # The long_query_list is composed by a list of student IDs
         sid = key
         queries = query_dict[sid]
         outputs = []
@@ -75,13 +83,15 @@ if __name__ == "__main__":
         for query in queries:
             print("[" + "{:.2%}".format((index+1)/len(query_dict)) + "]", end="")
             print(key, end="\t")
-            output_rows = execute_query(query, timeout=300000)
+            # output_rows = execute_query(query, timeout=300000)
+            output_rows = execute_query(query)
             if len(output_rows) > 0:
                 outputs.append(output_rows)    
                 print(output_rows, end="\t")
             
                 benchmark_query = "SELECT test('" + query + "', 1);"
-                benchmark_rows = execute_query(benchmark_query, timeout=360000)
+                # benchmark_rows = execute_query(benchmark_query, timeout=360000)
+                benchmark_rows = execute_query(benchmark_query)
                 benchmarks.append(benchmark_rows)
                 print(benchmark_rows)
             
