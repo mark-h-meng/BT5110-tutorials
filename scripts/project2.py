@@ -16,11 +16,12 @@ user='postgres'
 password='admin'
 host='localhost'
 
-EXECUTE_QUERY = False
+EXECUTE_QUERY = True
 KEEP_LINE_BREAK = True
 
 regex = re.compile(r'[\n\r\t]')
-initialize_connecconnection_commandtion_command = "dbname='" + dbname + "' user='" + user + "' host='" + host + "' password='" + password + "'" # + 'connect_timeout = 10'
+initialize_connecconnection_commandtion_command = "dbname='" + dbname + "' user='" + user + "' host='" + host + "' password='" + password + \
+     "'" + " options='-c statement_timeout=30000'"
 
 default_question_pattern = '/* Question '
 
@@ -310,17 +311,18 @@ def check_aggregation_free(solution, comment=''):
         clue_str += ' HAVING '
     if re.search('group by ', solution, re.IGNORECASE):
         clue_str += ' GROUP-BY '
-    if re.search(' sum(', solution, re.IGNORECASE):
+    '''
+    if re.search(' sum', solution, re.IGNORECASE):
         clue_str += ' SUM '
-    if re.search(' count(', solution, re.IGNORECASE):
+    if re.search(' count', solution, re.IGNORECASE):
         clue_str += ' COUNT '
-    if re.search(' avg(', solution, re.IGNORECASE):
+    if re.search(' avg', solution, re.IGNORECASE):
         clue_str += ' AVG '
-    if re.search(' min(', solution, re.IGNORECASE):
+    if re.search(' min', solution, re.IGNORECASE):
         clue_str += ' MIN '
-    if re.search(' max(', solution, re.IGNORECASE):
+    if re.search(' max', solution, re.IGNORECASE):
         clue_str += ' MAX '
-    
+    '''
     if len(clue_str) > 0:
         if len(comment) > 0:
             comment += '\n' 

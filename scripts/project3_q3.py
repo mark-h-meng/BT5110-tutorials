@@ -1,5 +1,5 @@
 import re
-import os, sys
+import os, sys, random
 import csv
 import logging
 import json
@@ -23,6 +23,14 @@ long_query_list = ['A0041688X', 'A0119430N', 'A0179033E (LATE)',
                     'A0231902R', 'A0231906J', 'A0231907H', 
                     'A0231909A','A0231921N', 'A0232004A', 'A0232013A']
 
+
+def generate_random_output_filename(filename):
+    random.seed(42)
+    r = random.randint(1000, 9999)
+    filename_components = filename.split(".")
+    filename_components[-1] = filename_components[-1] + "_" + str(r)
+    filename_with_random = ".".join(filename_components)
+    return filename_with_random 
 
 def read_json_from_file(filename):
     with open(filename) as f:
@@ -69,12 +77,12 @@ def execute_query(query, timeout=None):
 
 if __name__ == "__main__":
     student_answer_dict = read_json_from_file(json_filepath)
-    # query_dict, benchmark_dict = create_benchmark_dict(student_answer_dict, [0,3])
+    # query_dict, benchmark_dict = create_benchmark_dict(student_answer_dict, [len(student_answer_dict)-1,len(student_answer_dict)])
     query_dict, benchmark_dict = create_benchmark_dict(student_answer_dict, [0, len(student_answer_dict)])
     
     output_dict = {}
 
-    # for index,key in enumerate(query_dict):
+    #for index,key in enumerate(query_dict):
     for index,key in enumerate(long_query_list): # The long_query_list is composed by a list of student IDs
         sid = key
         queries = query_dict[sid]
@@ -102,7 +110,10 @@ if __name__ == "__main__":
         output_dict[sid] = outputs
         benchmark_dict[sid] = benchmarks
 
-    output_file = 'output_p3_3.csv'
+    output_file = generate_random_output_filename('output_p3_3.csv')
+    while os.path.exists(output_file):
+        output_file = generate_random_output_filename('output_p3_3.csv')
+    
 
     output_file = open(output_file, "w", newline='', encoding="UTF-8")
     # create the csv writer
