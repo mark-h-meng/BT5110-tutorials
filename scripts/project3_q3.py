@@ -28,7 +28,7 @@ def generate_random_output_filename(filename):
     random.seed(42)
     r = random.randint(1000, 9999)
     filename_components = filename.split(".")
-    filename_components[-1] = filename_components[-1] + "_" + str(r)
+    filename_components[-2] = filename_components[-2] + "_" + str(r)
     filename_with_random = ".".join(filename_components)
     return filename_with_random 
 
@@ -82,8 +82,8 @@ if __name__ == "__main__":
     
     output_dict = {}
 
-    #for index,key in enumerate(query_dict):
-    for index,key in enumerate(long_query_list): # The long_query_list is composed by a list of student IDs
+    for index,key in enumerate(query_dict):
+    # for index,key in enumerate(long_query_list): # The long_query_list is composed by a list of student IDs
         sid = key
         queries = query_dict[sid]
         outputs = []
@@ -92,17 +92,21 @@ if __name__ == "__main__":
             print("[" + "{:.2%}".format((index+1)/len(query_dict)) + "]", end="")
             print(key, end="\t")
             # output_rows = execute_query(query, timeout=300000)
-            output_rows = execute_query(query)
+            output_rows = execute_query(query, timeout=1000)
             if len(output_rows) > 0:
                 outputs.append(output_rows)    
                 print(output_rows, end="\t")
             
-                benchmark_query = "SELECT test('" + query + "', 1);"
-                # benchmark_rows = execute_query(benchmark_query, timeout=360000)
-                benchmark_rows = execute_query(benchmark_query)
-                benchmarks.append(benchmark_rows)
-                print(benchmark_rows)
-            
+                if len(output_rows[0])==4:
+
+                    benchmark_query = "SELECT test('" + query + "', 1);"
+                    # benchmark_rows = execute_query(benchmark_query, timeout=360000)
+                    benchmark_rows = execute_query(benchmark_query, timeout=600000)
+                    benchmarks.append(benchmark_rows)
+                    print(benchmark_rows)
+                else:
+                    print("Wrong output")
+                    benchmarks.append("")
             else:
                 outputs.append("")
                 benchmarks.append("")
