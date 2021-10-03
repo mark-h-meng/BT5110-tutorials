@@ -1,0 +1,346 @@
+\title{BT5110 Data Management and Warehousing}
+
+\subtitle{Tutorial 4: Normalisation}
+
+\author{Mark Meng Huasong}
+
+\institute[National University of Singapore] % (optional, but mostly needed)
+{
+	School of Computing\\
+	National University of Singapore
+}
+
+\titlegraphic{
+	\includegraphics[width=2cm]{nus-logo}
+}
+
+\date{13 - 17 Sep, 2021}
+
+\begin{frame}
+	\titlepage
+	\begin{tcolorbox}
+		\begin{center}
+			{\scriptsize \textcolor{red}{All the materials within presentation slides are protected by copyrights.\\
+					It is forbidden by NUS to upload these materials to the Internet.}}
+		\end{center}
+	\end{tcolorbox}
+\end{frame}
+
+\begin{frame}[fragile]{Quick Recap: End of Last Tutorial}
+	What we have done in the previous class:\\\vspace{5pt}
+	(1) Entity-relationship diagram design. \\
+	(2) Transforming ER diagram into SQL data description language (DDL)\\\vspace{5pt}
+	\begin{figure}
+		\includegraphics[width=0.75\textwidth, trim=0 0 0 0, clip]{t5/images/steps.png}
+	\end{figure}
+\end{frame}
+
+\section*{Question 1 Functional Dependencies}
+
+\begin{frame}[fragile]{Question 1}
+Your company, Apasaja Private Limited, is commissioned by an online company offering several services to design the relational schema the management of their users' profiles. A service is fully described and identified by its \textbf{name}. Each user can register to one or more services. A user is uniquely identified by her \textbf{email} as well as by her \textbf{mobile number}. Each user has a \textbf{postal address} and a \textbf{country} of residence. The postal address, however, unambiguously identifies the coutry in which it is located. There can be several users with the same address.\vspace{5pt}
+
+However, we are only given an abstract schema for this application. \vspace{5pt}
+
+Consider the relations $R=\{A, B, C, D, E\}$ with the set of functional dependencies $\Sigma=\{\{A\} \rightarrow \{A, B, C\}, \{A, B\} \rightarrow \{A\}, \{B, C\} \rightarrow \{A, D\}, \{B\} \rightarrow \{A, B\}, \{C\} \rightarrow \{D\}\}$.\vspace{5pt}
+\end{frame}
+
+\begin{frame}[fragile]{Question 1 (a) Mapping}
+(a) From the functional dependencies in $\Sigma$ and the text description of the application, can you figure out a mapping of the attributes and the letters? \vspace{15pt}
+
+\textbf{Solution}: $A$ and $B$ are mobile number and email, or the other way around.\vspace{5pt}
+
+$C$ is the address.\vspace{5pt}
+
+$D$ is the country.\vspace{5pt}
+
+$E$ is the name of a service.\vspace{5pt}
+\end{frame}
+
+\begin{frame}[fragile]{Question 1 (b) Attribute Closure}
+(b) Compute the attribute closures of the attributes in $R$ with $\Sigma$ in order to find the candidate keys of $R$ with $\Sigma$. \vspace{15pt}
+
+\textbf{Solution}: \vspace{5pt}
+
+\begin{columns}[t]
+	\column{0.45\textwidth}
+	\textcolor{gray}{\scriptsize \textit{(Let's start with single attribute first)}}\\
+	$\{A\}^{+}= \{A, B, C, D\}$\\	
+	$\{B\}^{+}= \{A, B, C, D\}$\\	
+	$\{C\}^{+}= \{C, D\}$\\
+	$\{D\}^{+}= \{D\}$\\
+	$\{E\}^{+}= \{E\}$\\ \vspace{5pt}
+	\textcolor{gray}{\textit{\scriptsize (Two attributes' combination)}}\\
+	$\{A, B\}^{+}= \{A, B, C, D\}$\\
+	$\{A, C\}^{+}= \{A, B, C, D\}$\\
+	$\{A, D\}^{+}= \{A, B, C, D\}$
+	\column{0.45\textwidth}	
+	$\underline{\{A, E\}^{+}}= \{A, B, C, D, E\}$\\
+	$\{B, C\}^{+}= \{A, B, C, D\}$\\
+	$\{B, D\}^{+}= \{A, B, C, D\}$\\
+	$\underline{\{B, E\}^{+}}= \{A, B, C, D, E\}$\\
+	$\{C, D\}^{+}= \{C, D\}$\\
+	$\{C, E\}^{+}= \{C, D, E\}$\\
+	$\{D, E\}^{+}= \{D, E\}$\\ \vspace{5pt}
+	Other attribute closures need not be computed.
+\end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Question 1 (c-d)}
+	(c) Find the candidate keys of $R$ with $\Sigma$. \\ \vspace{5pt}
+	\textbf{Solution}: The candidate keys are $\{A, E\}$ and $\{B, E\}$. \\\vspace{35pt}
+
+	(d) Find the prime attributes.\\ \vspace{5pt}
+	\textbf{Solution}: The prime attributes are $A$, $B$ and $E$.
+\end{frame}
+
+\section*{Question 2 Minimal Cover}
+
+\begin{frame}[fragile]{Question 2 (a) Minimal Cover.}
+	(a) Compute a minimal cover of $R$ with $\Sigma$.\vspace{10pt}
+
+	\textbf{Solution}: \\\vspace{3pt}
+	We start from $\Sigma$: \\\vspace{5pt}
+	$\{A\} \rightarrow \{A, B, C\}$\\
+	$\{A, B\} \rightarrow \{A\}$\\
+	$\{B, C\} \rightarrow \{A, D\}$\\
+	$\{B\} \rightarrow \{A, B\}$\\
+	$\{C\} \rightarrow \{D\}$\\\vspace{5pt}
+	Step 1, we simplify the right-hand sides:\\\vspace{3pt}
+	\begin{columns}[t]
+	\column{0.45\textwidth}
+	$\{A\} \rightarrow \{A\}$\\
+	$\{A\} \rightarrow \{B\}$\\
+	$\{A\} \rightarrow \{C\}$\\
+	$\{A, B\} \rightarrow \{A\}$\\
+	$\{B, C\} \rightarrow \{A\}$
+	\column{0.45\textwidth}
+	$\{B, C\} \rightarrow \{D\}$\\
+	$\{B\} \rightarrow \{A\}$\\
+	$\{B\} \rightarrow \{B\}$\\
+	$\{C\} \rightarrow \{D\}$
+	\end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Question 2 (a) Cont.}
+	Step 2, we simplify the left-hand sides:\\\vspace{3pt}
+	$\{A\} \rightarrow \{A\}$.\\	
+	$\{A\} \rightarrow \{B\}$.\\	
+	$\{A\} \rightarrow \{C\}$.\\	
+	$\{A,\cancel{B}\} \rightarrow \{A\}$ because $\{A\} \rightarrow \{A\}$.\\	
+	$\{B, \cancel{C}\} \rightarrow \{A\}$ because $\{B\} \rightarrow \{A\}$.\\	
+	$\{B, \cancel{C}\} \rightarrow \{D\}$ because $\{B\} \rightarrow \{D\}$ \\\vspace{3pt}
+	(we could also do $\{\cancel{B}, C\} \rightarrow \{D\}$ because $\{C\} \rightarrow \{D\}$). Note that we know that $\{B\} \rightarrow \{D\}$ because $\{B\}^{+}= \{A, B, C, D\}$.\\\vspace{3pt}
+	$\{B\} \rightarrow \{A\}$.\\
+	$\{B\} \rightarrow \{B\}$.\\
+	$\{C\} \rightarrow \{D\}$.
+\end{frame}
+
+\begin{frame}[fragile]{Question 2 (a) Cont.}
+	Step 3, we simplify the set:\\\vspace{3pt}
+	$\cancel{\{A\} \rightarrow \{A\}}$ because it is trivial.\\	
+	$\{A\} \rightarrow \{B\}$.\\	
+	$\{A\} \rightarrow \{C\}$.\\	
+	$\{B\} \rightarrow \{A\}$.\\	
+	$\cancel{\{B\} \rightarrow \{D\}}$ because it can be derived from the others.\\	
+	$\cancel{\{B\} \rightarrow \{B\}}$ $\cancel{\{A\} \rightarrow \{A\}}$.\\	
+	$\{C\} \rightarrow \{D\}$.\\\vspace{5pt}
+	
+	\textbf{The result is:} \\\vspace{3pt}
+	$\{A\} \rightarrow \{B\}$\\	
+	$\{A\} \rightarrow \{C\}$\\	
+	$\{B\} \rightarrow \{A\}$\\
+	$\{C\} \rightarrow \{D\}$
+\end{frame}
+
+\begin{frame}[fragile]{Question 2 (a) Cont.}
+	\begin{alertblock}{Notice}
+	Note that there can be other minimal covers that the algorithm can compute by considering the functional dependencies in a different order at each step of the algorithm. This is not the case in the example.
+	\end{alertblock}\vspace{5pt}
+
+	However, there is a minimal cover that the algorithm cannot compute:\\\vspace{5pt}
+	$\{A\} \rightarrow \{B\}$\\
+	$\{B\} \rightarrow \{A\}$\\
+	$\{B\} \rightarrow \{C\}$\\
+	$\{C\} \rightarrow \{D\}$\\\vspace{10pt}	
+	If the algorithm starts from $\Sigma^{+}$, then it can find all minimal covers.
+\end{frame}
+
+\begin{frame}[fragile]{Question 2 (b)}
+	(b) Compute a compact minimal cover of $R$ with $\Sigma$.\vspace{10pt}
+	
+	\textbf{Solution}: \\\vspace{5pt}
+	Given the minimal cover of $R$ with $\Sigma$:\\\vspace{3pt}
+	$\{A\} \rightarrow \{B\}$\\	
+	$\{A\} \rightarrow \{C\}$\\	
+	$\{B\} \rightarrow \{A\}$\\
+	$\{C\} \rightarrow \{D\}$\\\vspace{5pt}
+	The \textbf{compact minimal cover} is:\\\vspace{3pt}
+	$\{A\} \rightarrow \{B, C\}$\\	
+	$\{B\} \rightarrow \{A\}$\\	
+	$\{C\} \rightarrow \{D\}$
+\end{frame}
+
+\section*{Question 3 Normal Forms}
+
+\begin{frame}[fragile]{Question 3 Normal Forms.}
+(a) Is $R$ with $\Sigma$ in 2NF?\\
+(b) Is $R$ with $\Sigma$ in 3NF?\\
+(c) Is $R$ with $\Sigma$ in BCNF?\\
+
+\begin{figure}
+	\includegraphics[width=0.75\textwidth, trim=0 0 0 0, clip]{t5/images/normal_forms.png}
+\end{figure}
+\end{frame}
+
+\begin{frame}[fragile]{Question 3 (a)}
+(a) Is $R$ with $\Sigma$ in 2NF?\\\vspace{5pt}
+\textbf{Solution}:
+Let us look at the non-trivial functional dependencies of the form $X \rightarrow \{A\}$ derived from $\Sigma$. Namely after removing the trivial functional dependencies after step 1 of the minimal cover algorithm. Equivalently, we could use a minimal cover.\\\vspace{3pt}
+$\{A\} \rightarrow \{C\}$ is non-trivial, $\{A\}$ is a proper subset of a candidate key and $\{C\}$ is not a prime attribute. This functional dependency violates the three conditions of the 2NF definition. $R$ with $\Sigma$ is not in 2NF.\\\vspace{3pt}
+
+Incidentally, several other functional dependencies also violate the 2NF definition:\\
+$\{B\} \rightarrow \{C\}$ is non-trivial, $\{B\}$ is a proper subset of a candidate key and $\{C\}$ is not a prime attribute. \\\vspace{3pt}
+This ones do not (one condition is met):\\
+$\{B,C\} \rightarrow \{D\}$ $\{B,C\}$ is not a proper subset of a candidate key.\\
+$\{C\} \rightarrow \{D\}$ $\{C\}$ is not a proper subset of a candidate key.\\
+$\{A\} \rightarrow \{B\}$ $\{B\}$ is a prime attribute.\\
+$\{B, C\} \rightarrow \{A\}$ $\{A\}$ is a prime attribute.
+\end{frame}
+
+\begin{frame}[fragile]{Question 3 (b)}
+
+(b) Is $R$ with $\Sigma$ in 3NF?\\\vspace{5pt}
+\textbf{Solution}:
+Let us look at the non-trivial functional dependencies of the form $X \rightarrow \{A\}$ derived from $\Sigma$. Namely after removing the trivial functional dependencies after step 1 of the minimal cover algorithm. Equivalently, we could use a minimal cover.\\\vspace{3pt}
+$\{A\} \rightarrow \{C\}$ is non-trivial, $\{A\}$ is not a superkey and $\{C\}$ is not a prime attribute. This functional dependency violates the three conditions of the 3NF definition. $R$ with $\Sigma$ is not in 3NF.\\\vspace{3pt}
+
+Incidentally, several other functional dependencies also violate the 3NF definition:\\
+$\{A\} \rightarrow \{B\}$ is non-trivial, $\{A\}$ is not a superkey and $\{B\}$ is not a prime attribute.\\\vspace{3pt}
+
+$\{B, C\} \rightarrow \{D\}$ is non-trivial, $\{B, C\}$ is not a superkey and $\{D\}$ is not a prime attribute.\\
+$\{B\} \rightarrow \{C\}$ is non-trivial, $\{B\}$ is not a superkey and $\{C\}$ is not a prime attribute.\\
+$\{C\} \rightarrow \{D\}$ is non-trivial, $\{C\}$ is not a superkey and $\{D\}$ is not a prime attribute.\\\vspace{3pt}
+
+This one does not (one condition is met):\\
+$\{B, C\} \rightarrow \{A\}$ $\{A\}$ is a prime attribute.
+
+\end{frame}
+
+\begin{frame}[fragile]{Question 3 (c)}
+(c) Is $R$ with $\Sigma$ in BCNF?\\\vspace{5pt}
+\textbf{Solution}:
+$R$ with $\Sigma$ is not in 3NF, then it cannot be in BCNF.\\\vspace{3pt}
+
+Let us look at the non-trivial functional dependencies of the form $X \rightarrow \{A\}$ derived from $\Sigma$. Namely after removing the trivial functional dependencies after step 1 of the minimal cover algorithm. Equivalently, we could use a minimal cover.\\\vspace{3pt}
+
+$\{A\} \rightarrow \{C\}$ is non-trivial and $\{A\}$ is not a superkey . This functional dependency violates the two conditions of the BCNF definition. $R$ with $\Sigma$ is not in BCNF.\\\vspace{3pt}
+
+Incidentally, all the other functional dependencies also violate the BCNF definition:\\
+$\{A\} \rightarrow \{B\}$ is non-trivial and $\{A\}$ is not a superkey.\\
+$\{B, C\} \rightarrow \{D\}$ is non-trivial and $\{B, C\}$ is not a superkey.\\
+$\{B\} \rightarrow \{C\}$ is non-trivial and $\{B\}$ is not a superkey.\\
+$\{C\} \rightarrow \{D\}$ is non-trivial and  $\{C\}$ is not a superkey.\\
+$\{B, C\} \rightarrow \{A\}$ $\{A\}$ is non-trivial and  $\{B, C\}$ is not a superkey.
+\end{frame}
+
+\section*{Question 4 Normalisation}
+
+\begin{frame}[fragile]{Question 4 (a)}
+(a) Synthesise $R$ with $\Sigma$ into a 3NF decomposition using the algorithm from the lecture.\\\vspace{5pt}
+
+\textbf{Solution}:
+First compute a compact minimal cover:
+
+$\{A\} \rightarrow \{B, C\}$
+
+$\{B\} \rightarrow \{A\}$
+
+$\{C\} \rightarrow \{D\}$
+
+For each functional dependency create a fragment:
+
+$R_1 = \{A, B, C\}$
+
+$R_2 = \{B, A\}$ , this fragment is not kept: it is subsumed by $R_1$.
+
+$R_3 = \{C, D\}$.
+
+None of the fragments contain a candidate key. We choose one: say $\{A, E\}$, and add it as fragment:
+
+$R_4 = \{A, E\}$.
+
+The result is:
+$R_1 = \{\underline{A}, \underline{B}, C\}$
+$R_3 = \{\underline{C}, D\}$.
+$R_4 = \{\underline{A, E}\}$.
+
+The algorithm always works. It is guaranteed to find a decomposition in 3NF. Note that using a different minimal cover or compact minimal cover may give a different (but equally correct) result.
+\end{frame}
+
+\begin{frame}[fragile]{Question 4 (b-c)}
+(b) Is the results lossless?\\\vspace{5pt}
+\textbf{Solution}: Yes, the algorithm guarantees that the result is lossless.
+\vspace{30pt}
+(c) Is the results dependency preserving?\\\vspace{5pt}
+\textbf{Solution}:
+Yes, the algorithm guarantees that the result is dependency preserving.
+
+\end{frame}
+
+\begin{frame}[fragile]{Question 4 (d)}
+(d) Is the results in BCNF?\\\vspace{5pt}
+
+\textbf{Solution}:
+The algorithm guarantees that the result is in 3NF. In this case, it is also in BCNF! (you can check). It is not always but often the case.
+\end{frame}
+
+\begin{frame}[fragile]{Question 4 (e)}
+(e) Decompose $R$ with $\Sigma$ into a BCNF decomposition using the algorithm from the lecture.\\\vspace{5pt}
+
+\textbf{Solution}: We found that $\{A\} \rightarrow \{C\}$ violates the BCNF condition.\\\vspace{3pt}
+
+We use it to decompose into two fragments:\\
+$R_1 = \{A\}^{+} = \{A, B, C, D\}$ with $\Sigma_1 = \{\{A\} \rightarrow \{C\}, \{B\} \rightarrow \{A\}, \{C\} \rightarrow \{D\}\}$.
+
+$R_2 = \{A, E\}$ with $\Sigma_2 = \emptyset$.
+
+$R_2$ with $\Sigma_2$ is in BCNF.
+
+$R_1$ with $\Sigma_1$ is not in BCNF because $\{C\} \rightarrow \{D\}$ violates the BCNF condition.
+
+We use it to decompose into two fragments:\\
+$R_{1.1} = \{C\}^{+} = \{C, D\}$ (computed for $R_1$ with $\Sigma_1$!) with $\Sigma_{1.1} = \{\{C\} \rightarrow \{D\}\}$.
+
+$R_{1.2} = \{A, B, C\}$ with $\Sigma_{1.2} = \{\{A\} \rightarrow \{B\}, \{A\} \rightarrow \{C\}, \{B\} \rightarrow \{A\}\}$.
+
+$R_{1.1}$ with $\Sigma_{1.1}$ is in BCNF.
+
+$R_{1.2}$ with $\Sigma_{1.2}$ is in BCNF.
+
+The result is a decomposition into three fragments: $R_2$, $R_{1.1}$ and $R_{1.2}$. It is the same result as the synthesis.\\
+
+However, this (the decomposition outcome is same as the synthesis result) is not always the case. In particular, some dependencies can be lost.
+\end{frame}
+
+\begin{frame}[fragile]{Question 4 (f-g)}
+(f) Is the results lossless?\\\vspace{5pt}
+\textbf{Solution}: Yes, the algorithm guarantees that the result is lossless.\\
+\vspace{30pt}
+(g) Is the results dependency preserving?\\\vspace{5pt}
+\textbf{Solution}:
+Incidentally yes, the algorithm \textcolor{red}{\textbf{does not}} guarantee that the result is dependency preserving.
+\end{frame}
+	
+\begin{frame}{}
+	\centering  
+	For any further question, please feel free to email me:\vspace{10pt}
+	
+	huasong.meng@u.nus.edu \vspace{20pt}
+	
+	\begin{tcolorbox}
+		\begin{center}
+			\textcolor{red}{Cases in the extra practice are contributed by our students.\\\vspace{5pt}Copyright 2021 Mark H. Meng. All rights reserved.}
+		\end{center}
+	\end{tcolorbox}
+\end{frame}
