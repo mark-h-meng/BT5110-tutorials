@@ -181,12 +181,21 @@ $E$ is the name of a service.\vspace{5pt}
 	$\{C\} \rightarrow \{D\}$
 \end{frame}
 
+\begin{frame}[fragile]{Question 2 Cont.}
+Now let's look back the relation $R$ with all FDs ($\Sigma$):\\\vspace{5pt}
+\begin{figure}
+	\includegraphics[width=0.85\textwidth, trim=0 0 0 0, clip]{t5/images/end_q1.png}
+\end{figure}
+
+\textit{(We will keep using this (kind of) figures for later demonstrations)}
+\end{frame}
+
 \section*{Question 3 Normal Forms}
 
 \begin{frame}[fragile]{Question 3 Normal Forms.}
 (a) Is $R$ with $\Sigma$ in 2NF?\\
 (b) Is $R$ with $\Sigma$ in 3NF?\\
-(c) Is $R$ with $\Sigma$ in BCNF?\\
+(c) Is $R$ with $\Sigma$ in BCNF?\\\vspace{10pt}
 
 \begin{figure}
 	\includegraphics[width=0.75\textwidth, trim=0 0 0 0, clip]{t5/images/normal_forms.png}
@@ -194,7 +203,14 @@ $E$ is the name of a service.\vspace{5pt}
 \end{frame}
 
 \begin{frame}[fragile]{Question 3 (a)}
-(a) Is $R$ with $\Sigma$ in 2NF?\\\vspace{5pt}
+(a) Is $R$ with $\Sigma$ in 2NF?\\\vspace{10pt}
+
+\begin{figure}
+	\includegraphics[width=0.85\textwidth, trim=0 0 0 0, clip]{t5/images/q3_2nf.png}
+\end{figure}
+\end{frame}
+
+\begin{frame}[fragile]{Question 3 (a) Cont.}
 \textbf{Solution}:
 Let us look at the non-trivial functional dependencies of the form $X \rightarrow \{A\}$ derived from $\Sigma$. Namely after removing the trivial functional dependencies after step 1 of the minimal cover algorithm. Equivalently, we could use a minimal cover.\\\vspace{3pt}
 $\{A\} \rightarrow \{C\}$ is non-trivial, $\{A\}$ is a proper subset of a candidate key and $\{C\}$ is not a prime attribute. This functional dependency violates the three conditions of the 2NF definition. $R$ with $\Sigma$ is not in 2NF.\\\vspace{3pt}
@@ -210,7 +226,14 @@ $\{B, C\} \rightarrow \{A\}$ $\{A\}$ is a prime attribute.
 
 \begin{frame}[fragile]{Question 3 (b)}
 
-(b) Is $R$ with $\Sigma$ in 3NF?\\\vspace{5pt}
+(b) Is $R$ with $\Sigma$ in 3NF?\\\vspace{10pt}
+
+\begin{figure}
+	\includegraphics[width=0.95\textwidth, trim=0 0 0 0, clip]{t5/images/q3_3nf.png}
+\end{figure}
+\end{frame}
+
+\begin{frame}[fragile]{Question 3 (b) Cont.}
 \textbf{Solution}:
 Let us look at the non-trivial functional dependencies of the form $X \rightarrow \{A\}$ derived from $\Sigma$. Namely after removing the trivial functional dependencies after step 1 of the minimal cover algorithm. Equivalently, we could use a minimal cover.\\\vspace{3pt}
 $\{A\} \rightarrow \{C\}$ is non-trivial, $\{A\}$ is not a superkey and $\{C\}$ is not a prime attribute. This functional dependency violates the three conditions of the 3NF definition. $R$ with $\Sigma$ is not in 3NF.\\\vspace{3pt}
@@ -228,7 +251,14 @@ $\{B, C\} \rightarrow \{A\}$ $\{A\}$ is a prime attribute.
 \end{frame}
 
 \begin{frame}[fragile]{Question 3 (c)}
-(c) Is $R$ with $\Sigma$ in BCNF?\\\vspace{5pt}
+(c) Is $R$ with $\Sigma$ in BCNF?\\\vspace{10pt}
+
+\begin{figure}
+	\includegraphics[width=0.85\textwidth, trim=0 0 0 0, clip]{t5/images/q3_bcnf.png}
+\end{figure}
+\end{frame}
+
+\begin{frame}[fragile]{Question 3 (c) Cont.}
 \textbf{Solution}:
 $R$ with $\Sigma$ is not in 3NF, then it cannot be in BCNF.\\\vspace{3pt}
 
@@ -281,7 +311,7 @@ The algorithm always works. It is guaranteed to find a decomposition in 3NF. Not
 \begin{frame}[fragile]{Question 4 (b-c)}
 (b) Is the results lossless?\\\vspace{5pt}
 \textbf{Solution}: Yes, the algorithm guarantees that the result is lossless.
-\vspace{30pt}
+\\\vspace{30pt}
 (c) Is the results dependency preserving?\\\vspace{5pt}
 \textbf{Solution}:
 Yes, the algorithm guarantees that the result is dependency preserving.
@@ -308,17 +338,20 @@ $R_2 = \{A, E\}$ with $\Sigma_2 = \emptyset$.
 $R_2$ with $\Sigma_2$ is in BCNF.
 
 $R_1$ with $\Sigma_1$ is not in BCNF because $\{C\} \rightarrow \{D\}$ violates the BCNF condition.
+\textbf{$\leftarrow$ We need to further decompose it.}
+\end{frame}
 
-We use it to decompose into two fragments:\\
+\begin{frame}[fragile]{Question 4 (e) Cont.}
+For $R_1 = \{A\}^{+} = \{A, B, C, D\}$, we use it to decompose into two fragments:\\\vspace{5pt}
 $R_{1.1} = \{C\}^{+} = \{C, D\}$ (computed for $R_1$ with $\Sigma_1$!) with $\Sigma_{1.1} = \{\{C\} \rightarrow \{D\}\}$.
 
-$R_{1.2} = \{A, B, C\}$ with $\Sigma_{1.2} = \{\{A\} \rightarrow \{B\}, \{A\} \rightarrow \{C\}, \{B\} \rightarrow \{A\}\}$.
+$R_{1.2} = \{A, B, C\}$ with $\Sigma_{1.2} = \{\{A\} \rightarrow \{B\}, \{A\} \rightarrow \{C\}, \{B\} \rightarrow \{A\}\}$.\\\vspace{5pt}
 
 $R_{1.1}$ with $\Sigma_{1.1}$ is in BCNF.
 
-$R_{1.2}$ with $\Sigma_{1.2}$ is in BCNF.
+$R_{1.2}$ with $\Sigma_{1.2}$ is in BCNF.\\\vspace{5pt}
 
-The result is a decomposition into three fragments: $R_2$, $R_{1.1}$ and $R_{1.2}$. It is the same result as the synthesis.\\
+The result is a decomposition into three fragments: $R_2$, $R_{1.1}$ and $R_{1.2}$. It is the same result as the synthesis.\\\vspace{5pt}
 
 However, this (the decomposition outcome is same as the synthesis result) is not always the case. In particular, some dependencies can be lost.
 \end{frame}
@@ -329,7 +362,10 @@ However, this (the decomposition outcome is same as the synthesis result) is not
 \vspace{30pt}
 (g) Is the results dependency preserving?\\\vspace{5pt}
 \textbf{Solution}:
-Incidentally yes, the algorithm \textcolor{red}{\textbf{does not}} guarantee that the result is dependency preserving.
+Incidentally yes, the \textbf{algorithm} (itself) \textcolor{red}{\textbf{does not}} guarantee that the result is dependency preserving.\\
+\begin{alertblock}{Notice}
+	Don't take the dependency preserving for granted in decomposition.
+\end{alertblock}
 \end{frame}
 	
 \begin{frame}{}
