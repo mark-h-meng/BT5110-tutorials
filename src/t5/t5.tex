@@ -1,6 +1,6 @@
 \title{BT5110 Data Management and Warehousing}
 
-\subtitle{Tutorial 4: Normalisation}
+\subtitle{Tutorial 5: Normalisation}
 
 \author{Mark Meng Huasong}
 
@@ -14,7 +14,7 @@
 	\includegraphics[width=2cm]{nus-logo}
 }
 
-\date{13 - 17 Sep, 2021}
+\date{4 - 8 Oct, 2021}
 
 \begin{frame}
 	\titlepage
@@ -92,6 +92,12 @@ $E$ is the name of a service.\vspace{5pt}
 
 	(d) Find the prime attributes.\\ \vspace{5pt}
 	\textbf{Solution}: The prime attributes are $A$, $B$ and $E$.
+\end{frame}
+
+\begin{frame}[fragile]{Question 1 Cont. \textcolor{red}{(Extra)}}
+\begin{figure}
+	\includegraphics[width=0.85\textwidth, trim=0 0 0 0, clip]{t5/images/keys.png}
+\end{figure}
 \end{frame}
 
 \section*{Question 2 Minimal Cover}
@@ -205,8 +211,24 @@ Now let's look back the relation $R$ with all FDs ($\Sigma$):\\\vspace{5pt}
 \begin{frame}[fragile]{Question 3 (a)}
 (a) Is $R$ with $\Sigma$ in 2NF?\\\vspace{10pt}
 
+\textbf{Recap}: How to \textcolor{brown}{mechanically} define 2NF?\\\vspace{10pt}
+A relation $R$ with a set of functional dependencies $\Sigma$ is in second norm form (2NF) if and only iff for every functional dependency $X\rightarrow\{A\}$, we have:
+\begin{itemize}
+	\item $X\rightarrow\{A\}$ is trivial, or
+	\item $X$ is not a subset of a candidate key, or
+	\item $A$ is a prime attribute.
+\end{itemize}\vspace{10pt}
+
+\begin{alertblock}{Just to understand, don't keep it in mind!}
+	Unlike the 1NF that allow any attribute as long as they are single values, 
+	The 2NF is more strict so that it does not allow any non-prime attribute to be determined by partial (not full) candidate keys (e.g. \texttt{\textbf{postal}} is only determined by \texttt{\textbf{email}} or \texttt{\textbf{phone}}, but not \texttt{\textbf{service\_name}}).
+\end{alertblock}
+
+\end{frame}
+
+\begin{frame}[fragile]{Question 3 (a) Cont.}
 \begin{figure}
-	\includegraphics[width=0.85\textwidth, trim=0 0 0 0, clip]{t5/images/q3_2nf.png}
+	\includegraphics[width=0.85\textwidth, trim=0 0 0 0, clip]{t5/images/q3_2nf_highlight.png}
 \end{figure}
 \end{frame}
 
@@ -228,8 +250,24 @@ $\{B, C\} \rightarrow \{A\}$ $\{A\}$ is a prime attribute.
 
 (b) Is $R$ with $\Sigma$ in 3NF?\\\vspace{10pt}
 
+\textbf{Recap}: How to \textcolor{brown}{mechanically} define 3NF?\\\vspace{10pt}
+A relation $R$ with a set of functional dependencies $\Sigma$ is in third norm form (3NF) if and only iff for every functional dependency $X\rightarrow\{A\}$, we have:
+\begin{itemize}
+	\item $X\rightarrow\{A\}$ is trivial, or
+	\item $X$ is a superkey, or
+	\item $A$ is a prime attribute.
+\end{itemize}\vspace{5pt}
+
+\begin{alertblock}{Just to understand, don't keep it in mind!}
+	Unlike the 2NF that still allows a non-prime attribute to be determined by another non-prime attribute (e.g. \texttt{\textbf{country}} is determined by \texttt{\textbf{postal}}). 
+	The 3NF is more strict so that it does not allow any non-prime attribute to be determined by other non-prime attributes (all non-prime attributes have to be independent to each other, and therefore can only be determined by prime attributes).
+\end{alertblock}
+
+\end{frame}
+
+\begin{frame}[fragile]{Question 3 (b) Cont.}
 \begin{figure}
-	\includegraphics[width=0.95\textwidth, trim=0 0 0 0, clip]{t5/images/q3_3nf.png}
+	\includegraphics[width=0.95\textwidth, trim=0 0 0 0, clip]{t5/images/q3_3nf_highlight.png}
 \end{figure}
 \end{frame}
 
@@ -238,6 +276,9 @@ $\{B, C\} \rightarrow \{A\}$ $\{A\}$ is a prime attribute.
 Let us look at the non-trivial functional dependencies of the form $X \rightarrow \{A\}$ derived from $\Sigma$. Namely after removing the trivial functional dependencies after step 1 of the minimal cover algorithm. Equivalently, we could use a minimal cover.\\\vspace{3pt}
 $\{A\} \rightarrow \{C\}$ is non-trivial, $\{A\}$ is not a superkey and $\{C\}$ is not a prime attribute. This functional dependency violates the three conditions of the 3NF definition. $R$ with $\Sigma$ is not in 3NF.\\\vspace{3pt}
 
+\end{frame}
+
+\begin{frame}[fragile]{Question 3 (b) Cont.}
 Incidentally, several other functional dependencies also violate the 3NF definition:\\
 $\{A\} \rightarrow \{B\}$ is non-trivial, $\{A\}$ is not a superkey and $\{B\}$ is not a prime attribute.\\\vspace{3pt}
 
@@ -253,8 +294,24 @@ $\{B, C\} \rightarrow \{A\}$ $\{A\}$ is a prime attribute.
 \begin{frame}[fragile]{Question 3 (c)}
 (c) Is $R$ with $\Sigma$ in BCNF?\\\vspace{10pt}
 
+\textbf{Recap}: How to \textcolor{brown}{mechanically} define BCNF?\\\vspace{10pt}
+A relation $R$ with a set of functional dependencies $\Sigma$ is in Boyce-Codd norm form (BCNF) if and only iff for every functional dependency $X\rightarrow\{A\}$, we have:
+\begin{itemize}
+	\item $X\rightarrow\{A\}$ is trivial, or
+	\item $X$ is a superkey.
+\end{itemize}\vspace{3pt}
+
+\begin{alertblock}{Just to understand, don't keep it in mind!}
+BCNF was proposed in 1974 (3 years later than 2NF and 3NF) and was known as 3.5NF at the beginning.\\
+Unlike the 3NF that does not allow a non-prime attribute to be determined by another non-prime attribute (e.g. \texttt{country} is determined by \texttt{postal}). 
+The BCNF is more strict so that it does not allow any attribute to be determined by non-prime attributes.
+\end{alertblock}
+
+\end{frame}
+
+\begin{frame}[fragile]{Question 3 (c) Cont.}
 \begin{figure}
-	\includegraphics[width=0.85\textwidth, trim=0 0 0 0, clip]{t5/images/q3_bcnf.png}
+	\includegraphics[width=0.85\textwidth, trim=0 0 0 0, clip]{t5/images/q3_bcnf_highlight.png}
 \end{figure}
 \end{frame}
 
@@ -366,17 +423,141 @@ Incidentally yes, the \textbf{algorithm} (itself) \textcolor{red}{\textbf{does n
 \begin{alertblock}{Notice}
 	Don't take the dependency preserving for granted in decomposition.
 \end{alertblock}
+
 \end{frame}
+
+\begin{frame}[fragile]{Question 4 Cont. \textcolor{red}{(Extra)}}
+To wrap-up, BCNF decomposition is \textbf{not always optimal}, as it aims to dismiss some ``unnecessary'' dependencies among attributes. (sometimes 3NF is good enough)\\\vspace{5pt}
+Let's look back the decomposition result:
+
+$R_{1.1}=\{C, D\}$ (\textbf{\underline{postal}}, \textbf{country})
+
+$R_{1.1}=\{A, B, C\}$ (\textbf{\underline{mobile}}, \textbf{\underline{email}}, \textbf{postal})
+
+$R_{2}=\{C, D\}$ (\underline{\textbf{mobile}, \textbf{service}})\\\vspace{5pt}
+
+\textbf{Extra}:
+How to compare with ER design (the previous tutorial)? ER design and Normalisation (historically) uses to be competitive relationship in database design \& tuning, with the exactly same goal.\\\vspace{5pt}
+\end{frame}
+
+\begin{frame}[fragile]{Question 4 Cont. \textcolor{red}{(Extra)}}
+
+C.f. the decomposition outcome: \\
+(\textbf{\underline{postal}}, \textbf{country}),
+(\textbf{\underline{mobile}}, \textbf{\underline{email}}, \textbf{postal}),
+and (\underline{\textbf{mobile}, \textbf{service}})\\\vspace{5pt}
+
+Take a look at the ER diagram and DDL derived based on Q1 story:\\\vspace{5pt}
+\begin{figure}
+	\includegraphics[width=0.6\textwidth, trim=0 0 0 0, clip]{t5/images/er-diagram.png}
+\end{figure}
+
+Can you spot any problem in the design above?\\\vspace{5pt}
+\end{frame}
+
+\begin{frame}[fragile]{Question 4 Cont. \textcolor{red}{(Extra)}}
+We find that ER design is a \textbf{top-down} approach, while normalisation is the \textbf{bottom-up} one.\\\vspace{5pt}
+
+\begin{block}{ER design vs. Normalisation}
+	In ER design, we always group first (identify entity and relationship sets), then go into details (identify the tables and their attributes).\\
+	While in normalisation, we always focus on details first (add all attributes in a flatten form with functional dependencies), then group them into proper relations (based on the specific normal form stipulated).
+\end{block}
+
+A wise \& modern strategy is to take advantage of both, although it might be hard (not difficult for human, but hard for computer), i.e.,
+perform ER design first, and make it compliant with a desired norm form.
+\end{frame}
+
+\section*{Extra Practice}
+
+\begin{frame}[fragile]{\scalerel*{\includegraphics{t5/images/boss_level.png}}{boss\_icon}~\textcolor{red}{Boss Level Extra Practice}}
+	Challenging questions ahead!!! I share with you 4 practice questions and each one may cost you 5-10 mins.\\\vspace{10pt}
+	\textcolor{brown}{If you can UNDERSTAND their answers, you basically uderstand all key knowledge of this tutorial and you should be fine for the exam/test.}\\\vspace{10pt}
+	\textcolor{brown}{If you can easily SOLVE these questions, you are a master of normalization (at least for the scope of this module) and you can teach this part in the future.}\\
 	
+	\begin{columns}[t]
+	\column{0.65\textwidth}
+	\\\vspace{5pt}
+	\textbf{Free lunch, why not take it?}\\
+	\textbf{Come on! Die-die must try!}\\\vspace{10pt}
+	(Due to time limitation, solutions will be posted on Luminus and elaborated during zoom T5 session (Wed 8:30-9:30 PM) so that you can watch the video recording)
+	\column{0.25\textwidth}
+	\begin{figure}
+		\includegraphics[width=1\textwidth, trim=0 0 0 0, clip]{t5/images/mario.png}
+	\end{figure}
+\end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{\scalerel*{\includegraphics{t5/images/boss_level.png}}{boss\_icon}~\textcolor{red}{Boss Level Extra} - Case 1}
+We are designing a warehouse management system for a lot of warehouses. Each warehouse ($W$) has one manager ($M$), and each manager only manage one warehouse. There could be many products ($P$) in per warehouse. For each product we also record its stock number ($S$).\\\vspace{10pt}
+\textbf{Questions}:\\
+(1) Find \textbf{candidate key(s)} and \textbf{prime attribute(s)} from attribute closures $\Sigma^{+}$.\\
+(2) Compute the \textbf{compact minimal cover} of $R$ with all FDs $\Sigma$.\\
+(3) Determine if it is \textbf{2NF}? If yes, is it \textbf{3NF}? If yes, is it \textbf{BCNF}?\\
+(4) If it is not 3NF, \textbf{synthesis} the relations to make it 3NF.\\
+(5) If it is not BCNF, \textbf{decomposite} the relations to make it BCNF and verify the \textbf{dependency preservation}. 
+\end{frame}
+
+\begin{frame}[fragile]{\scalerel*{\includegraphics{t5/images/boss_level.png}}{boss\_icon}~\textcolor{red}{Boss Level Extra} - Case 2}
+	We are designing a transcript issuing system for our university. 
+	Each student is identified by its matric number/student ID, written as $S$.
+	We are going to record a grade ($G$) for each student ($S$) and each module ($M$).
+	We also record students' names ($N$) and their faculty ($F$). In case any verification is needed, we also save the dean's name for each department ($D$) so that people can contact him/her.\\\vspace{10pt}
+	\textbf{Questions}:\\
+	(1) Find \textbf{candidate key(s)} and \textbf{prime attribute(s)} from attribute closures $\Sigma^{+}$.\\
+	(2) Compute the \textbf{compact minimal cover} of $R$ with all FDs $\Sigma$.\\
+	(3) Determine if it is \textbf{2NF}? If yes, is it \textbf{3NF}? If yes, is it \textbf{BCNF}?\\
+	(4) If it is not 3NF, \textbf{synthesis} the relations to make it 3NF.\\
+	(5) If it is not BCNF, \textbf{decomposite} the relations to make it BCNF and verify the \textbf{dependency preservation}. 
+\end{frame}
+
+\begin{frame}[fragile]{\scalerel*{\includegraphics{t5/images/boss_level.png}}{boss\_icon}~\textcolor{red}{Boss Level Extra} - Case 3}
+	This time we deal with abstract relations with functional dependencies shown as in the figure below:\\\vspace{-5pt}
+	
+	\begin{figure}
+		\includegraphics[width=0.4\textwidth, trim=0 0 0 0, clip]{t5/images/case3.png}
+	\end{figure}\vspace{-5pt}
+
+	\textbf{Questions}:\\
+	(1) Find \textbf{candidate key(s)} and \textbf{prime attribute(s)} from attribute closures $\Sigma^{+}$.\\
+	(2) Compute the \textbf{compact minimal cover} of $R$ with all FDs $\Sigma$.\\
+	(3) Determine if it is \textbf{2NF}? If yes, is it \textbf{3NF}? If yes, is it \textbf{BCNF}?\\
+	(4) If it is not 3NF, \textbf{synthesis} the relations to make it 3NF.\\
+	(5) If it is not BCNF, \textbf{decomposite} the relations to make it BCNF and verify the \textbf{dependency preservation}. 
+\end{frame}
+
+\begin{frame}[fragile]{\scalerel*{\includegraphics{t5/images/boss_level.png}}{boss\_icon}~\textcolor{red}{Boss Level Extra} - Case 4}
+	This time we deal with abstract relations with functional dependencies shown as in the figure below:\\\vspace{-5pt}
+	
+	\begin{figure}
+		\includegraphics[width=0.25\textwidth, trim=0 0 0 0, clip]{t5/images/case4.png}
+	\end{figure}\vspace{-5pt}
+
+	\textbf{Questions}:\\
+	(1) Find \textbf{candidate key(s)} and \textbf{prime attribute(s)} from attribute closures $\Sigma^{+}$.\\
+	(2) Compute the \textbf{compact minimal cover} of $R$ with all FDs $\Sigma$.\\
+	(3) Determine if it is \textbf{2NF}? If yes, is it \textbf{3NF}? If yes, is it \textbf{BCNF}?\\
+	(4) If it is not 3NF, \textbf{synthesis} the relations to make it 3NF.\\
+	(5) If it is not BCNF, \textbf{decomposite} the relations to make it BCNF and verify the \textbf{dependency preservation}. 
+\end{frame}
+
+\begin{frame}{}
+	\begin{figure}
+		\includegraphics[width=0.6\textwidth, trim=0 0 0 0, clip]{t5/images/final.png}
+	\end{figure}
+\end{frame}
 \begin{frame}{}
 	\centering  
 	For any further question, please feel free to email me:\vspace{10pt}
 	
-	huasong.meng@u.nus.edu \vspace{20pt}
+	huasong.meng@u.nus.edu\\\vspace{3pt}
+	menghs@i2r.a-star.edu.sg (work)\\\vspace{3pt}
+	huasong.meng@gmail.com (personal)\vspace{10pt}
+	
+	Or you can whatsapp/wechat me via: 81028639 \vspace{20pt}
 	
 	\begin{tcolorbox}
 		\begin{center}
-			\textcolor{red}{Cases in the extra practice are contributed by our students.\\\vspace{5pt}Copyright 2021 Mark H. Meng. All rights reserved.}
+			\textcolor{red}{Copyright 2021 Mark H. Meng. All rights reserved.}
 		\end{center}
 	\end{tcolorbox}
 \end{frame}
