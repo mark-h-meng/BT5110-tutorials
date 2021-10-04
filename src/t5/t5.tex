@@ -35,6 +35,9 @@
 	\end{figure}
 \end{frame}
 
+
+\newcommand{\boss}[1]{\scalerel*{\includegraphics{t5/images/boss_level.png}}{boss\_icon}~\textcolor{red}{#1}}
+
 \section*{Question 1 Functional Dependencies}
 
 \begin{frame}[fragile]{Question 1}
@@ -497,6 +500,47 @@ We are designing a warehouse management system for a lot of warehouses. Each war
 (5) If it is not BCNF, \textbf{decomposite} the relations to make it BCNF and verify the \textbf{dependency preservation}. 
 \end{frame}
 
+\begin{frame}[fragile]{\scalerel*{\includegraphics{t5/images/boss_level.png}}{boss\_icon}~\textcolor{red}{Boss Level Extra} - Case 1}
+	$R = \{W, M, P, S\}$\\
+	$\Sigma = \{\{W\} \rightarrow \{M\}, \{M\} \rightarrow \{W\},
+	\{W, P\} \rightarrow \{S\}\}$.\\\vspace{5pt}
+	
+	\textbf{Solution}:\\
+	(1) The attribute closure of $R$ is:
+	\begin{align*} 
+	\Sigma^{+} = \{&\{W\}^{+} \rightarrow \{W, M\},\\
+	&\{M\}^{+} \rightarrow \{W, M\},\\
+	&\{P\}^{+} \rightarrow \{P\},\\
+	&\{S\}^{+} \rightarrow \{S\},\\
+	&\{{M,W}\}^{+} \rightarrow \{W, M\},\\
+	&\{{M,P}\}^{+} \rightarrow \{W, M, P, S\},\\
+	&\{{M,S}\}^{+} \rightarrow \{W, M, S\},\\
+	&\{{W,P}\}^{+} \rightarrow \{W, M, P, S\},\\
+	&\{{W,S}\}^{+} \rightarrow \{W, M, S\},...\}.
+	\end{align*} 
+
+	Now we find candidate keys: $\{W, P\}$ and $\{M, P\}$.\\
+	Prime attributes: $W, M, P$
+\end{frame}
+
+\begin{frame}[fragile]{\scalerel*{\includegraphics{t5/images/boss_level.png}}{boss\_icon}~\textcolor{red}{Boss Level Extra} - Case 1}
+	(2) The compact minimal cover is:\\\vspace{5pt}
+	
+	$\{W\} \rightarrow \{M\},$\\
+	$\{M\}  \rightarrow \{W\},$\\
+	$\{W, P\} \rightarrow \{S\}.$\\\vspace{5pt}
+
+	(3)  Yes it is 2NF, 3NF, but not BCNF (e.g., $\{W\} \rightarrow \{M\}$).\\\vspace{5pt}
+	
+	(4) Omitted as it is 3NF. \\\vspace{5pt}
+	
+	(5) Decomposition at $\{W\} \rightarrow \{M\}$:\\\vspace{5pt}
+	
+	$R_1 = (\underline{W}, \underline{M}),$\\
+	$R_2 = (\underline{W}, \underline{P}, S).$\\\vspace{5pt}
+		
+\end{frame}
+
 \begin{frame}[fragile]{\scalerel*{\includegraphics{t5/images/boss_level.png}}{boss\_icon}~\textcolor{red}{Boss Level Extra} - Case 2}
 	We are designing a transcript issuing system for our university. 
 	Each student is identified by its matric number/student ID, written as $S$.
@@ -508,6 +552,66 @@ We are designing a warehouse management system for a lot of warehouses. Each war
 	(3) Determine if it is \textbf{2NF}? If yes, is it \textbf{3NF}? If yes, is it \textbf{BCNF}?\\
 	(4) If it is not 3NF, \textbf{synthesis} the relations to make it 3NF.\\
 	(5) If it is not BCNF, \textbf{decomposite} the relations to make it BCNF and verify the \textbf{dependency preservation}. 
+\end{frame}
+
+\begin{frame}[fragile]{\scalerel*{\includegraphics{t5/images/boss_level.png}}{boss\_icon}~\textcolor{red}{Boss Level Extra} - Case 2}
+	$R = \{S, M, G, N, F, D\}$\\
+	$\Sigma = \{\{S, M\} \rightarrow \{G\}, 
+	\{S\} \rightarrow \{N, F\},
+	\{F\} \rightarrow \{D\}\}$.\\\vspace{5pt}
+	
+	\textbf{Solution}:\\
+	(1) The attribute closure of $R$ is:
+	\begin{align*} 
+		\Sigma^{+} = \{&\{S\}^{+} \rightarrow \{S, N, F, D\},\\
+		&\{M\}^{+} \rightarrow \{M\},\\
+		&\{G\}^{+} \rightarrow \{G\},\\
+		&\{N\}^{+} \rightarrow \{N\},\\
+		&\{F\}^{+} \rightarrow \{F, D\},\\
+		&\{D\}^{+} \rightarrow \{D\},\\
+		&\{{S, M}\}^{+} \rightarrow \{S, M, N, F, D, G\},\\
+		&\{{S, G}\}^{+} \rightarrow \{S, G, N, F, D\}, ...
+	\end{align*} 
+	
+	Now we find candidate keys: $\{S, M\}$.\\
+	Prime attributes: $S, M$
+\end{frame}
+
+\begin{frame}[fragile]{\scalerel*{\includegraphics{t5/images/boss_level.png}}{boss\_icon}~\textcolor{red}{Boss Level Extra} - Case 2}
+	(2) The compact minimal cover is:\\\vspace{5pt}
+	
+	$\{S, M\} \rightarrow \{G\},$\\
+	$\{S\}  \rightarrow \{N, F\},$\\
+	$\{F\} \rightarrow \{D\}.$\\\vspace{5pt}
+	
+	(3)  No it is not 2NF (e.g., $\{S\}\rightarrow\{N, F\}$, \{N, F\} are not prime attributes and $S$ is a subset of candidate key). Therefore it is not 3NF, and not BCNF, too.\\\vspace{5pt}
+	
+	(4) Synthesis result has 3 relations and is (luckily) BCNF: \\\vspace{5pt}
+	
+	$R_1 = (\underline{S}, \underline{M}, G),$\\
+	$R_2 = (\underline{S}, N, F),$\\
+	$R_3 = (\underline{F}, D).$\\\vspace{5pt}
+	
+\end{frame}
+
+\begin{frame}[fragile]{\scalerel*{\includegraphics{t5/images/boss_level.png}}{boss\_icon}~\textcolor{red}{Boss Level Extra} - Case 2}
+	(5) Decomposition at $\{F\} \rightarrow \{D\}$:\\\vspace{5pt}
+	
+	$R_1 = (\underline{F}, D),$\\
+	$R_2 = (\underline{S}, \underline{M}, G, N, F).$\\\vspace{5pt}
+	
+	However, $R_2$ needs to be further decomposed, at $\{S\} \rightarrow \{N\}$:\\\vspace{5pt}
+	
+	$R_{2.1} = (\underline{S}, N, F).$\\
+	$R_{2.2} = (\underline{S}, \underline{M}, G).$\\\vspace{5pt}
+	
+	As the result, the BCNF decomposition is (luckily) dependency preserving and is given below:\\\vspace{5pt}
+	
+	$R_1 = (\underline{F}, D),$\\
+	$R_{2.1} = (\underline{S}, N, F).$\\
+	$R_{2.2} = (\underline{S}, \underline{M}, G).$\\\vspace{5pt}
+	
+	\textit{(In fact this decomposition result is same with the synthesis one)}
 \end{frame}
 
 \begin{frame}[fragile]{\scalerel*{\includegraphics{t5/images/boss_level.png}}{boss\_icon}~\textcolor{red}{Boss Level Extra} - Case 3}
