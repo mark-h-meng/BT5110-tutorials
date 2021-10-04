@@ -35,7 +35,7 @@
 	\end{figure}
 \end{frame}
 
-% \newcommand{\boss}[1]{\scalerel*{\includegraphics{t5/images/boss_level.png}}{boss\_icon}~\textcolor{red}{#1}}
+% \newcommand{\boss}[1]{\scalerel*{\includegraphics{t5/images/boss_level.png}}{boss\_icon}~\textcolor{red}{Boss Level #1}}
 
 \newcommand{\boss}[1]{\textcolor{red}{#1}}
 
@@ -473,7 +473,7 @@ perform ER design first, and make it compliant with a desired norm form.
 
 \section*{Extra Practice}
 
-\begin{frame}[fragile]{\scalerel*{\includegraphics{t5/images/boss_level.png}}{boss\_icon}~\textcolor{red}{Boss Level Extra Practice}}
+\begin{frame}[fragile]{\boss{Extra Practice}}
 	Challenging questions ahead!!! I share with you 4 practice questions and each one may cost you 5-10 mins.\\\vspace{10pt}
 	\textcolor{brown}{If you can UNDERSTAND their answers, you basically uderstand all key knowledge of this tutorial and you should be fine for the exam/test.}\\\vspace{10pt}
 	\textcolor{brown}{If you can easily SOLVE these questions, you are a master of normalization (at least for the scope of this module) and you can teach this part in the future.}\\
@@ -491,7 +491,7 @@ perform ER design first, and make it compliant with a desired norm form.
 \end{columns}
 \end{frame}
 
-\begin{frame}[fragile]{\scalerel*{\includegraphics{t5/images/boss_level.png}}{boss\_icon}~\textcolor{red}{Boss Level Extra} - Case 1}
+\begin{frame}[fragile]{\boss{Extra} - Case 1}
 We are designing a warehouse management system for a lot of warehouses. Each warehouse ($W$) has one manager ($M$), and each manager only manage one warehouse. There could be many products ($P$) in per warehouse. For each product we also record its stock number ($S$).\\\vspace{10pt}
 \textbf{Questions}:\\
 (1) Find \textbf{candidate key(s)} and \textbf{prime attribute(s)} from attribute closures $\Sigma^{+}$.\\
@@ -501,7 +501,7 @@ We are designing a warehouse management system for a lot of warehouses. Each war
 (5) If it is not BCNF, \textbf{decomposite} the relations to make it BCNF and verify the \textbf{dependency preservation}. 
 \end{frame}
 
-\begin{frame}[fragile]{\scalerel*{\includegraphics{t5/images/boss_level.png}}{boss\_icon}~\textcolor{red}{Boss Level Extra} - Case 1}
+\begin{frame}[fragile]{\boss{Extra} - Case 1}
 	$R = \{W, M, P, S\}$\\
 	$\Sigma = \{\{W\} \rightarrow \{M\}, \{M\} \rightarrow \{W\},
 	\{W, P\} \rightarrow \{S\}\}$.\\\vspace{5pt}
@@ -524,14 +524,14 @@ We are designing a warehouse management system for a lot of warehouses. Each war
 	Prime attributes: $W, M, P$
 \end{frame}
 
-\begin{frame}[fragile]{\scalerel*{\includegraphics{t5/images/boss_level.png}}{boss\_icon}~\textcolor{red}{Boss Level Extra} - Case 1}
+\begin{frame}[fragile]{\boss{Extra} - Case 1}
 	(2) The compact minimal cover is:\\\vspace{5pt}
 	
 	$\{W\} \rightarrow \{M\},$\\
 	$\{M\}  \rightarrow \{W\},$\\
 	$\{W, P\} \rightarrow \{S\}.$\\\vspace{5pt}
 
-	(3)  Yes it is 2NF, 3NF, but not BCNF (e.g., $\{W\} \rightarrow \{M\}$).\\\vspace{5pt}
+	(3)  Yes it is 2NF, 3NF, but not BCNF (e.g., $\{W\} \rightarrow \{M\}$, where $\{W\}$ is not a superkey).\\\vspace{5pt}
 	
 	(4) Omitted as it is 3NF. \\\vspace{5pt}
 	
@@ -539,10 +539,12 @@ We are designing a warehouse management system for a lot of warehouses. Each war
 	
 	$R_1 = (\underline{W}, \underline{M}),$\\
 	$R_2 = (\underline{W}, \underline{P}, S).$\\\vspace{5pt}
+	
+	It is (luckily) dependency preserving.
 		
 \end{frame}
 
-\begin{frame}[fragile]{\scalerel*{\includegraphics{t5/images/boss_level.png}}{boss\_icon}~\textcolor{red}{Boss Level Extra} - Case 2}
+\begin{frame}[fragile]{\boss{Extra} - Case 2}
 	We are designing a transcript issuing system for our university. 
 	Each student is identified by its matric number/student ID, written as $S$.
 	We are going to record a grade ($G$) for each student ($S$) and each module ($M$).
@@ -555,7 +557,7 @@ We are designing a warehouse management system for a lot of warehouses. Each war
 	(5) If it is not BCNF, \textbf{decomposite} the relations to make it BCNF and verify the \textbf{dependency preservation}. 
 \end{frame}
 
-\begin{frame}[fragile]{\scalerel*{\includegraphics{t5/images/boss_level.png}}{boss\_icon}~\textcolor{red}{Boss Level Extra} - Case 2}
+\begin{frame}[fragile]{\boss{Extra} - Case 2}
 	$R = \{S, M, G, N, F, D\}$\\
 	$\Sigma = \{\{S, M\} \rightarrow \{G\}, 
 	\{S\} \rightarrow \{N, F\},
@@ -578,7 +580,7 @@ We are designing a warehouse management system for a lot of warehouses. Each war
 	Prime attributes: $S, M$
 \end{frame}
 
-\begin{frame}[fragile]{\scalerel*{\includegraphics{t5/images/boss_level.png}}{boss\_icon}~\textcolor{red}{Boss Level Extra} - Case 2}
+\begin{frame}[fragile]{\boss{Extra} - Case 2}
 	(2) The compact minimal cover is:\\\vspace{5pt}
 	
 	$\{S, M\} \rightarrow \{G\},$\\
@@ -595,7 +597,7 @@ We are designing a warehouse management system for a lot of warehouses. Each war
 	
 \end{frame}
 
-\begin{frame}[fragile]{\scalerel*{\includegraphics{t5/images/boss_level.png}}{boss\_icon}~\textcolor{red}{Boss Level Extra} - Case 2}
+\begin{frame}[fragile]{\boss{Extra} - Case 2}
 	(5) Decomposition at $\{F\} \rightarrow \{D\}$:\\\vspace{5pt}
 	
 	$R_1 = (\underline{F}, D),$\\
@@ -615,7 +617,7 @@ We are designing a warehouse management system for a lot of warehouses. Each war
 	\textit{(In fact this decomposition result is same with the synthesis one)}
 \end{frame}
 
-\begin{frame}[fragile]{\scalerel*{\includegraphics{t5/images/boss_level.png}}{boss\_icon}~\textcolor{red}{Boss Level Extra} - Case 3}
+\begin{frame}[fragile]{\boss{Extra} - Case 3}
 	This time we deal with abstract relations with functional dependencies shown as in the figure below:\\\vspace{-5pt}
 	
 	\begin{figure}
@@ -631,7 +633,7 @@ We are designing a warehouse management system for a lot of warehouses. Each war
 \end{frame}
 
 
-\begin{frame}[fragile]{\scalerel*{\includegraphics{t5/images/boss_level.png}}{boss\_icon}~\textcolor{red}{Boss Level Extra} - Case 3}
+\begin{frame}[fragile]{\boss{Extra} - Case 3}
 
 	\textbf{Solution}:\\
 	(1) The attribute closure of $R = \{A, B, C, D\}$ is:\\\vspace{5pt}
@@ -653,7 +655,7 @@ We are designing a warehouse management system for a lot of warehouses. Each war
 	Prime attributes: $A, B, C, D$ (There is no non-prime attribute for this case)
 \end{frame}
 
-\begin{frame}[fragile]{\scalerel*{\includegraphics{t5/images/boss_level.png}}{boss\_icon}~\textcolor{red}{Boss Level Extra} - Case 3}
+\begin{frame}[fragile]{\boss{Extra} - Case 3}
 	(2) The compact minimal cover is:\\\vspace{5pt}
 	
 	$\{A, B\} \rightarrow \{C\}$\\
@@ -666,7 +668,7 @@ We are designing a warehouse management system for a lot of warehouses. Each war
 	
 \end{frame}
 
-\begin{frame}[fragile]{\scalerel*{\includegraphics{t5/images/boss_level.png}}{boss\_icon}~\textcolor{red}{Boss Level Extra} - Case 3}
+\begin{frame}[fragile]{\boss{Extra} - Case 3}
 	(5) Decomposition at $\{C\} \rightarrow \{D\}$:\\\vspace{5pt}
 	
 	$R_1 = (A, \underline{C}, D),$\\
@@ -684,7 +686,7 @@ We are designing a warehouse management system for a lot of warehouses. Each war
 	In this way both relations are BCNF, but we (still) lose that dependency $\{A, B\} \rightarrow \{C\}$.
 \end{frame}
 
-\begin{frame}[fragile]{\scalerel*{\includegraphics{t5/images/boss_level.png}}{boss\_icon}~\textcolor{red}{Boss Level Extra} - Case 4}
+\begin{frame}[fragile]{\boss{Extra} - Case 4}
 	This time we deal with abstract relations with functional dependencies shown as in the figure below:\\\vspace{-5pt}
 	
 	\begin{figure}
@@ -700,7 +702,7 @@ We are designing a warehouse management system for a lot of warehouses. Each war
 \end{frame}
 
 
-\begin{frame}[fragile]{\scalerel*{\includegraphics{t5/images/boss_level.png}}{boss\_icon}~\textcolor{red}{Boss Level Extra} - Case 4}
+\begin{frame}[fragile]{\boss{Extra} - Case 4}
 	
 	\textbf{Solution}:\\
 	(1) The attribute closure of $R = \{A, B, C, D\}$ is:\\\vspace{5pt}
@@ -722,7 +724,7 @@ We are designing a warehouse management system for a lot of warehouses. Each war
 	Prime attributes: $A, B, C$.
 \end{frame}
 
-\begin{frame}[fragile]{\scalerel*{\includegraphics{t5/images/boss_level.png}}{boss\_icon}~\textcolor{red}{Boss Level Extra} - Case 4}
+\begin{frame}[fragile]{\boss{Extra} - Case 4}
 	(2) The compact minimal cover is:\\\vspace{5pt}
 	
 	$\{A\} \rightarrow \{B, C, D\}$\\
@@ -739,7 +741,7 @@ We are designing a warehouse management system for a lot of warehouses. Each war
 	
 \end{frame}
 
-\begin{frame}[fragile]{\scalerel*{\includegraphics{t5/images/boss_level.png}}{boss\_icon}~\textcolor{red}{Boss Level Extra} - Case 4}
+\begin{frame}[fragile]{\boss{Extra} - Case 4}
 	(5) Decomposition at $\{B\} \rightarrow \{D\}$:\\\vspace{5pt}
 	
 	$R_1 = (\underline{B}, D),$\\
@@ -747,7 +749,6 @@ We are designing a warehouse management system for a lot of warehouses. Each war
 	
 	In this way both relations are BCNF, but we lose a dependency $\{A\} \rightarrow \{D\}$.\\\vspace{5pt}
 	
-	\textit{(In fact this decomposition result is same with the synthesis one)}
 \end{frame}
 
 \section*{Farewell}
