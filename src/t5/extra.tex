@@ -1,0 +1,285 @@
+
+
+
+\begin{frame}[fragile]{\boss{Extra} - Case 1}
+	We are designing a warehouse management system for a lot of warehouses. Each warehouse ($W$) has one manager ($M$), and each manager only manage one warehouse. There could be many products ($P$) in per warehouse. For each product we also record its stock number ($S$).\\\vspace{10pt}
+	\textbf{Questions}:\\
+	(1) Find \textbf{candidate key(s)} and \textbf{prime attribute(s)} from attribute closures $\Sigma^{+}$.\\
+	(2) Compute the \textbf{compact minimal cover} of $R$ with all FDs $\Sigma$.\\
+	(3) Determine if it is \textbf{2NF}? If yes, is it \textbf{3NF}? If yes, is it \textbf{BCNF}?\\
+	(4) If it is not 3NF, \textbf{synthesis} the relations to make it 3NF.\\
+	(5) If it is not BCNF, \textbf{decomposite} the relations to make it BCNF and verify the \textbf{dependency preservation}. 
+\end{frame}
+
+\begin{frame}[fragile]{\boss{Extra} - Case 1 (Solution)}
+	\textbf{W}: warehouse; \textbf{M}: manager;
+	\textbf{P}: product; \textbf{S}: stock.\\\vspace{5pt}
+	$R = \{W, M, P, S\}$\\
+	$\Sigma = \{\{W\} \rightarrow \{M\}, \{M\} \rightarrow \{W\},
+	\{W, P\} \rightarrow \{S\}\}$.\\\vspace{15pt}
+	\begin{figure}
+		\includegraphics[width=0.2\textwidth, trim=0 0 0 0, clip]{t5/images/case1.png}
+	\end{figure}\vspace{-5pt}
+\end{frame}
+
+\begin{frame}[fragile]{\boss{Extra} - Case 1 (Solution)}
+	$R = \{W, M, P, S\}$\\
+	$\Sigma = \{\{W\} \rightarrow \{M\}, \{M\} \rightarrow \{W\},
+	\{W, P\} \rightarrow \{S\}\}$.\\\vspace{5pt}
+	
+	\textbf{Solution}:\\
+	(1) The attribute closure of $R$ is:
+	\begin{align*} 
+		\Sigma^{+} = \{&\{W\}^{+} \rightarrow \{W, M\},\\
+		&\{M\}^{+} \rightarrow \{W, M\},\\
+		&\{P\}^{+} \rightarrow \{P\},\\
+		&\{S\}^{+} \rightarrow \{S\},\\
+		&\{{M,W}\}^{+} \rightarrow \{W, M\},\\
+		&\{{M,P}\}^{+} \rightarrow \{W, M, P, S\},\\
+		&\{{M,S}\}^{+} \rightarrow \{W, M, S\},\\
+		&\{{W,P}\}^{+} \rightarrow \{W, M, P, S\},\\
+		&\{{W,S}\}^{+} \rightarrow \{W, M, S\},...\}.
+	\end{align*} 
+	
+	Now we find candidate keys: $\{W, P\}$ and $\{M, P\}$.\\
+	Prime attributes: $W, M, P$
+\end{frame}
+
+\begin{frame}[fragile]{\boss{Extra} - Case 1 (Solution)}
+	(2) The compact minimal cover is:\\\vspace{5pt}
+	
+	$\{W\} \rightarrow \{M\},$\\
+	$\{M\}  \rightarrow \{W\},$\\
+	$\{W, P\} \rightarrow \{S\}.$\\\vspace{5pt}
+	
+	(3)  Yes it is 2NF, 3NF, but not BCNF (e.g., $\{W\} \rightarrow \{M\}$, where $\{W\}$ is not a superkey).\\\vspace{5pt}
+	
+	(4) Omitted as it is 3NF. \\\vspace{5pt}
+	
+	(5) Decomposition at $\{W\} \rightarrow \{M\}$:\\\vspace{5pt}
+	
+	$R_1 = (\underline{W}, \underline{M}),$\\
+	$R_2 = (\underline{W}, \underline{P}, S).$\\\vspace{5pt}
+	
+	It is (luckily) dependency preserving.
+	
+\end{frame}
+
+\begin{frame}[fragile]{\boss{Extra} - Case 2}
+	We are designing a transcript issuing system for our university. 
+	Each student is identified by its matric number/student ID, written as $S$.
+	We are going to record a grade ($G$) for each student ($S$) and each module ($M$).
+	We also record students' names ($N$) and their faculty ($F$). In case any verification is needed, we also save the dean's name for each department ($D$) so that people can contact him/her.\\\vspace{10pt}
+	\textbf{Questions}:\\
+	(1) Find \textbf{candidate key(s)} and \textbf{prime attribute(s)} from attribute closures $\Sigma^{+}$.\\
+	(2) Compute the \textbf{compact minimal cover} of $R$ with all FDs $\Sigma$.\\
+	(3) Determine if it is \textbf{2NF}? If yes, is it \textbf{3NF}? If yes, is it \textbf{BCNF}?\\
+	(4) If it is not 3NF, \textbf{synthesis} the relations to make it 3NF.\\
+	(5) If it is not BCNF, \textbf{decomposite} the relations to make it BCNF and verify the \textbf{dependency preservation}. 
+\end{frame}
+
+\begin{frame}[fragile]{\boss{Extra} - Case 2 (Solution)}
+	\textbf{S}: student ID; \textbf{M}: module; \textbf{N}: name;
+	\textbf{F}: faculty; \textbf{G}: grade; \textbf{D}: dean\\\vspace{5pt}
+	$R = \{S, M, G, N, F, D\}$\\
+	$\Sigma = \{\{S, M\} \rightarrow \{G\}, 
+	\{S\} \rightarrow \{N, F\},
+	\{F\} \rightarrow \{D\}\}$.\\\vspace{15pt}
+	\begin{figure}
+		\includegraphics[width=0.4\textwidth, trim=0 0 0 0, clip]{t5/images/case2.png}
+	\end{figure}\vspace{-5pt}
+\end{frame}
+
+\begin{frame}[fragile]{\boss{Extra} - Case 2 (Solution)}
+	$R = \{S, M, G, N, F, D\}$\\
+	$\Sigma = \{\{S, M\} \rightarrow \{G\}, 
+	\{S\} \rightarrow \{N, F\},
+	\{F\} \rightarrow \{D\}\}$.\\\vspace{5pt}
+	
+	\textbf{Solution}:\\
+	(1) The attribute closure of $R$ is:
+	\begin{align*} 
+		\Sigma^{+} = \{&\{S\}^{+} \rightarrow \{S, N, F, D\},\\
+		&\{M\}^{+} \rightarrow \{M\},\\
+		&\{G\}^{+} \rightarrow \{G\},\\
+		&\{N\}^{+} \rightarrow \{N\},\\
+		&\{F\}^{+} \rightarrow \{F, D\},\\
+		&\{D\}^{+} \rightarrow \{D\},\\
+		&\{{S, M}\}^{+} \rightarrow \{S, M, N, F, D, G\},\\
+		&\{{S, G}\}^{+} \rightarrow \{S, G, N, F, D\}, ...
+	\end{align*} 
+	
+	Now we find candidate keys: $\{S, M\}$.\\
+	Prime attributes: $S, M$
+\end{frame}
+
+\begin{frame}[fragile]{\boss{Extra} - Case 2 (Solution)}
+	(2) The compact minimal cover is:\\\vspace{5pt}
+	
+	$\{S, M\} \rightarrow \{G\},$\\
+	$\{S\}  \rightarrow \{N, F\},$\\
+	$\{F\} \rightarrow \{D\}.$\\\vspace{5pt}
+	
+	(3)  No it is not 2NF (e.g., $\{S\}\rightarrow\{N, F\}$, \{N, F\} are not prime attributes and $S$ is a subset of candidate key). Therefore it is not 3NF, and not BCNF, too.\\\vspace{5pt}
+	
+	(4) Synthesis result has 3 relations and is (luckily) BCNF: \\\vspace{5pt}
+	
+	$R_1 = (\underline{S}, \underline{M}, G),$\\
+	$R_2 = (\underline{S}, N, F),$\\
+	$R_3 = (\underline{F}, D).$\\\vspace{5pt}
+	
+\end{frame}
+
+\begin{frame}[fragile]{\boss{Extra} - Case 2 (Solution)}
+	(5) Decomposition at $\{F\} \rightarrow \{D\}$:\\\vspace{5pt}
+	
+	$R_1 = (\underline{F}, D),$\\
+	$R_2 = (\underline{S}, \underline{M}, G, N, F).$\\\vspace{5pt}
+	
+	However, $R_2$ needs to be further decomposed, at $\{S\} \rightarrow \{N\}$:\\\vspace{5pt}
+	
+	$R_{2.1} = (\underline{S}, N, F).$\\
+	$R_{2.2} = (\underline{S}, \underline{M}, G).$\\\vspace{5pt}
+	
+	As the result, the BCNF decomposition is (luckily) dependency preserving and is given below:\\\vspace{5pt}
+	
+	$R_1 = (\underline{F}, D),$\\
+	$R_{2.1} = (\underline{S}, N, F).$\\
+	$R_{2.2} = (\underline{S}, \underline{M}, G).$\\\vspace{5pt}
+	
+	\textit{(In fact this decomposition result is same with the synthesis one)}
+\end{frame}
+
+\begin{frame}[fragile]{\boss{Extra} - Case 3}
+	This time we deal with abstract relations with functional dependencies shown as in the figure below:\\\vspace{-5pt}
+	
+	\begin{figure}
+		\includegraphics[width=0.4\textwidth, trim=0 0 0 0, clip]{t5/images/case3.png}
+	\end{figure}\vspace{-10pt}
+	
+	\textbf{Questions}:\\
+	(1) Find \textbf{candidate key(s)} and \textbf{prime attribute(s)} from attribute closures $\Sigma^{+}$.\\
+	(2) Compute the \textbf{compact minimal cover} of $R$ with all FDs $\Sigma$.\\
+	(3) Determine if it is \textbf{2NF}? If yes, is it \textbf{3NF}? If yes, is it \textbf{BCNF}?\\
+	(4) If it is not 3NF, \textbf{synthesis} the relations to make it 3NF.\\
+	(5) If it is not BCNF, \textbf{decomposite} the relations to make it BCNF and verify the \textbf{dependency preservation}. 
+\end{frame}
+
+
+\begin{frame}[fragile]{\boss{Extra} - Case 3 (Solution)}
+	
+	\textbf{Solution}:\\
+	(1) The attribute closure of $R = \{A, B, C, D\}$ is:\\\vspace{5pt}
+	\begin{scriptsize}
+		\begin{align*} 
+			\Sigma^{+} = \{&\{A\}^{+} \rightarrow \{A\},\\
+			&\{B\}^{+} \rightarrow \{B\},\\
+			&\{C\}^{+} \rightarrow \{A, C, D\},\\
+			&\{D\}^{+} \rightarrow \{A, D\},\\
+			&\{A, B\}^{+} \rightarrow \{A, B, C, D\},\\
+			&\{A, C\}^{+} \rightarrow \{A, C, D\},\\
+			&\{A, D\}^{+} \rightarrow \{A, D\},\\
+			&\{B, C\}^{+} \rightarrow \{A, B, C, D\}\\
+			&\{B, D\}^{+} \rightarrow \{A, B, C, D\}, ...
+		\end{align*}
+	\end{scriptsize}
+	
+	Now we find candidate keys: $\{A, B\}$ or $\{B, C\}$ or $\{B, D\}$.\\
+	Prime attributes: $A, B, C, D$ (There is no non-prime attribute for this case)
+\end{frame}
+
+\begin{frame}[fragile]{\boss{Extra} - Case 3 (Solution)}
+	(2) The compact minimal cover is:\\\vspace{5pt}
+	
+	$\{A, B\} \rightarrow \{C\}$\\
+	$\{C\} \rightarrow \{D\}$\\
+	$\{D\} \rightarrow \{A\}$.\\\vspace{5pt}
+	
+	(3) Yes it is 2NF and 3NF (because all attributes are prime attributes). However, it is not BCNF (e.g., $\{C\} \rightarrow \{D\}$ and $\{D\} \rightarrow \{A\}$).\\\vspace{5pt}
+	
+	(4) Omitted as it is 3NF. \\\vspace{5pt}
+	
+\end{frame}
+
+\begin{frame}[fragile]{\boss{Extra} - Case 3 (Solution)}
+	(5) Decomposition at $\{C\} \rightarrow \{D\}$:\\\vspace{5pt}
+	
+	$R_1 = (A, \underline{C}, D),$\\
+	$R_2 = (\underline{B}, \underline{C}).$\\\vspace{5pt}
+	
+	In this way both relations are BCNF, but we lose a dependency $\{A, B\} \rightarrow \{C\}$.\\\vspace{5pt}
+	
+	\textcolor{red}{How about we change the entry point of decomposition?}\\\vspace{5pt}
+	
+	Decomposition at $\{D\} \rightarrow \{A\}$:\\\vspace{5pt}
+	
+	$R_1 = (A, \underline{D}),$\\
+	$R_2 = (B, \underline{C}, D).$\\\vspace{5pt}
+	
+	In this way both relations are BCNF, but we (still) lose that dependency $\{A, B\} \rightarrow \{C\}$.
+\end{frame}
+
+\begin{frame}[fragile]{\boss{Extra} - Case 4}
+	Another abstract relations with functional dependencies shown as in the figure below:\\\vspace{-5pt}
+	
+	\begin{figure}
+		\includegraphics[width=0.25\textwidth, trim=0 0 0 0, clip]{t5/images/case4.png}
+	\end{figure}\vspace{-5pt}
+	
+	\textbf{Questions}:\\
+	(1) Find \textbf{candidate key(s)} and \textbf{prime attribute(s)} from attribute closures $\Sigma^{+}$.\\
+	(2) Compute the \textbf{compact minimal cover} of $R$ with all FDs $\Sigma$.\\
+	(3) Determine if it is \textbf{2NF}? If yes, is it \textbf{3NF}? If yes, is it \textbf{BCNF}?\\
+	(4) If it is not 3NF, \textbf{synthesis} the relations to make it 3NF.\\
+	(5) If it is not BCNF, \textbf{decomposite} the relations to make it BCNF and verify the \textbf{dependency preservation}. 
+\end{frame}
+
+
+\begin{frame}[fragile]{\boss{Extra} - Case 4 (Solution)}
+	
+	\textbf{Solution}:\\
+	(1) The attribute closure of $R = \{A, B, C, D\}$ is:\\\vspace{5pt}
+	\begin{scriptsize}
+		\begin{align*} 
+			\Sigma^{+} = \{&\{A\}^{+} \rightarrow \{A, B, C, D\},\\
+			&\{B\}^{+} \rightarrow \{B, D\},\\
+			&\{C\}^{+} \rightarrow \{C\},\\
+			&\{D\}^{+} \rightarrow \{D\},\\
+			&\{A, B\}^{+} \rightarrow \{A, B, C, D\},\\
+			&\{A, C\}^{+} \rightarrow \{A, B, C, D\} (trivial),\\
+			&\{A, D\}^{+} \rightarrow \{A, B, C, D\} (trivial),\\
+			&\{B, C\}^{+} \rightarrow \{A, B, C, D\}\\
+			&\{B, D\}^{+} \rightarrow \{B, D\}, ...
+		\end{align*}
+	\end{scriptsize}
+	
+	Now we find candidate keys: $\{A\}$ or $\{B, C\}$.\\
+	Prime attributes: $A, B, C$.
+\end{frame}
+
+\begin{frame}[fragile]{\boss{Extra} - Case 4 (Solution)}
+	(2) The compact minimal cover is:\\\vspace{5pt}
+	
+	$\{A\} \rightarrow \{B, C, D\}$\\
+	$\{B\} \rightarrow \{D\}$\\
+	$\{B, C\} \rightarrow \{A\}$.\\\vspace{5pt}
+	
+	(3) No it is not 2NF (e.g., $\{B\} \rightarrow \{D\}$, where $D$ is a non-prime attribute but $B$ is a subset of candidate key). Therefore, it is not 3NF and not BCNF, too.\\\vspace{5pt}
+	
+	(4) Synthesis result has 2 relations and each one is (luckily) BCNF: \\\vspace{5pt}
+	
+	$R_1 = (\underline{A}, \underline{B, C}, D),$\\\vspace{2pt}
+	$R_2 = (\underline{B}, D),$\\\vspace{1pt}
+	$\cancel{R_3 = (\underline{B, C}, \underline{A})}.$ (duplicate with $R_1$)\\\vspace{5pt}
+	
+\end{frame}
+
+\begin{frame}[fragile]{\boss{Extra} - Case 4 (Solution)}
+	(5) Decomposition at $\{B\} \rightarrow \{D\}$:\\\vspace{5pt}
+	
+	$R_1 = (\underline{B}, D),$\\
+	$R_2 = (\underline{A}, \underline{B, C}).$\\\vspace{5pt}
+	
+	In this way both relations are BCNF, but we lose a dependency $\{A\} \rightarrow \{D\}$.\\\vspace{5pt}
+	
+\end{frame}
