@@ -1,5 +1,43 @@
 
+\title{BT5110 Data Management and Warehousing}
 
+\subtitle{Tutorial 5: Normalisation\\ \textbf{(Extra Practice)}}
+
+\author{Mark Meng Huasong}
+
+\institute[National University of Singapore] % (optional, but mostly needed)
+{
+	School of Computing\\
+	National University of Singapore
+}
+
+\titlegraphic{
+	\includegraphics[width=2cm]{nus-logo}
+}
+
+\date{4 - 8 Oct, 2021}
+
+\begin{frame}
+	\titlepage
+	\begin{tcolorbox}
+		\begin{center}
+			{\scriptsize \textcolor{red}{All the materials within presentation slides are protected by copyrights.\\
+					It is forbidden by NUS to upload these materials to the Internet.}}
+		\end{center}
+	\end{tcolorbox}
+\end{frame}
+
+\begin{frame}
+	\begin{itemize}
+		\item Extra Case No.1 - Warehouse management system
+		\item Extra Case No.2 - University transcript issuing system
+		\item Extra Case No.3 (Abstract) - \textcolor{red}{\textit{Non dependency preserving decomposition}}
+		\item Extra Case No.4 (Abstract) - \textcolor{red}{\textit{Candidate keys with different sizes}}
+		\item In-class Case No.1 (Abstract) 
+		\item In-class Case No.2 (Abstract) - \textcolor{red}{\textit{Trick wanted for finding candidate key(s)}}
+		
+	\end{itemize}
+\end{frame}
 
 \begin{frame}[fragile]{\boss{Extra} - Case 1}
 	We are designing a warehouse management system for a lot of warehouses. Each warehouse ($W$) has one manager ($M$), and each manager only manage one warehouse. There could be many products ($P$) in per warehouse. For each product we also record its stock number ($S$).\\\vspace{10pt}
@@ -282,4 +320,190 @@
 	
 	In this way both relations are BCNF, but we lose a dependency $\{A\} \rightarrow \{D\}$.\\\vspace{5pt}
 	
+\end{frame}
+
+\begin{frame}[fragile]{\boss{Extra} - In-class Case 1}
+	Given a relation $R=\{A, B, C\}$ with functional dependency set:\\ 
+	$\Sigma=\{\{A\} \rightarrow \{B\},\{B\} \rightarrow \{C\}, \{A, B\} \rightarrow \{C\},\{B, C\} \rightarrow \{A\}\}.$\\\vspace{10pt}
+	\textbf{Questions}:\\
+	(1) Find \textbf{candidate key(s)} and \textbf{prime attribute(s)} from attribute closures $\Sigma^{+}$.\\
+	(2) Compute the \textbf{compact minimal cover} of $R$ with all FDs $\Sigma$.\\
+	(3) Determine if it is \textbf{2NF}? If yes, is it \textbf{3NF}? If yes, is it \textbf{BCNF}?\\
+	(4) If it is not 3NF, \textbf{synthesis} the relations to make it 3NF.\\
+	(5) If it is not BCNF, \textbf{decomposite} the relations to make it BCNF and verify the \textbf{dependency preservation}. 
+\end{frame}
+
+\begin{frame}[fragile]{\boss{Extra} - In-class Case 1 (Solution)}
+	$R=\{A, B, C\}$\\ 
+	$\Sigma=\{\{A\} \rightarrow \{B\},\{B\} \rightarrow \{C\}, \{A, B\} \rightarrow \{C\},\{B, C\} \rightarrow \{A\}\}.$\\\vspace{5pt}
+	
+	\textbf{Solution}:\\
+	(1) The attribute closure of $R$ is:
+	\begin{align*} 
+		\Sigma^{+} = \{&\{A\}^{+} \rightarrow \{A,B,C\},\\
+		&\{B\}^{+} \rightarrow \{A,B,C\},\\
+		&\{C\}^{+} \rightarrow \{C\},\\
+		&\{A,B\}^{+} \rightarrow \{A,B,C\},\\
+		&\{A,C\}^{+} \rightarrow \{A,B,C\},\\
+		&\{B,C\}^{+} \rightarrow \{A,B,C\},\\
+		&\{A,B,C\}^{+} \rightarrow \{A,B,C\}\}.
+	\end{align*} 
+	
+	Now we find candidate keys: $\{A\}$ and $\{B\}$.\\
+	Prime attributes: $A, B$
+\end{frame}
+
+\begin{frame}[fragile]{\boss{Extra} - In-class Case 1 (Solution)}
+	$\Sigma=\{\{A\} \rightarrow \{B\},\{B\} \rightarrow \{C\}, \{A, B\} \rightarrow \{C\},\{B, C\} \rightarrow \{A\}\}.$\\\vspace{25pt}
+	
+	(2) The minimal cover is:\\\vspace{5pt}
+	
+	$\{A\} \rightarrow \{B\},$\\
+	$\{B\}  \rightarrow \{C\},$\\
+	$\{B,C\} \rightarrow \{A\}.$\\\vspace{5pt}
+	
+	This is the compact minimal cover, too.\\\vspace{5pt}
+	
+	(3)  Yes it is 2NF, 3NF, and BCNF, too.\\\vspace{5pt}
+	
+	(4) Omitted as it is 3NF. \\\vspace{5pt}
+	
+	(5) Omitted as it is BCNF. \\\vspace{5pt}
+	
+\end{frame}
+
+\begin{frame}[fragile]{\boss{Extra} - In-class Case 2}
+	Given a relation $R=\{A, B, C, D, E\}$ with functional dependency set:\\ 
+	$\Sigma=\{\{C,D\} \rightarrow \{E\},\{A,B\} \rightarrow \{B\}, \{A,C,D\} \rightarrow \{E\},\{A\} \rightarrow \{E\},\{D,E\} \rightarrow \{B,C\},\{A\} \rightarrow \{A\}\}.$\\\vspace{10pt}
+	\textbf{Questions}:\\
+	(1) Find \textbf{candidate key(s)} and \textbf{prime attribute(s)} from attribute closures $\Sigma^{+}$.\\
+	(2) Compute the \textbf{compact minimal cover} of $R$ with all FDs $\Sigma$.\\
+	(3) Determine if it is \textbf{2NF}? If yes, is it \textbf{3NF}? If yes, is it \textbf{BCNF}?\\
+	(4) If it is not 3NF, \textbf{synthesis} the relations to make it 3NF.\\
+	(5) If it is not BCNF, \textbf{decomposite} the relations to make it BCNF and verify the \textbf{dependency preservation}. 
+\end{frame}
+
+\begin{frame}[fragile]{\boss{Extra} - In-class Case 2 (Solution)}
+	$\Sigma=\{\{C,D\} \rightarrow \{E\},\{A,B\} \rightarrow \{B\}, \{A,C,D\} \rightarrow \{E\},\{A\} \rightarrow \{E\},\{D,E\} \rightarrow \{B,C\},\{A\} \rightarrow \{A\}\}.$\\\vspace{5pt}
+	
+	\textbf{Solution}:\\
+	(1) The attribute closure of $R$ is:
+	\vspace{-10pt}\begin{columns}
+	\column{0.35\textwidth}
+	\begin{scriptsize}\begin{align*} 
+		\Sigma^{+} = \{&\{A\}^{+} \rightarrow \{A,E\},\\
+		&\{B\}^{+} \rightarrow \{B\},\\
+		&\{C\}^{+} \rightarrow \{C\},\\
+		&\{D\}^{+} \rightarrow \{D\},\\
+		&\{E\}^{+} \rightarrow \{E\},\\
+		&\{A,B\}^{+} \rightarrow \{A,B,E\},\\
+		&\{A,C\}^{+} \rightarrow \{A,C,E\},\\
+		&\{A,D\}^{+} \rightarrow \{A,D\},\\
+		&\{A,E\}^{+} \rightarrow \{A,B,E\}\}\\
+		& ...\\
+		&\{A,C,D,E\}^{+} \rightarrow \{A,B,C,D,E\}\}\\
+		&\{A,B,C,D,E\}^{+} \rightarrow \{A,B,C,D,E\}\}.
+	\end{align*}\end{scriptsize} 
+	
+	\column{0.45\textwidth}
+	\textbf{Hint}:\\
+	After removing all trivial FDs, we find $A$ and $D$ have never appeared in the right-hand side, which means the candidate key must contains $A$ and $D$. We just need to find the minimal set that implies $\{B,C,E\}$.\\\vspace{10pt}
+
+	Then we can find candidate key: $\{A,C,D,E\}$.\\
+	Prime attributes: $A, C, D, E$
+	\end{columns}
+	
+\end{frame}
+
+\begin{frame}[fragile]{\boss{Extra} - In-class Case 2 (Solution)}
+	$\Sigma=\{\{C,D\} \rightarrow \{E\},\{A,B\} \rightarrow \{B\}, \{A,C,D\} \rightarrow \{E\},\{A\} \rightarrow \{E\},\{D,E\} \rightarrow \{B,C\},\{A\} \rightarrow \{A\}\}.$\\\vspace{5pt}
+	
+	(2) The compact minimal cover is:\\\vspace{5pt}
+	
+	\begin{columns}
+	\column{0.35\textwidth}
+	$\{C,D\} \rightarrow \{E\},$\\
+	$\cancel{\{A,B\} \rightarrow \{B\}}$,\\
+	$\cancel{\{A,C,D\} \rightarrow \{E\}}$,\\
+	$\{A\}  \rightarrow \{E\},$\\
+	$\{D,E\} \rightarrow \{B\}.$\\
+	$\{D,E\} \rightarrow \{C\}.$\\
+	$\cancel{\{A\} \rightarrow \{A\}}$\\\vspace{5pt}
+	\column{0.05\textwidth} $\rightarrow$
+	\column{0.45\textwidth}
+	So the finalized set is:\\
+	$\{C,D\} \rightarrow \{E\},$\\
+	$\{A\}  \rightarrow \{E\},$\\
+	$\{D,E\} \rightarrow \{B\}.$\\
+	$\{D,E\} \rightarrow \{C\}.$\\
+	\end{columns}
+	
+	(3)  No it is not 2NF, not 3NF, and not BCNF, too.\\\vspace{5pt}
+	
+	$\{D,E\} \rightarrow \{B\}$ violates 2NF.\\
+	$\{D,E\} \rightarrow \{B\}$ violates 3NF.\\
+	All FDs in minimal cover violate BCNF.
+	
+\end{frame}
+
+
+\begin{frame}[fragile]{\boss{Extra} - In-class Case 2 (Solution)}
+	(4) Recall the compact minimal cover:\\\vspace{5pt}
+	
+	$\{C,D\} \rightarrow \{E\},$\\
+	$\{A\}  \rightarrow \{E\},$\\
+	$\{D,E\} \rightarrow \{B\}.$\\
+	$\{D,E\} \rightarrow \{C\}.$\\\vspace{5pt}
+	
+	Let's do 3NF synthesis:\\ \vspace{5pt}
+	\begin{columns}
+	\column{0.35\textwidth}
+	$R_1 = (\underline{C, D}, E),$\\
+	$R_2 = (\underline{A}, E),$\\
+	$R_3 = (B, \underline{D, E}).$\\
+	$R_4 = (C, \underline{D, E}).$\\
+	$R_5 = (\underline{A,C,D,E}).$\\\vspace{5pt}
+	\column{0.05\textwidth} $\rightarrow$
+	\column{0.35\textwidth}
+	So the simplified result is:\\
+	$R_1 = (\underline{A, C, D, E}),$\\
+	$R_2 = (B, \underline{D, E}),$\\
+	
+	\end{columns}
+	Both relation are BCNF.
+
+\end{frame}
+
+\begin{frame}[fragile]{\boss{Extra} - In-class Case 2 (Solution)}
+	(5) Recall the compact minimal cover:\\
+	
+	$\{C,D\} \rightarrow \{E\},$\\
+	$\{A\}  \rightarrow \{E\},$\\
+	$\{D,E\} \rightarrow \{B\}.$\\
+	$\{D,E\} \rightarrow \{C\}.$\\\vspace{5pt}
+	
+	Decomposition at $\{C,D\} \rightarrow \{E\}$:\\\vspace{5pt}
+		
+	$R_1 = (\underline{C,D}, E),$\\
+	$R_2 = (\underline{A}, B, \underline{C,D}).$\\\vspace{5pt}
+	
+	We can find that:\\\vspace{5pt}
+	$\Sigma_1 = \{\{C,D\}\rightarrow\{E\}\}$
+	$\Sigma_2 = \emptyset$
+	
+	Both relations are BCNF\\\vspace{5pt}
+	However, we lose lots of dependency in this decomposition.
+\end{frame}
+
+\begin{frame}{}
+	\centering  
+	For any further question, please feel free to email me:\vspace{10pt}
+	
+	huasong.meng@u.nus.edu\\\vspace{3pt}
+	
+	\begin{tcolorbox}
+		\begin{center}
+			\textcolor{red}{Copyright 2021 Mark H. Meng. All rights reserved.}
+		\end{center}
+	\end{tcolorbox}
 \end{frame}
