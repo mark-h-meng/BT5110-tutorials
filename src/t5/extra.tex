@@ -28,15 +28,18 @@
 \end{frame}
 
 \begin{frame}
+	{\large \textbf{Agenda}}
 	\begin{itemize}
 		\item Extra Case No.1 - Warehouse management system
 		\item Extra Case No.2 - University transcript issuing system
 		\item Extra Case No.3 (Abstract) - \textcolor{red}{\textit{Non dependency preserving decomposition}}
-		\item Extra Case No.4 (Abstract) - \textcolor{red}{\textit{Candidate keys with different sizes}}
+		\item Extra Case No.4 (Abstract) $\ddagger$ - \textcolor{red}{\textit{Candidate keys with different sizes}}
 		\item In-class Case No.1 (Abstract) 
-		\item In-class Case No.2 (Abstract) - \textcolor{red}{\textit{Trick wanted for finding candidate key(s)}}
+		\item In-class Case No.2 (Abstract) $\ddagger$ - \textcolor{red}{\textit{Trick of finding candidate key(s)}}
 		
-	\end{itemize}
+	\end{itemize}\vspace{20pt}
+
+	\textcolor{red}{\textbf{\hl{$\ddagger$ Updated in the latest version as some errors raised in-class have been fixed}}}
 \end{frame}
 
 \begin{frame}[fragile]{\boss{Extra} - Case 1}
@@ -272,11 +275,10 @@
 	(5) If it is not BCNF, \textbf{decomposite} the relations to make it BCNF and verify the \textbf{dependency preservation}. 
 \end{frame}
 
-
 \begin{frame}[fragile]{\boss{Extra} - Case 4 (Solution)}
 	
 	\textbf{Solution}:\\
-	(1) The attribute closure of $R = \{A, B, C, D\}$ is:\\\vspace{5pt}
+	(1) The attribute closure of $R = \{A, B, C, D\}$ is:\\
 	\begin{scriptsize}
 		\begin{align*} 
 			\Sigma^{+} = \{&\{A\}^{+} \rightarrow \{A, B, C, D\},\\
@@ -289,36 +291,70 @@
 			&\{B, C\}^{+} \rightarrow \{A, B, C, D\}\\
 			&\{B, D\}^{+} \rightarrow \{B, D\}, ...
 		\end{align*}
-	\end{scriptsize}
+	\end{scriptsize}\vspace{-15pt}
 	
 	Now we find candidate keys: $\{A\}$ or $\{B, C\}$.\\
+	\textcolor{brown}{Although $\{A\}\rightarrow\{B, C\}$, both of them are candidate keys because (1) their closures functionally determine all attributes of $R$; (2) both of them are minimal superkeys (cannot be further simplified).}\\
 	Prime attributes: $A, B, C$.
 \end{frame}
 
 \begin{frame}[fragile]{\boss{Extra} - Case 4 (Solution)}
-	(2) The compact minimal cover is:\\\vspace{5pt}
+	\textcolor{red}{\textbf{\hl{Updated version (an error raised in class corrected)}}}\\
+	(2) First let's list all FDs given in the question:\\\vspace{5pt}
+	$\{A\} \rightarrow \{B,C,D\}$, 
+	$\{B\} \rightarrow \{D\}$, 
+	$\{B, C\} \rightarrow \{A\}$.\\\vspace{5pt}
 	
-	$\{A\} \rightarrow \{B, C, D\}$\\
+	Step 1: Simplify the RHS:\\\vspace{5pt}
+	$\{A\} \rightarrow \{B\}$\\
+	$\{A\} \rightarrow \{C\}$\\
+	$\{A\} \rightarrow \{D\}$\\
 	$\{B\} \rightarrow \{D\}$\\
 	$\{B, C\} \rightarrow \{A\}$.\\\vspace{5pt}
 	
-	(3) No it is not 2NF (e.g., $\{B\} \rightarrow \{D\}$, where $D$ is a non-prime attribute but $B$ is a subset of candidate key). Therefore, it is not 3NF and not BCNF, too.\\\vspace{5pt}
+	Step 2: Simplify the LHS \\
+	(There is only 1 FD with multiple attributes on the LHS and that FD cannot be simplified as there does not exist any FD implies $A$) \\\vspace{5pt}
 	
+\end{frame}
+
+\begin{frame}[fragile]{\boss{Extra} - Case 4 (Solution)}
+	Step 3: Simplify the set:\\\vspace{5pt}
+	
+	$\{A\} \rightarrow \{B\}$\\
+	$\{A\} \rightarrow \{C\}$\\
+	$\cancel{\{A\} \rightarrow \{D\}}$ (because $\{A\} \rightarrow \{B\}$ and $\{B\} \rightarrow \{D\}$)\\
+	$\{B\} \rightarrow \{D\}$\\
+	$\{B, C\} \rightarrow \{A\}$.\\\vspace{5pt}
+	
+	Finally, the compact minimal cover is:\\\vspace{5pt}
+	
+	$\{A\} \rightarrow \{B, C\}$\\
+	$\{B\} \rightarrow \{D\}$\\
+	$\{B, C\} \rightarrow \{A\}$.\\\vspace{5pt}
+	
+\end{frame}
+
+\begin{frame}[fragile]{\boss{Extra} - Case 4 (Solution)}
+	(3) No it is not 2NF (e.g., $\{B\} \rightarrow \{D\}$, where $D$ is a non-prime attribute but $B$ is a subset of candidate key). Therefore, it is not 3NF and not BCNF, too. (all because of $\{B\} \rightarrow \{D\}$)\\\vspace{5pt}
+	
+	
+	\textcolor{red}{\textbf{\hl{Updated version (an error raised in class corrected)}}}\\
 	(4) Synthesis result has 2 relations and each one is (luckily) BCNF: \\\vspace{5pt}
 	
-	$R_1 = (\underline{A}, \underline{B, C}, D),$\\\vspace{2pt}
+	$R_1 = (\underline{A}, \underline{B, C}),$\\\vspace{2pt}
 	$R_2 = (\underline{B}, D),$\\\vspace{1pt}
 	$\cancel{R_3 = (\underline{B, C}, \underline{A})}.$ (duplicate with $R_1$)\\\vspace{5pt}
 	
 \end{frame}
 
 \begin{frame}[fragile]{\boss{Extra} - Case 4 (Solution)}
+	\textcolor{red}{\textbf{\hl{Updated version (an error raised in class corrected)}}}\\
 	(5) Decomposition at $\{B\} \rightarrow \{D\}$:\\\vspace{5pt}
 	
 	$R_1 = (\underline{B}, D),$\\
 	$R_2 = (\underline{A}, \underline{B, C}).$\\\vspace{5pt}
 	
-	In this way both relations are BCNF, but we lose a dependency $\{A\} \rightarrow \{D\}$.\\\vspace{5pt}
+	In this way both relations are BCNF, and luckily we obtain the exact same result as the 3NF synthesis, therefore it is dependency preserving.\\\vspace{5pt}
 	
 \end{frame}
 
@@ -387,9 +423,10 @@
 	$\Sigma=\{\{C,D\} \rightarrow \{E\},\{A,B\} \rightarrow \{B\}, \{A,C,D\} \rightarrow \{E\},\{A\} \rightarrow \{E\},\{D,E\} \rightarrow \{B,C\},\{A\} \rightarrow \{A\}\}.$\\\vspace{5pt}
 	
 	\textbf{Solution}:\\
+	\textcolor{red}{\textbf{\hl{Updated version (an error raised in class corrected)}}}\\
 	(1) The attribute closure of $R$ is:
 	\vspace{-10pt}\begin{columns}
-	\column{0.35\textwidth}
+	\column{0.3\textwidth}
 	\begin{scriptsize}\begin{align*} 
 		\Sigma^{+} = \{&\{A\}^{+} \rightarrow \{A,E\},\\
 		&\{B\}^{+} \rightarrow \{B\},\\
@@ -398,19 +435,18 @@
 		&\{E\}^{+} \rightarrow \{E\},\\
 		&\{A,B\}^{+} \rightarrow \{A,B,E\},\\
 		&\{A,C\}^{+} \rightarrow \{A,C,E\},\\
-		&\{A,D\}^{+} \rightarrow \{A,D\},\\
+		&\{A,D\}^{+} \rightarrow \{A,B,C,D,E\},\\
 		&\{A,E\}^{+} \rightarrow \{A,B,E\}\}\\
 		& ...\\
 		&\{A,C,D,E\}^{+} \rightarrow \{A,B,C,D,E\}\}\\
 		&\{A,B,C,D,E\}^{+} \rightarrow \{A,B,C,D,E\}\}.
 	\end{align*}\end{scriptsize} 
 	
-	\column{0.45\textwidth}
+	\column{0.65\textwidth}
 	\textbf{Hint}:\\
-	After removing all trivial FDs, we find $A$ and $D$ have never appeared in the right-hand side, which means the candidate key must contains $A$ and $D$. We just need to find the minimal set that implies $\{B,C,E\}$.\\\vspace{10pt}
+	After removing all trivial FDs, we find $A$ and $D$ have never appeared in the right-hand side, which means the candidate key must contains $A$ and $D$. We just need to find the minimal set that implies $\{B,C,E\}$. (Luckily both $A$ and $D$ together can determine $\{B,C,E\}$)\\\vspace{10pt}
 
-	Then we can find candidate key: $\{A,C,D,E\}$.\\
-	Prime attributes: $A, C, D, E$
+	Then we can find candidate key: $\{A,D\}$. And the prime attributes: $A, D$
 	\end{columns}
 	
 \end{frame}
@@ -434,53 +470,54 @@
 	So the finalized set is:\\
 	$\{C,D\} \rightarrow \{E\},$\\
 	$\{A\}  \rightarrow \{E\},$\\
-	$\{D,E\} \rightarrow \{B\}.$\\
-	$\{D,E\} \rightarrow \{C\}.$\\
+	$\{D,E\} \rightarrow \{B, C\}.$
 	\end{columns}
 	
-	(3)  No it is not 2NF, not 3NF, and not BCNF, too.\\\vspace{5pt}
+	\textcolor{red}{\textbf{\hl{Updated version (an error raised in class corrected)}}}\\
+	(3)  Yes it is in 2NF. But not in 3NF, and not in BCNF, too.\\\vspace{5pt}
 	
-	$\{D,E\} \rightarrow \{B\}$ violates 2NF.\\
-	$\{D,E\} \rightarrow \{B\}$ violates 3NF.\\
-	All FDs in minimal cover violate BCNF.
+	E.g., $\{C,D\} \rightarrow \{E\}$ is not trivial, the LHS is not a superkey and the RHS is not a prime attribute, therefore it violates 3NF (in fact all four FDs in the compact minimal cover violate 3NF and BCNF).
 	
 \end{frame}
 
 
 \begin{frame}[fragile]{\boss{Extra} - In-class Case 2 (Solution)}
+	\textcolor{red}{\textbf{\hl{Updated version (an error raised in class corrected)}}}\\
 	(4) Recall the compact minimal cover:\\\vspace{5pt}
 	
-	$\{C,D\} \rightarrow \{E\},$\\
-	$\{A\}  \rightarrow \{E\},$\\
-	$\{D,E\} \rightarrow \{B\}.$\\
-	$\{D,E\} \rightarrow \{C\}.$\\\vspace{5pt}
+	$\{C,D\} \rightarrow \{E\},$
+	$\{A\}  \rightarrow \{E\},$
+	$\{D,E\} \rightarrow \{B,C\}.$\\\vspace{5pt}
 	
 	Let's do 3NF synthesis:\\ \vspace{5pt}
 	\begin{columns}
-	\column{0.35\textwidth}
+	\column{0.55\textwidth}
 	$R_1 = (\underline{C, D}, E),$\\
 	$R_2 = (\underline{A}, E),$\\
-	$R_3 = (B, \underline{D, E}).$\\
-	$R_4 = (C, \underline{D, E}).$\\
-	$R_5 = (\underline{A,C,D,E}).$\\\vspace{5pt}
-	\column{0.05\textwidth} $\rightarrow$
-	\column{0.35\textwidth}
+	$R_3 = (B, C, \underline{D, E}).$\\\vspace{3pt}
+	(The candidate key is not included in any relation fragment above, so we add a new fragment manually)\\\vspace{3pt}
+	$R_4 = (\underline{A, D}).$\\\vspace{3pt}
+	
+	\column{0.02\textwidth} $\rightarrow$
+	\column{0.3\textwidth}
 	So the simplified result is:\\
-	$R_1 = (\underline{A, C, D, E}),$\\
-	$R_2 = (B, \underline{D, E}),$\\
+	($R_1$ can be subsumed in $R_3$)
+	$R_2 = (\underline{A}, E),$\\
+	$R_3 = (B, \underline{C,D,E}),$\\
+	$R_4 = (\underline{A, D}),$\\
+	All 3 fragments are in BCNF.
 	
 	\end{columns}
-	Both relation are BCNF.
 
 \end{frame}
 
 \begin{frame}[fragile]{\boss{Extra} - In-class Case 2 (Solution)}
+	\textcolor{red}{\textbf{\hl{Updated version (an error raised in class corrected)}}}\\
 	(5) Recall the compact minimal cover:\\
 	
 	$\{C,D\} \rightarrow \{E\},$\\
 	$\{A\}  \rightarrow \{E\},$\\
-	$\{D,E\} \rightarrow \{B\}.$\\
-	$\{D,E\} \rightarrow \{C\}.$\\\vspace{5pt}
+	$\{D,E\} \rightarrow \{B,C\}.$\\\vspace{5pt}
 	
 	Decomposition at $\{C,D\} \rightarrow \{E\}$:\\\vspace{5pt}
 		
@@ -488,11 +525,11 @@
 	$R_2 = (\underline{A}, B, \underline{C,D}).$\\\vspace{5pt}
 	
 	We can find that:\\\vspace{5pt}
-	$\Sigma_1 = \{\{C,D\}\rightarrow\{E\}\}$
+	$\Sigma_1 = \{\{C,D\}\rightarrow\{E\}\}$\\
 	$\Sigma_2 = \emptyset$
 	
 	Both relations are BCNF\\\vspace{5pt}
-	However, we lose lots of dependency in this decomposition.
+	However, we lose lots of dependency in this decomposition. E.g., $\{A\}\rightarrow\{E\}, \{D,E\}\rightarrow\{B,C\}$.
 \end{frame}
 
 \begin{frame}{}
