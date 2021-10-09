@@ -388,7 +388,7 @@ The algorithm guarantees that the result is in 3NF. In this case, it is also in 
 \textbf{Solution}: We found that $\{A\} \rightarrow \{C\}$ violates the BCNF condition.\\\vspace{3pt}
 
 We use it to decompose into two fragments:\\
-$R_1 = \{A\}^{+} = \{A, B, C, D\}$ with $\Sigma_1 = \{\{A\} \rightarrow \{C\}, \{B\} \rightarrow \{A\}, \{C\} \rightarrow \{D\}\}$.
+$R_1 = \{A\}^{+} = \{A, B, C, D\}$ with $\Sigma_1 = \{\{A\} \rightarrow \{C\}, \{A\} \rightarrow \{B\},\{B\} \rightarrow \{A\}, \{C\} \rightarrow \{D\}\}$.
 
 $R_2 = \{A, E\}$ with $\Sigma_2 = \emptyset$.
 
