@@ -18,6 +18,9 @@ drop_all_temp_views = "SELECT 'DROP VIEW IF EXISTS ' || table_name || ';' "\
     "FROM information_schema.views WHERE table_schema"\
         " NOT IN ('pg_catalog', 'information_schema') AND table_name !~ '^pg_';"
 
+ORIGINAL_PARAM_Q1F = 6
+SPECIAL_PARAMS_Q1F = [7, 8, 16]
+
 initialize_connection_command = "dbname='" + dbname + "' user='" + user + "' host='" + host + "' password='" + password + "'" 
 
 EXECUTE_QUERY = True
@@ -78,10 +81,29 @@ def extract_student_answers(submission_files, project_questions, csv_format = ['
     writer = csv.writer(output_file)
 
     header = ['student']
+
+    # We perform a special arrangement for the test 1 as for Q1(f) we are generating
+    #  four variants and run them for outputs separately. 
+    # [1/2] The header row needs to be added with corresponding items
+    '''
     for qn in project_questions:
         header.append(qn)
         if EXECUTE_QUERY:
             header.append('output')
+        for col in csv_format:
+            header.append(col)
+    '''
+    
+    for idx, qn in enumerate(project_questions):
+        header.append(qn)
+        if EXECUTE_QUERY:
+            header.append('output')  
+        if idx == 5:
+            for param in SPECIAL_PARAMS_Q1F:
+                header.append("option_[" + str(param) + "]")
+                if EXECUTE_QUERY:
+                    header.append('output')  
+                  
         for col in csv_format:
             header.append(col)
 
@@ -89,7 +111,6 @@ def extract_student_answers(submission_files, project_questions, csv_format = ['
 
     total_num_files = len(student_file_lst)
     file_count = 1
-    q3_answers_dict = {}
 
     for index, item in enumerate(student_file_lst):
         curr_student_id = student_id_lst[index]
@@ -130,6 +151,26 @@ def extract_student_answers(submission_files, project_questions, csv_format = ['
                         # rows = psql_execute_query(solution_string.replace('\n', ' '), question="("+project_questions[question_index]+")")
                         rows = psql_execute_query(solution_string, question="("+project_questions[question_index]+")", question_index=question_index)
                         student_row.append(summarize_sql_output(rows)) 
+
+                        # We perform a special arrangement for the test 1 as for Q1(f) we are generating
+                        #  four variants and run them for outputs separately. 
+                        # [2/2] Generate variants of query, execute them and record outputs
+
+                        if question_index == 5 and len(SPECIAL_PARAMS_Q1F) > 0:
+                            
+                            print('(', end = "")
+                            for param in SPECIAL_PARAMS_Q1F:
+                                solution_string_variant = solution_string.replace(str(ORIGINAL_PARAM_Q1F), str(param))
+                                student_row.append(solution_string_variant.strip())
+                                
+                                # Drop all views created by previous student
+                                cmd_list = psql_execute_query(drop_all_temp_views, question="", question_index=0, time_out=100000)
+                                for cmd in cmd_list[0]:
+                                    psql_execute_query(cmd[0], question="", question_index=0, time_out=100000)
+                                rows_variant = psql_execute_query(solution_string_variant, question="("+project_questions[question_index]+")", question_index=question_index)
+                                student_row.append(summarize_sql_output(rows_variant)) 
+                                print('+', end = "")
+                            print(')', end = "")
 
                     # Leave an empty cell for comments and/or grading                    
                     for col in csv_format:
@@ -180,7 +221,7 @@ def extract_student_answers(submission_files, project_questions, csv_format = ['
                             line = line.strip()
 
                 
-                    logging.info("Line{}: {}".format(line_count, line.strip()))
+                    logging.info("Line{}: {}".format(line_count, line.strip().encode('utf-8')))
 
                     solution_string += line
 
@@ -192,7 +233,7 @@ def extract_student_answers(submission_files, project_questions, csv_format = ['
                                 line = ""
                         else:
                             line = line.strip()
-                        logging.info("Line{}: {}".format(line_count, line.strip()))
+                        logging.info("Line{}: {}".format(line_count, line.strip().encode('utf-8')))
 
                         solution_string += line
                     
@@ -281,7 +322,21 @@ def validate_sql_output(query_output_rows, num_rows, rows_checklist=[], sorted=F
             comment += "Inconsistent of output (wrong order).\n"
     
     return comment
+
+def check_illegal_character(solution, comment=''):
+    if len(comment) > 0:
+            comment += '\n' 
+    illegal_chars = ['\uff0c', '\uff08', '\u201d', '\u201c', '\uff0c', '\u2018', '\u2019'] 
+    illegal_chars_plaintext = ['ff0c', 'ff08', '201d', '201c', 'ff0c', '2018', '2019'] 
+    check = []
+    for idx, char in enumerate(illegal_chars):
+        if char in solution:
+            check.append(illegal_chars_plaintext[idx])
     
+    if len(check) > 0:
+        comment += 'Illegal fullwidth character detected ' + str(check) + '; '
+    return comment 
+
 def check_semicolons(solution, question_index, comment=''):
     # For the last two questions, we donot need to check
     if question_index >= 6:
@@ -289,7 +344,7 @@ def check_semicolons(solution, question_index, comment=''):
     if len(solution) > 0 and solution.find(';') < 0:
         if len(comment) > 0:
             comment += '\n' 
-        comment += 'Missing semicolon, CHECK CODE. '  
+        comment += 'Missing semicolon, CHECK CODE; '  
     return comment
 
 def check_multiple_queries(solution, question_index, comment=''):
@@ -299,7 +354,7 @@ def check_multiple_queries(solution, question_index, comment=''):
     if solution.count(';') > 1:
         if len(comment) > 0:
             comment += '\n' 
-        comment += 'Multiple semicolons detected, CHECK CODE. '  
+        comment += 'Multiple semicolons detected, CHECK CODE; '  
     return comment
 
 def check_usage_of_aggregation(solution, question_index, comment=''):
@@ -315,7 +370,7 @@ def check_usage_of_aggregation(solution, question_index, comment=''):
     if len(clue_str) > 0:
         if len(comment) > 0:
             comment += '\n' 
-        comment = 'Aggregation is used, CHECK CODE.'  
+        comment = 'Aggregation is used, CHECK CODE; '  
     return comment
 
 def check_ddl_correctness(solution, question_index, comment=''):
@@ -329,19 +384,20 @@ def check_ddl_correctness(solution, question_index, comment=''):
 
         if len(comment) > 0:
             comment += '\n' 
-        comment += "No. tables: " + str(num_tables) + "; "
+        comment += "Num. tables: " + str(num_tables) + "; "
 
-        not_null_constraint_check = "No. not null: " + str(num_not_null)
+        not_null_constraint_check = "Num. not null: " + str(num_not_null)
         if num_not_null < 4:
-            not_null_constraint_check += " (CHECK CODE)"
+            not_null_constraint_check += " (CHECK CODE) "
         comment += not_null_constraint_check + "; "
 
-        forigen_key_check = "No. foreign keys defined: " + str(num_fkey)
+        forigen_key_check = "Num. foreign keys defined: " + str(num_fkey)
         if num_fkey > 0:
-            forigen_key_check += " (CHECK CODE)"
+            forigen_key_check += " (CHECK CODE) "
         comment += forigen_key_check + "; "
         
         return comment
+
 
 def check_solution_format(solution, question_index, comment=''):
     
@@ -355,17 +411,22 @@ def check_solution_format(solution, question_index, comment=''):
             check.append("ROW_NUMBER")
         
         if len(check) > 0:
-            comment += "\nAnswer violates requirement (", + str(check) + "), CHECK CODE."
+            comment += "Answer violates requirement " + str(check) + ", CHECK CODE;"
             
     return comment
 
 
 def perform_extra_checking(solution, question_index, comment=''):
+    if comment is None:
+        comment = ''
+    comment = check_illegal_character(solution, comment)
     comment = check_semicolons(solution, question_index, comment)
     comment = check_multiple_queries(solution, question_index, comment)
     comment = check_usage_of_aggregation(solution, question_index,comment)
     comment = check_solution_format(solution, question_index, comment)
     comment = check_ddl_correctness(solution, question_index, comment)
+    
+    return comment
     
 dirpath=('submission\\test1\\')
 arr = retrieve_all_submission_files(dirpath)
