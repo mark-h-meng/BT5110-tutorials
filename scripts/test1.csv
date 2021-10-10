@@ -1,4 +1,294 @@
 student,1.a,output,comment,grade,1.b,output,comment,grade,1.c,output,comment,grade,1.d,output,comment,grade,1.e,output,comment,grade,1.f,output,comment,grade,2.a,output,comment,grade,2.b,output,comment,grade
+A0041688X,"SELECT DISTINCT continent_name,continent_code
+FROM country;","7, [('Africa', 'AF'), ('Europe', 'EU'), ('South America', 'SA'), ('Asia', 'AS'), ('North America', 'NA'), ('Oceania', 'OC'), ('Antarctica', 'AN')]",,,"SELECT a.name AS app, c.name AS country
+FROM app a, country c, store s, store s1, available av, appfunctionality af
+WHERE a.name = s.name
+AND a.name = s1.name
+AND a.name = av.name
+AND av.country = c.code3
+AND a.name = af.name
+AND af.functionality='contact tracing'
+AND s.os = 'iOS'
+AND s1.os = 'Android'
+AND c.continent_name = 'Europe'
+GROUP BY a.name,c.name;","10, [('Apturi Covid Latvia - SPKC', 'Latvia, Republic of'), ('Corona-Warn-App', 'Germany, Federal Republic of'), ('COVID-19.eus', 'Spain, Kingdom of'), ('Immuni', 'Italy, Italian Republic'), ('ProteGO Safe', 'Poland, Republic of'), ('Rakning C-19', 'Iceland, Republic of'), ('StopCovid France', 'France, French Republic'), ('StopKorona!', 'Macedonia, The Former Yugoslav Republic of'), ('Stopp Corona', 'Austria, Republic of'), ('SwissCovid', 'Switzerland, Swiss Confederation')]",,,"SELECT DISTINCT c.name
+FROM country c, country c1
+WHERE c.name = c1.name
+GROUP BY c.continent_name, c.name
+HAVING count(c1.name)>1;","8, [('Turkey, Republic of',), ('Azerbaijan, Republic of',), ('United States Minor Outlying Islands',), ('Kazakhstan, Republic of',), ('Russian Federation',), ('Georgia',), ('Cyprus, Republic of',), ('Armenia, Republic of',)]",,,"SELECT c.name FROM country c
+EXCEPT
+SELECT DISTINCT c2.name from country c2;","0, []",,,"SELECT DISTINCT a.name FROM country c, app a
+INNER JOIN store s1 on a.name = s1.name
+AND s1.os IN (SELECT DISTINCT s2.os FROM store s2)
+WHERE c.continent_name='Oceania';","395, [('AyudaCOVID',), ('Lynx-Virtual',), ('HowWeFeel',), ('U Informa COVID-19',), ('MorChana - ??????',), ('COVID-19 West Bengal Government',), ('Quidate',), ('SOS CORONA',), ('Apple COVID-19',), ('patientMpower for Covid 19 USA',)]",,,"SELECT c.name, COUNT(a.name)
+FROM country c, app a, available av
+WHERE av.country = c.code3
+AND av.name = a.name
+GROUP BY c.name
+ORDER BY count(a.name) DESC
+LIMIT 6;","6, [('United States of America', 65), ('India, Republic of', 52), ('Mexico, United Mexican States', 21), ('Brazil, Federative Republic of', 17), ('Spain, Kingdom of', 16), ('United Kingdom of Great Britain & Northern Ireland', 14)]",,,"CREATE TABLE IF NOT EXISTS E1(
+	A TEXT,
+	B TEXT NOT NULL,
+	C TEXT,
+	D TEXT,
+	PRIMARY KEY(A,C,D));
+CREATE TABLE IF NOT EXISTS E2(
+	G TEXT PRIMARY KEY,
+	H TEXT NOT NULL,
+	J TEXT NOT NULL,
+	K TEXT NOT NULL);
+CREATE TABLE IF NOT EXISTS S(
+	A TEXT,
+	C TEXT,
+	D TEXT,
+	G TEXT,
+	F TEXT NOT NULL,
+	PRIMARY KEY (A,C,D,G),
+	FOREIGN KEY (G) REFERENCES E2(G),
+	FOREIGN KEY (A,C,D) REFERENCES E1(A,C,D)
+);",No output,,,"Supposed E1 refers to local parcels to be delivered. 
+A,C,D which form the primary key could be sender address, receiver name and 
+receiver address respectively. B could be the name of the sender.
+S could refer to the relationship 'shipped by' where F could be shipping number.
+E2 could refer to the logistic companies which receive and deliver the parcels.
+G which is the primary key, can be the company's registration number as it uniquely
+identify the company. 
+H,J,K could be company name, company address and telephone number respectively.
+A parcel can only be delivered by 1 logistic company while logistic companies can
+receive/deliver none or many parcels.",No output,,
+A0047158B,"SELECT DISTINCT continent_name, continent_code 
+FROM country;","7, [('Africa', 'AF'), ('Europe', 'EU'), ('South America', 'SA'), ('Asia', 'AS'), ('North America', 'NA'), ('Oceania', 'OC'), ('Antarctica', 'AN')]",,,"SELECT DISTINCT a.name AS app, c.name AS country
+FROM available a, country c, store s, appfunctionality af
+WHERE c.continent_name = 'Europe'
+AND a.name = af.name
+AND af.functionality = 'contact tracing'
+AND a.country = c.code3
+AND a.name = s.name
+AND a.name IN (
+	SELECT s1.name
+	FROM store s1
+	WHERE s1.os = 'iOS')
+AND a.name IN (
+	SELECT s2.name
+	FROM store s2
+	WHERE s2.os = 'Android');","10, [('Apturi Covid Latvia - SPKC', 'Latvia, Republic of'), ('Corona-Warn-App', 'Germany, Federal Republic of'), ('COVID-19.eus', 'Spain, Kingdom of'), ('Immuni', 'Italy, Italian Republic'), ('ProteGO Safe', 'Poland, Republic of'), ('Rakning C-19', 'Iceland, Republic of'), ('StopCovid France', 'France, French Republic'), ('StopKorona!', 'Macedonia, The Former Yugoslav Republic of'), ('Stopp Corona', 'Austria, Republic of'), ('SwissCovid', 'Switzerland, Swiss Confederation')]",,,"SELECT DISTINCT c.name AS name
+FROM country c
+WHERE c.name IN (
+	SELECT c1.name
+	FROM country c1
+	GROUP BY c1.name
+	HAVING COUNT(DISTINCT c1.continent_code)>1);","8, [('Turkey, Republic of',), ('Azerbaijan, Republic of',), ('United States Minor Outlying Islands',), ('Kazakhstan, Republic of',), ('Russian Federation',), ('Georgia',), ('Cyprus, Republic of',), ('Armenia, Republic of',)]",,,"SELECT DISTINCT c1.name AS name
+FROM country c1, country c2
+WHERE c1.continent_code <> c2.continent_code
+AND c1.name = c2.name;","8, [('Turkey, Republic of',), ('Kazakhstan, Republic of',), ('Georgia',), ('Armenia, Republic of',), ('Azerbaijan, Republic of',), ('United States Minor Outlying Islands',), ('Russian Federation',), ('Cyprus, Republic of',)]",,,"SELECT DISTINCT a.name AS name
+FROM available a, country c, store s
+WHERE a.country = c.code3
+AND c.continent_name = 'Oceania'
+AND a.name = s.name
+AND s.name IN (
+	SELECT DISTINCT s1.name
+	FROM store s1, store s2
+	WHERE s1.os <> s2.os
+	AND s1.name = s2.name
+	AND s.os = s1.os);","8, [('#BeatCovid19Now',), ('Bupa Aged Care Connect',), ('Coronavirus Australia',), ('COVIDSafe',), ('healthdirect',), ('MyAus COVID-19',), ('NZ COVID Tracer',), ('TCC COVID Monitor',)]",,,"SELECT c.name AS name, COUNT(DISTINCT a.name) AS count
+FROM available a, country c
+WHERE a.country = c.code3
+GROUP BY c.name
+ORDER BY count DESC
+LIMIT 6;","6, [('United States of America', 65), ('India, Republic of', 52), ('Mexico, United Mexican States', 21), ('Brazil, Federative Republic of', 17), ('Spain, Kingdom of', 16), ('United Kingdom of Great Britain & Northern Ireland', 14)]",,,"CREATE TABLE E2 (
+	J TEXT NOT NULL,
+	K TEXT NOT NULL,
+	G TEXT PRIMARY KEY,
+	H TEXT NOT NULL);
+CREATE TABLE E1S (
+	A TEXT PRIMARY KEY,
+	B TEXT NOT NULL,
+	C TEXT NOT NULL,
+	D TEXT NOT NULL,
+	F TEXT NOT NULL,
+	G TEXT NOT NULL,
+	FOREIGN KEY G REFERENCES E2(G));",No output,,,"E1S - Child Birth Certificate (Details on the child and its birth details)
+A - birth certificate number (primary key, uniquely identifiable across babies)
+B - date of birth
+C - child's name (forms the candidate key with mother's identification number)
+D - mother's identification number (forms the candidate key with child's name)
+F - time of birth (each child will only correspond to 1 time of birth)
+E2 - Hospitals (Details on the hospitals)
+G - hospital registration number (unique identifier for hospitals)
+H - hospital name
+J - state
+K - hospital establishment date",No output,,
+A0057228A,"SELECT DISTINCT continent_name, continent_code 
+FROM country;","7, [('Africa', 'AF'), ('Europe', 'EU'), ('South America', 'SA'), ('Asia', 'AS'), ('North America', 'NA'), ('Oceania', 'OC'), ('Antarctica', 'AN')]",,,,No output,,,"SELECT c1.name 
+FROM country c1, country c2
+WHERE c1.name = c2.name
+AND c1.continent_name <> c2.continent_name
+GROUP BY c1.name
+ORDER BY c1.name;","8, [('Armenia, Republic of',), ('Azerbaijan, Republic of',), ('Cyprus, Republic of',), ('Georgia',), ('Kazakhstan, Republic of',), ('Russian Federation',), ('Turkey, Republic of',), ('United States Minor Outlying Islands',)]",,,"SELECT DISTINCT c1.name 
+FROM country c1, country c2
+WHERE c1.name = c2.name
+AND c1.continent_name <> c2.continent_name
+ORDER by c1.name;","8, [('Armenia, Republic of',), ('Azerbaijan, Republic of',), ('Cyprus, Republic of',), ('Georgia',), ('Kazakhstan, Republic of',), ('Russian Federation',), ('Turkey, Republic of',), ('United States Minor Outlying Islands',)]",,,,No output,,,,No output,,,"CREATE TABLE IF NOT EXISTS E1(
+	A TEXT NOT NULL, PRIMARY KEY,
+	B TEXT NOT NULL,
+	C TEXT NOT NULL,
+	D TEXT NOT NULL
+	PRIMARY KEY (C, D)
+	);
+CREATE TABLE IF NOT EXISTS E2(
+	G TEXT NOT NULL, PRIMARY KEY, 
+	H TEXT NOT NULL, 
+	J TEXT NOT NULL,
+	K TEXT NOT NULL
+	);
+CREATE TABLE IF NOT EXISTS S(
+	F TEXT NOT NULL,
+	E1 TEXT NOT NULL,
+	E2 TEXT NOT NULL,
+	PRIMARY KEY (E2, A, C, D),
+	FOREIGN KEY (E2) REFERENCES E2(G),
+	FOREIGN KEY (A, C, D) REFERENCES E1(A, C, D)
+	);",No output,,,,No output,,
+A0060127U,"SELECT distinct (c.continent_name) , c.continent_code
+FROM country c;","7, [('Africa', 'AF'), ('Europe', 'EU'), ('South America', 'SA'), ('Asia', 'AS'), ('North America', 'NA'), ('Oceania', 'OC'), ('Antarctica', 'AN')]",,,"SELECT a.name as app , c.name as country
+FROM app a, store s, appfunctionality af, available av, country c
+WHERE a.name=s.name
+AND af.name = a.name
+AND a.name= av.name
+AND c.code3 = av.country
+AND af.functionality = 'contact tracing'
+AND c.continent_name = 'Europe'
+AND s.os = 'iOS'
+INTERSECT 
+SELECT a.name as app , c.name as country
+FROM app a, store s, appfunctionality af, available av, country c
+WHERE a.name=s.name
+AND af.name = a.name
+AND a.name= av.name
+AND c.code3 = av.country
+AND af.functionality = 'contact tracing'
+AND c.continent_name = 'Europe'
+AND s.os = 'Android';","10, [('StopCovid France', 'France, French Republic'), ('Immuni', 'Italy, Italian Republic'), ('Apturi Covid Latvia - SPKC', 'Latvia, Republic of'), ('Corona-Warn-App', 'Germany, Federal Republic of'), ('ProteGO Safe', 'Poland, Republic of'), ('Rakning C-19', 'Iceland, Republic of'), ('StopKorona!', 'Macedonia, The Former Yugoslav Republic of'), ('Stopp Corona', 'Austria, Republic of'), ('COVID-19.eus', 'Spain, Kingdom of'), ('SwissCovid', 'Switzerland, Swiss Confederation')]",,,"SELECT c1.name
+FROM country c1
+GROUP BY c1.name
+HAVING count (c1.continent_name) >1;","8, [('Georgia',), ('Armenia, Republic of',), ('Azerbaijan, Republic of',), ('United States Minor Outlying Islands',), ('Turkey, Republic of',), ('Kazakhstan, Republic of',), ('Russian Federation',), ('Cyprus, Republic of',)]",,,"SELECT DISTINCT (c1.name)
+FROM country c1, country c2
+WHERE c1.name=c2.name
+AND c1.continent_name <> c2.continent_name;","8, [('Turkey, Republic of',), ('Kazakhstan, Republic of',), ('Georgia',), ('Armenia, Republic of',), ('Azerbaijan, Republic of',), ('United States Minor Outlying Islands',), ('Russian Federation',), ('Cyprus, Republic of',)]",,,"SELECT distinct (a.name)
+FROM app a, country c, available av, store s1, store s2
+WHERE a.name=av.name
+AND s1.store <> s2.store
+AND s1.name=a.name
+AND s2.name=a.name
+AND av.country=c.code3
+AND c.continent_name= 'Oceania'
+AND NOT EXISTS
+	(SELECT *
+	FROM store s
+	WHERE a.name=s.name	
+	AND NOT EXISTS (SELECT *
+		FROM available av
+		WHERE av.country=c.code3
+		AND av.name=a.name ));","8, [('#BeatCovid19Now',), ('Bupa Aged Care Connect',), ('Coronavirus Australia',), ('COVIDSafe',), ('healthdirect',), ('MyAus COVID-19',), ('NZ COVID Tracer',), ('TCC COVID Monitor',)]",,,"SELECT c.name, count(*) 
+FROM country c, available a
+WHERE a.country=c.code3
+GROUP BY c.name
+ORDER BY count(*) DESC
+LIMIT 6;","6, [('United States of America', 65), ('India, Republic of', 52), ('Mexico, United Mexican States', 21), ('Brazil, Federative Republic of', 17), ('Spain, Kingdom of', 16), ('United Kingdom of Great Britain & Northern Ireland', 14)]",,,"CREATE TABLE E2 (
+G TEXT PRIMARY KEY,
+H TEXT NOT NULL,
+J TEXT NOT NULL,
+K TEXT NOT NULL);
+CREATE TABLE E1S (
+A TEXT UNIQUE NOT NULL,
+B TEXT NOT NULL,
+C TEXT NOT NULL,
+D TEXT NOT NULL,
+F TEXT NOT NULL,
+E2G TEXT NOT NULL,
+PRIMARY KEY (C,D, E2G),
+FOREIGN KEY (E2G) REFERENCES E2(G));",No output,,,"The example is E1 can be government ministry and E2 can be parliament member and S refers to head.
+A: full name of government ministry
+B: number of staff
+C: office location
+D: abbreviation of the name
+F: start date
+G: Name of parliament member
+H: gender
+J: age
+K: martial status
+Participation constraints: Each government ministry can only be headed by one parliament member.
+Parliament members may not head any government ministry, or may head multiple government ministries.
+A can be a candidate key as the ministry can be uniquely identified with the full name.",No output,,
+A0080400B,"SELECT DISTINCT c.continent_name, c.continent_code
+FROM country c;","7, [('Africa', 'AF'), ('Europe', 'EU'), ('South America', 'SA'), ('Asia', 'AS'), ('North America', 'NA'), ('Oceania', 'OC'), ('Antarctica', 'AN')]",,,"SELECT av.name AS app, c.name AS country
+FROM available av, country c, appfunctionality af, store s1, store s2
+WHERE av.country = c.code3 AND
+	af.name = av.name AND
+	s1.name = av.name AND
+	s2.name = s1.name AND
+	c.continent_name = 'Europe' AND
+	af.functionality = 'contact tracing' AND
+	s1.os='iOS' AND
+	s2.os='Android';","10, [('COVID-19.eus', 'Spain, Kingdom of'), ('Rakning C-19', 'Iceland, Republic of'), ('Stopp Corona', 'Austria, Republic of'), ('Corona-Warn-App', 'Germany, Federal Republic of'), ('Immuni', 'Italy, Italian Republic'), ('StopKorona!', 'Macedonia, The Former Yugoslav Republic of'), ('SwissCovid', 'Switzerland, Swiss Confederation'), ('ProteGO Safe', 'Poland, Republic of'), ('Apturi Covid Latvia - SPKC', 'Latvia, Republic of'), ('StopCovid France', 'France, French Republic')]",,,"SELECT c.name
+FROM country c
+GROUP BY c.name
+HAVING COUNT(*) >1
+;","8, [('Georgia',), ('Armenia, Republic of',), ('Azerbaijan, Republic of',), ('United States Minor Outlying Islands',), ('Turkey, Republic of',), ('Kazakhstan, Republic of',), ('Russian Federation',), ('Cyprus, Republic of',)]",,,"SELECT DISTINCT c1.name
+FROM country c1, country c2
+WHERE c1.name = c2.name AND
+	c1.continent_name <> c2.continent_name;","8, [('Turkey, Republic of',), ('Kazakhstan, Republic of',), ('Georgia',), ('Armenia, Republic of',), ('Azerbaijan, Republic of',), ('United States Minor Outlying Islands',), ('Russian Federation',), ('Cyprus, Republic of',)]",,,"SELECT av1.name
+	FROM available av1, country c1
+	WHERE av1.country = c1.code3 AND
+		c1.continent_name='Oceania'
+EXCEPT
+SELECT Oc_app.name
+FROM
+	(SELECT av.name, s.os
+	FROM available av, country c, store s
+	WHERE av.country = c.code3 AND
+		c.continent_name='Oceania'
+	GROUP BY av.name, s.os) AS Oc_app
+LEFT JOIN store s ON Oc_app.name = s.name AND Oc_app.os=s.os
+WHERE s.name ISNULL;","8, [('Bupa Aged Care Connect',), ('MyAus COVID-19',), ('TCC COVID Monitor',), ('#BeatCovid19Now',), ('Coronavirus Australia',), ('healthdirect',), ('NZ COVID Tracer',), ('COVIDSafe',)]",,,"SELECT c.name, COUNT(*)
+FROM available av, country c
+WHERE av.country = c.code3
+GROUP BY c.name
+ORDER BY COUNT(*) DESC
+LIMIT 6;","6, [('United States of America', 65), ('India, Republic of', 52), ('Mexico, United Mexican States', 21), ('Brazil, Federative Republic of', 17), ('Spain, Kingdom of', 16), ('United Kingdom of Great Britain & Northern Ireland', 14)]",,,"CREATE TABLE E2 (
+G text PRIMARY KEY,
+H text NOT NULL,
+J text NOT NULL,
+K text NOT NULL
+);
+CREATE TABLE E1S (
+A text PRIMARY KEY,
+B text NOT NULL,
+C text NOT NULL,
+D text NOT NULL,
+F text NOT NULL,
+G text NOT NULL REFERENCES E2(G),
+UNIQUE (C,D)
+);",No output,,,"Primary Key:
+A is able to identify the entities in E1 with the smallest number of attributes
+hence it is a suitable primary key for E1. Similarly for G in E2.
+Foreign Key:
+The G columns in E1 references G in E2 as G is the primary key of E2 (hence a unique entity).
+To celebrate the end of BT5101 test, the professor decide to treat each student in the class to
+a Starbucks drink, each student can only get 1 Grande drink.
+E1 is the list of BT5101 students class of 2021 obtained from teh school. E2 listed the drinks available at Starbucks.
+Entity E1:
+A: NUS student number unique to each NUS student
+B: Name of student, some students may have the same name.
+C: passport number
+D: country of origin. Together with C, they uniquely identify the student (in case some countries use similar numbering system)
+Relationship S (favorite drink)  - matches every single student to their favorite Starbucks drink.
+F: any remarks regarding the drink (use soymilk etc)
+Entity E2:
+G: name of Starbucks drink (unique, eg. Java Chips Frappucino)
+H: price of the drink (Grande)
+J: calories
+K: whether it is a cold or hot drink",No output,,
 A0086956J,"SELECT DISTINCT c.continent_name, c.continent_code
 FROM country c;","7, [('Africa', 'AF'), ('Europe', 'EU'), ('South America', 'SA'), ('Asia', 'AS'), ('North America', 'NA'), ('Oceania', 'OC'), ('Antarctica', 'AN')]",,,"SELECT a.name AS app, c.name AS country
 FROM app a, available av, country c, store s1, store s2
@@ -10,7 +300,7 @@ WHERE a.name=av.name
 	AND s1.os='iOS' AND s2.os='Android';","42, [('Care Workforce', 'United Kingdom of Great Britain & Northern Ireland'), ('Moje ezdravie', 'Slovakia (Slovak Republic)'), ('COVID Symptom Study', 'United Kingdom of Great Britain & Northern Ireland'), ('????????? ???? ???????????', 'Russian Federation'), ('SwissCovid', 'Switzerland, Swiss Confederation'), ('CoronaTest Navarra', 'Spain, Kingdom of'), ('Apturi Covid Latvia - SPKC', 'Latvia, Republic of'), ('CORONAVIRUS - ???????????', 'Ukraine'), ('Luscii', 'Netherlands, Kingdom of the'), ('COVID Radar', 'Netherlands, Kingdom of the')]",,,"SELECT c.name
 FROM country c
 GROUP BY c.name
-HAVING COUNT(*) > 1","8, [('Georgia',), ('Armenia, Republic of',), ('Azerbaijan, Republic of',), ('United States Minor Outlying Islands',), ('Turkey, Republic of',), ('Kazakhstan, Republic of',), ('Russian Federation',), ('Cyprus, Republic of',)]","Missing semicolon, CHECK CODE. ",,"SELECT DISTINCT c1.name
+HAVING COUNT(*) > 1","8, [('Georgia',), ('Armenia, Republic of',), ('Azerbaijan, Republic of',), ('United States Minor Outlying Islands',), ('Turkey, Republic of',), ('Kazakhstan, Republic of',), ('Russian Federation',), ('Cyprus, Republic of',)]",,,"SELECT DISTINCT c1.name
 FROM country c1, country c2
 WHERE c1.name=c2.name
 	AND c1.continent_name <> c2.continent_name;","8, [('Turkey, Republic of',), ('Kazakhstan, Republic of',), ('Georgia',), ('Armenia, Republic of',), ('Azerbaijan, Republic of',), ('United States Minor Outlying Islands',), ('Russian Federation',), ('Cyprus, Republic of',)]",,,"SELECT a.name
@@ -34,7 +324,7 @@ FROM tmp loser LEFT OUTER JOIN tmp winner
 	AND winner.count>loser.count
 GROUP BY loser.name, loser.count
 HAVING COUNT(*)<6
-ORDER by loser.count DESC;","6, [('United States of America', 65), ('India, Republic of', 52), ('Mexico, United Mexican States', 21), ('Brazil, Federative Republic of', 17), ('Spain, Kingdom of', 16), ('United Kingdom of Great Britain & Northern Ireland', 14)]","Multiple semicolons detected, CHECK CODE. ",,"CREATE TABLE E1(
+ORDER by loser.count DESC;","6, [('United States of America', 65), ('India, Republic of', 52), ('Mexico, United Mexican States', 21), ('Brazil, Federative Republic of', 17), ('Spain, Kingdom of', 16), ('United Kingdom of Great Britain & Northern Ireland', 14)]",,,"CREATE TABLE E1(
 	A VARCHAR(64),
 	B VARCHAR(64) NOT NULL,
 	C VARCHAR(64),
@@ -139,7 +429,7 @@ and G represents the employee ID of the manager. This employee ID is unique as w
 S is the relationship which joins E1 and E2. For example this can be 'manage'. In this case, one manager can manage
 a team which consists 1 or more employee or this manager can be an individual contributor (manage 0 people). 
 However, one employee should and only should has one manager.",No output,,
-A0093740E,"select continent_name, continent_code from country","262, [('Asia', 'AS'), ('Europe', 'EU'), ('Antarctica', 'AN'), ('Africa', 'AF'), ('Oceania', 'OC'), ('Europe', 'EU'), ('Africa', 'AF'), ('North America', 'NA'), ('Europe', 'EU'), ('Asia', 'AS')]","Missing semicolon, CHECK CODE. ",,"select distinct av.name as app, av.country
+A0093740E,"select continent_name, continent_code from country","262, [('Asia', 'AS'), ('Europe', 'EU'), ('Antarctica', 'AN'), ('Africa', 'AF'), ('Oceania', 'OC'), ('Europe', 'EU'), ('Africa', 'AF'), ('North America', 'NA'), ('Europe', 'EU'), ('Asia', 'AS')]",,,"select distinct av.name as app, av.country
 from appfunctionality af, available av, country c, store s
 where av.country = c.code3
 and af.name = av.name
@@ -150,13 +440,13 @@ except
 (select distinct a.name, s.os
 from app a, store s
 where s.os = 'iOS'
-and s.os <> 'Android')","26, [('V¡rusRadar', 'HUN'), ('eRouska', 'CZE'), ('geoHealthApp Covid19 Tracker', 'CHE'), ('COVID-19.eus', 'ESP'), ('Rakning C-19', 'ISL'), ('Stopp Corona', 'AUT'), ('Radar Covid', 'ESP'), ('COVID Tracker Ireland', 'IRL'), ('Smitte|stop', 'DNK'), ('Corona-Warn-App', 'DEU')]","Missing semicolon, CHECK CODE. ",,"select c.name
+and s.os <> 'Android')","26, [('V¡rusRadar', 'HUN'), ('eRouska', 'CZE'), ('geoHealthApp Covid19 Tracker', 'CHE'), ('COVID-19.eus', 'ESP'), ('Rakning C-19', 'ISL'), ('Stopp Corona', 'AUT'), ('Radar Covid', 'ESP'), ('COVID Tracker Ireland', 'IRL'), ('Smitte|stop', 'DNK'), ('Corona-Warn-App', 'DEU')]",,,"select c.name
 from country c
 group by c.name
-having count (distinct c.continent_code)>1","8, [('Armenia, Republic of',), ('Azerbaijan, Republic of',), ('Cyprus, Republic of',), ('Georgia',), ('Kazakhstan, Republic of',), ('Russian Federation',), ('Turkey, Republic of',), ('United States Minor Outlying Islands',)]","Missing semicolon, CHECK CODE. ",,"select c.name
+having count (distinct c.continent_code)>1","8, [('Armenia, Republic of',), ('Azerbaijan, Republic of',), ('Cyprus, Republic of',), ('Georgia',), ('Kazakhstan, Republic of',), ('Russian Federation',), ('Turkey, Republic of',), ('United States Minor Outlying Islands',)]",,,"select c.name
 from country c
 group by c.name
-having count (distinct c.continent_code)>1","8, [('Armenia, Republic of',), ('Azerbaijan, Republic of',), ('Cyprus, Republic of',), ('Georgia',), ('Kazakhstan, Republic of',), ('Russian Federation',), ('Turkey, Republic of',), ('United States Minor Outlying Islands',)]","Aggregation is used, CHECK CODE.",,,No output,,,"select *from
+having count (distinct c.continent_code)>1","8, [('Armenia, Republic of',), ('Azerbaijan, Republic of',), ('Cyprus, Republic of',), ('Georgia',), ('Kazakhstan, Republic of',), ('Russian Federation',), ('Turkey, Republic of',), ('United States Minor Outlying Islands',)]",,,,No output,,,"select *from
 ( select c.name, count (distinct av.name ) as count
 	from country c, available av
 	where av.country = c.code3
@@ -164,7 +454,7 @@ having count (distinct c.continent_code)>1","8, [('Armenia, Republic of',), ('Az
 	c.name
     order by count desc
 ) a
-limit 16","16, [('United States of America', 65), ('India, Republic of', 52), ('Mexico, United Mexican States', 21), ('Brazil, Federative Republic of', 17), ('Spain, Kingdom of', 16), ('United Kingdom of Great Britain & Northern Ireland', 14), ('Australia, Commonwealth of', 8), ('Indonesia, Republic of', 8), ('Switzerland, Swiss Confederation', 7), ('Argentina, Argentine Republic', 7)]","Missing semicolon, CHECK CODE. ",,"CREATE TABLE E1 (
+limit 16","16, [('United States of America', 65), ('India, Republic of', 52), ('Mexico, United Mexican States', 21), ('Brazil, Federative Republic of', 17), ('Spain, Kingdom of', 16), ('United Kingdom of Great Britain & Northern Ireland', 14), ('Australia, Commonwealth of', 8), ('Indonesia, Republic of', 8), ('Switzerland, Swiss Confederation', 7), ('Argentina, Argentine Republic', 7)]",,,"CREATE TABLE E1 (
 A TEXT PRIMARY KEY,
 B TEXT NOT NULL,
 C TEXT NOT NULL,
@@ -301,4 +591,4 @@ CREATE TABLE E2 (
 J TEXT,
 K TEXT NOT NULL,
 G TEXT PRIMARY KEY,
-H TEXT NOT NOT NULL);",No output,,,Omitted.,No output,,
+H TEXT NOT NULL);",No output,,,Omitted.,No output,,

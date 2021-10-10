@@ -124,10 +124,7 @@ def extract_student_answers(submission_files, project_questions, csv_format = ['
                 if question_index >= 0:
                     student_row.append(solution_string.strip())
 
-                    extra_comment = check_semicolons(solution_string, question_index, extra_comment)
-                    extra_comment = check_usage_of_aggregation(solution_string, question_index,extra_comment)     
-                    extra_comment = check_multiple_queries(solution_string, question_index, extra_comment)
-                    extra_comment = check_solution_format(solution_string, question_index, extra_comment)
+                    extra_comment = perform_extra_checking(solution_string, question_index, extra_comment)
 
                     if EXECUTE_QUERY:
                         # rows = psql_execute_query(solution_string.replace('\n', ' '), question="("+project_questions[question_index]+")")
@@ -204,11 +201,8 @@ def extract_student_answers(submission_files, project_questions, csv_format = ['
 
         student_row.append(solution_string.strip())
         
-        extra_comment = check_semicolons(solution_string, question_index,extra_comment)
-        extra_comment = check_usage_of_aggregation(solution_string, question_index,extra_comment)        
-        extra_comment = check_multiple_queries(solution_string, question_index, extra_comment)
-        extra_comment = check_solution_format(solution_string, question_index, extra_comment)
-
+        extra_comment = perform_extra_checking(solution_string, question_index,extra_comment)
+        
         if EXECUTE_QUERY:
         # while False: # leave the last question not been executed
             rows = psql_execute_query(solution_string, question="("+project_questions[question_index]+")", question_index=question_index)
@@ -254,6 +248,7 @@ def summarize_sql_output(rows):
         return "No output"
     output_summary = str(len(rows[0])) + ", " 
     if len(rows[0]) > 1:
+        # We only keep the first 10 rows in per output
         output_summary = output_summary + str(rows[0][:10])
     else:
         output_summary = output_summary + str(rows[0])
@@ -286,8 +281,7 @@ def validate_sql_output(query_output_rows, num_rows, rows_checklist=[], sorted=F
             comment += "Inconsistent of output (wrong order).\n"
     
     return comment
-
-
+    
 def check_semicolons(solution, question_index, comment=''):
     # For the last two questions, we donot need to check
     if question_index >= 6:
@@ -324,31 +318,54 @@ def check_usage_of_aggregation(solution, question_index, comment=''):
         comment = 'Aggregation is used, CHECK CODE.'  
     return comment
 
-def check_solution_format(solution, question_index, comment=''):
-    return comment
-    '''
-    if question_index >= 3:
+def check_ddl_correctness(solution, question_index, comment=''):
+    if question_index != 6:
+        return comment
+    else:
+        solution_strip_str = solution.strip().replace('\n', ' ').replace('\t', '').replace(' ', '').lower()
+        num_tables = solution_strip_str.count('create table'.replace(' ', ''))
+        num_not_null = solution_strip_str.count('not null'.replace(' ', ''))
+        num_fkey = solution_strip_str.count('references'.replace(' ', ''))
+
+        if len(comment) > 0:
+            comment += '\n' 
+        comment += "No. tables: " + str(num_tables) + "; "
+
+        not_null_constraint_check = "No. not null: " + str(num_not_null)
+        if num_not_null < 4:
+            not_null_constraint_check += " (CHECK CODE)"
+        comment += not_null_constraint_check + "; "
+
+        forigen_key_check = "No. foreign keys defined: " + str(num_fkey)
+        if num_fkey > 0:
+            forigen_key_check += " (CHECK CODE)"
+        comment += forigen_key_check + "; "
+        
         return comment
 
-    check = False
-    solution_strip_str = solution.strip().replace('\n', ' ').replace('\t', '').replace(' ', '').lower()
-
-    if question_index == 0: # Question 2.a
-        check = 'right outer join'.replace(' ', '') in solution_strip_str
-        
-    elif question_index == 1: # Question 2.b
-        check = 'from employee per, (select'.replace(' ', '') in solution_strip_str
-
-    elif question_index == 2:# Question 2.c
-        check = 'where not exists'.replace(' ', '') in solution_strip_str
-
-    if not (check):
-        if len(comment) > 0:
-            comment += '\n'
-        comment += 'Answer violates predefined format, CHECK CODE. '
+def check_solution_format(solution, question_index, comment=''):
     
+    if question_index == 5: # Question 1.f
+        solution_strip_str = solution.strip().replace('\n', ' ').replace('\t', '').replace(' ', '').lower()
+        check = []
+        if 'rank'.replace(' ', '') in solution_strip_str:
+            check.append("RANK")
+        
+        if 'row_number'.replace(' ', '') in solution_strip_str:
+            check.append("ROW_NUMBER")
+        
+        if len(check) > 0:
+            comment += "\nAnswer violates requirement (", + str(check) + "), CHECK CODE."
+            
     return comment
-    '''
+
+
+def perform_extra_checking(solution, question_index, comment=''):
+    comment = check_semicolons(solution, question_index, comment)
+    comment = check_multiple_queries(solution, question_index, comment)
+    comment = check_usage_of_aggregation(solution, question_index,comment)
+    comment = check_solution_format(solution, question_index, comment)
+    comment = check_ddl_correctness(solution, question_index, comment)
     
 dirpath=('submission\\test1\\')
 arr = retrieve_all_submission_files(dirpath)

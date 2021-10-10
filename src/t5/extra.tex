@@ -28,6 +28,20 @@
 \end{frame}
 
 \begin{frame}
+	Updated on 8 Oct (Friday):
+	\begin{itemize}
+		\item Fixed some errors that have been raised in-class for the Case 4 and In-class Case 2. Refer to the red color notice text in relevant pages, and pay attention while viewing the Zoom recording. 
+	\end{itemize}
+	Updated on 10 Oct (Sunday):
+	\begin{itemize}
+		\item Fixed the underline notation to indicate keys of $R_1$ in page 11.\\
+		i.e., $\underline{S},\underline{M} \rightarrow\underline{S,M}$
+		\item Fixed the decomposition mistake of Case 3 in page 16.\\
+		i.e., $R_1$ in the first option is not in BCNF, therefore a further decomposition is needed. 
+	\end{itemize}
+\end{frame}
+
+\begin{frame}
 	{\large \textbf{Agenda}}
 	\begin{itemize}
 		\item Extra Case No.1 - Warehouse management system
@@ -165,7 +179,7 @@
 	
 	(4) Synthesis result has 3 relations and is (luckily) BCNF: \\\vspace{5pt}
 	
-	$R_1 = (\underline{S}, \underline{M}, G),$\\
+	$R_1 = (\underline{S,M}, G),$\\
 	$R_2 = (\underline{S}, N, F),$\\
 	$R_3 = (\underline{F}, D).$\\\vspace{5pt}
 	
@@ -243,16 +257,20 @@
 \end{frame}
 
 \begin{frame}[fragile]{\boss{Extra} - Case 3 (Solution)}
-	(5) Decomposition at $\{C\} \rightarrow \{D\}$:\\\vspace{5pt}
+	(5) Decomposition at $\{C\} \rightarrow \{D\}$:\\\vspace{3pt}
 	
 	$R_1 = (A, \underline{C}, D),$\\
-	$R_2 = (\underline{B}, \underline{C}).$\\\vspace{5pt}
+	$R_2 = (\underline{B}, \underline{C}).$\\\vspace{3pt}
 	
-	In this way both relations are BCNF, but we lose a dependency $\{A, B\} \rightarrow \{C\}$.\\\vspace{5pt}
+	The $R_1$ is not in BCNF (e.g., $\{D\} \rightarrow \{A\}$), let's further decompose it:\\
+	$R_{1.1} = (A, \underline{D}),$\\
+	$R_{1.2} = (\underline{C}, D),$\\\vspace{3pt}
 	
-	\textcolor{red}{How about we change the entry point of decomposition?}\\\vspace{5pt}
+	In this way all 3 relations ($R_{1.1}$, $R_{1.2}$ and $R_{2}$) are BCNF, but we lose a dependency $\{A, B\} \rightarrow \{C\}$.\\\vspace{10pt}
 	
-	Decomposition at $\{D\} \rightarrow \{A\}$:\\\vspace{5pt}
+	\textcolor{red}{How about we change the entry point of decomposition?}\\\vspace{3pt}
+	
+	Decomposition at $\{D\} \rightarrow \{A\}$:\\\vspace{3pt}
 	
 	$R_1 = (A, \underline{D}),$\\
 	$R_2 = (B, \underline{C}, D).$\\\vspace{5pt}
