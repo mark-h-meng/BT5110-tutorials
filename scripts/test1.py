@@ -1,11 +1,12 @@
 import re
 import os
+import random
+import string
 import csv
 import logging
 import psycopg2
 from psycopg2 import sql
 from psycopg2.extensions import ISOLATION_LEVEL_AUTOCOMMIT 
-import os
 
 logging.basicConfig(filename='file_processing.log', filemode='w', level=logging.DEBUG)
 
@@ -22,6 +23,7 @@ ORIGINAL_PARAM_Q1F = 6
 SPECIAL_PARAMS_Q1F = [7, 8, 16]
 
 initialize_connection_command = "dbname='" + dbname + "' user='" + user + "' host='" + host + "' password='" + password + "'" 
+initialize_connection_command_no_db = "user='" + user + "' host='" + host + "' password='" + password + "'" 
 
 EXECUTE_QUERY = True
 KEEP_LINE_BREAK = True
@@ -29,6 +31,10 @@ KEEP_LINE_BREAK = True
 regex = re.compile(r'[\n\r\t]')
 
 default_question_pattern = '/* Question '
+
+def generate_randome_string(len=5):
+    random_str = ''.join(random.choice(string.ascii_lowercase) for x in range(len))
+    return random_str
 
 # Given a list of files submitted by students, output the list of student IDs
 def extract_student_id(filenames):
@@ -260,6 +266,10 @@ def extract_student_answers(submission_files, project_questions, csv_format = ['
     output_file.close()
 
 def psql_execute_query(query, question="", question_index=0, time_out='10000'):
+    # Special arrangement for Q2.(a), as discussed on 11/Oct/2021
+    if question_index == 6:
+        return psql_execute_schema_code(query, question, question_index)
+
     try:     
         rows = []
         if question_index >= 6:
@@ -279,6 +289,51 @@ def psql_execute_query(query, question="", question_index=0, time_out='10000'):
             rows.append(cur.fetchall())
         except psycopg2.Error as errorMsg:  
             conn.rollback()
+        return rows
+    except Exception as error:
+        print("Database query error: ", error, question, end="")
+        print("Exception TYPE:", type(error), question, end="")
+
+def psql_execute_schema_code(query, question="", question_index=0, time_out='10000'):
+    try:     
+        rows = []
+        if len(query.strip()) <= 0:
+            return rows
+        connect_command = initialize_connection_command_no_db + " options='-c statement_timeout=" + str(time_out) + "'"
+
+        conn = psycopg2.connect(connect_command)
+        conn.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
+        cur = conn.cursor()
+
+        tmp_db_name = generate_randome_string(len=5)
+        query_create_temp_db = "CREATE DATABASE " + tmp_db_name +";"
+        connect_command_temp_db = initialize_connection_command_no_db + "dbname='" + tmp_db_name + "' options='-c statement_timeout=" + str(time_out) + "'"
+        query_delete_temp_db = "DROP DATABASE " + tmp_db_name + ";"
+        
+        # step 1 create table 
+        try:
+            cur.execute(query_create_temp_db)
+            conn.commit()
+        except psycopg2.Error as errorMsg:  
+            conn.rollback()
+        
+        print("("+tmp_db_name+")", end="")
+
+        # step 2 execute DDL query 
+        try:
+            cur.execute(query)
+            conn.commit()
+            rows.append(cur.fetchall())
+        except psycopg2.Error as errorMsg:  
+            conn.rollback()
+
+        # step 3 delete table 
+        try:
+            cur.execute(query_delete_temp_db)
+            conn.commit()
+        except psycopg2.Error as errorMsg:  
+            conn.rollback()
+        
         return rows
     except Exception as error:
         print("Database query error: ", error, question, end="")
@@ -361,16 +416,29 @@ def check_usage_of_aggregation(solution, question_index, comment=''):
 
     if question_index < 3 or question_index > 4:
         return comment
-    clue_str = ''
-    if re.search('having ', solution, re.IGNORECASE):
-        clue_str += ' HAVING '
-    if re.search('group by ', solution, re.IGNORECASE):
-        clue_str += ' GROUP-BY '
+    clue_str = []
+    if re.search('count ', solution, re.IGNORECASE):
+        clue_str.append('COUNT')
+    if re.search('having', solution, re.IGNORECASE):
+        clue_str.append('HAVING')
+    if re.search('group by', solution, re.IGNORECASE):
+        clue_str.append('GROUP-BY')
     
     if len(clue_str) > 0:
         if len(comment) > 0:
             comment += '\n' 
-        comment = 'Aggregation is used, CHECK CODE; '  
+        comment = 'Aggregation ' + str(clue_str)+ ' is used, CHECK CODE; '  
+    return comment
+
+def check_missing_of_aggregation(solution, question_index, comment=''):
+
+    if question_index != 2:
+        return comment
+    if not re.search('having', solution, re.IGNORECASE):
+        if not re.search('group by', solution, re.IGNORECASE):
+            if len(comment) > 0:
+                comment += '\n' 
+            comment += 'Aggregation is missing, CHECK CODE; '
     return comment
 
 def check_ddl_correctness(solution, question_index, comment=''):
@@ -423,6 +491,7 @@ def perform_extra_checking(solution, question_index, comment=''):
     comment = check_semicolons(solution, question_index, comment)
     comment = check_multiple_queries(solution, question_index, comment)
     comment = check_usage_of_aggregation(solution, question_index,comment)
+    comment = check_missing_of_aggregation(solution, question_index,comment)
     comment = check_solution_format(solution, question_index, comment)
     comment = check_ddl_correctness(solution, question_index, comment)
     
