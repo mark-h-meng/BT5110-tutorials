@@ -39,6 +39,10 @@
 		\item Fixed the decomposition mistake of Case 3 in page 16.\\
 		i.e., $R_1$ in the first option is not in BCNF, therefore a further decomposition is needed. 
 	\end{itemize}
+	Update on 12 Oct (Tuesday) has been recalled and pages 28 and afterwards are re-composed to avoid ambiguity.
+	%\begin{itemize}
+	%	\item Fixed the mistake in computing the minimal cover set and consequential sub-questions of In-class Case 2 in page 28-30.
+	%\end{itemize}
 \end{frame}
 
 \begin{frame}
@@ -317,7 +321,6 @@
 \end{frame}
 
 \begin{frame}[fragile]{\boss{Extra} - Case 4 (Solution)}
-	\textcolor{red}{\textbf{\hl{Updated version (an error raised in class corrected)}}}\\
 	(2) First let's list all FDs given in the question:\\\vspace{5pt}
 	$\{A\} \rightarrow \{B,C,D\}$, 
 	$\{B\} \rightarrow \{D\}$, 
@@ -355,8 +358,6 @@
 \begin{frame}[fragile]{\boss{Extra} - Case 4 (Solution)}
 	(3) No it is not 2NF (e.g., $\{B\} \rightarrow \{D\}$, where $D$ is a non-prime attribute but $B$ is a subset of candidate key). Therefore, it is not 3NF and not BCNF, too. (all because of $\{B\} \rightarrow \{D\}$)\\\vspace{5pt}
 	
-	
-	\textcolor{red}{\textbf{\hl{Updated version (an error raised in class corrected)}}}\\
 	(4) Synthesis result has 2 relations and each one is (luckily) BCNF: \\\vspace{5pt}
 	
 	$R_1 = (\underline{A}, \underline{B, C}),$\\\vspace{2pt}
@@ -366,7 +367,6 @@
 \end{frame}
 
 \begin{frame}[fragile]{\boss{Extra} - Case 4 (Solution)}
-	\textcolor{red}{\textbf{\hl{Updated version (an error raised in class corrected)}}}\\
 	(5) Decomposition at $\{B\} \rightarrow \{D\}$:\\\vspace{5pt}
 	
 	$R_1 = (\underline{B}, D),$\\
@@ -441,10 +441,9 @@
 	$\Sigma=\{\{C,D\} \rightarrow \{E\},\{A,B\} \rightarrow \{B\}, \{A,C,D\} \rightarrow \{E\},\{A\} \rightarrow \{E\},\{D,E\} \rightarrow \{B,C\},\{A\} \rightarrow \{A\}\}.$\\\vspace{5pt}
 	
 	\textbf{Solution}:\\
-	\textcolor{red}{\textbf{\hl{Updated version (an error raised in class corrected)}}}\\
 	(1) The attribute closure of $R$ is:
 	\vspace{-10pt}\begin{columns}
-	\column{0.3\textwidth}
+	\column{0.5\textwidth}
 	\begin{scriptsize}\begin{align*} 
 		\Sigma^{+} = \{&\{A\}^{+} \rightarrow \{A,E\},\\
 		&\{B\}^{+} \rightarrow \{B\},\\
@@ -460,9 +459,9 @@
 		&\{A,B,C,D,E\}^{+} \rightarrow \{A,B,C,D,E\}\}.
 	\end{align*}\end{scriptsize} 
 	
-	\column{0.65\textwidth}
-	\textbf{Hint}:\\
-	After removing all trivial FDs, we find $A$ and $D$ have never appeared in the right-hand side, which means the candidate key must contains $A$ and $D$. We just need to find the minimal set that implies $\{B,C,E\}$. (Luckily both $A$ and $D$ together can determine $\{B,C,E\}$)\\\vspace{10pt}
+	\column{0.45\textwidth}
+	\textbf{Hint}: 
+	After removing all trivial FDs, we find $A$ and $D$ have never appeared in the right-hand side, which means the candidate key must contains $A$ and $D$. We just need to find the minimal set that implies $\{B,C,E\}$. (Luckily both $A$ and $D$ together can determine $\{B,C,E\}$)\\\vspace{3pt}
 
 	Then we can find candidate key: $\{A,D\}$. And the prime attributes: $A, D$
 	\end{columns}
@@ -474,80 +473,95 @@
 	
 	(2) The compact minimal cover is:\\\vspace{5pt}
 	
-	\begin{columns}
-	\column{0.35\textwidth}
+	\begin{columns}[t]
+	\column{0.29\textwidth} \textbf{STEP 1}\\
+	\begin{block}{}
+		\tiny \textcolor{red}{Simplify the RHS by the Union Rule, i.e., if $\{X\}\rightarrow \{YZ\}$, then \underline{split} into $\{X\}\rightarrow \{Y\}$ and $\{X\}\rightarrow \{Z\}$}	
+	\end{block}
+	$\{C,D\} \rightarrow \{E\},$\\
+	$\{A,B\} \rightarrow \{B\}$,\\
+	$\{A\}  \rightarrow \{E\},$\\
+	$\{A,C,D\} \rightarrow \{E\},$\\
+	$\{D,E\} \rightarrow \{B\}.$\\
+	$\{D,E\} \rightarrow \{C\}.$\\
+	$\{A\} \rightarrow \{A\}$\\\vspace{5pt}
+	\column{0.29\textwidth} \textbf{STEP 2}\\
+	\begin{block}{}
+		\tiny \textcolor{red}{Simplify the LHS, i.e., if given $\{X\}\rightarrow \{Y\}$ and $\{XB\}\rightarrow \{Y\}$, then we \underline{omit} $\{XB\}\rightarrow \{Y\}$}	
+	\end{block}
 	$\{C,D\} \rightarrow \{E\},$\\
 	$\cancel{\{A,B\} \rightarrow \{B\}}$,\\
 	$\cancel{\{A,C,D\} \rightarrow \{E\}}$,\\
 	$\{A\}  \rightarrow \{E\},$\\
 	$\{D,E\} \rightarrow \{B\}.$\\
 	$\{D,E\} \rightarrow \{C\}.$\\
-	$\cancel{\{A\} \rightarrow \{A\}}$\\\vspace{5pt}
-	\column{0.05\textwidth} $\rightarrow$
-	\column{0.45\textwidth}
-	So the finalized set is:\\
+	$\{A\} \rightarrow \{A\}$\\\vspace{5pt}
+	\column{0.28\textwidth}  \textbf{STEP 3 (compact)}\\	
+	\begin{block}{}
+		\tiny \textcolor{red}{Check if every FD is non-trivial and minimal, i.e., if given $\{X\}\rightarrow \{Y\}$, we need to \underline{ensure} there does not exist an $A$ s.t. $\{X\}\rightarrow \{A\}$ and $\{A\}\rightarrow \{Y\}$}	
+	\end{block}
+	The finalized set is:\\
 	$\{C,D\} \rightarrow \{E\},$\\
 	$\{A\}  \rightarrow \{E\},$\\
-	$\{D,E\} \rightarrow \{B, C\}.$
+	$\{D,E\} \rightarrow \{B, C\}$\\
+	$\cancel{\{A\} \rightarrow \{A\}}$.
 	\end{columns}
-	
-	\textcolor{red}{\textbf{\hl{Updated version (an error raised in class corrected)}}}\\
-	(3)  Yes it is in 2NF. But not in 3NF, and not in BCNF, too.\\\vspace{5pt}
-	
-	E.g., $\{C,D\} \rightarrow \{E\}$ is not trivial, the LHS is not a superkey and the RHS is not a prime attribute, therefore it violates 3NF (in fact all four FDs in the compact minimal cover violate 3NF and BCNF).
 	
 \end{frame}
 
 
 \begin{frame}[fragile]{\boss{Extra} - In-class Case 2 (Solution)}
-	\textcolor{red}{\textbf{\hl{Updated version (an error raised in class corrected)}}}\\
-	(4) Recall the compact minimal cover:\\\vspace{5pt}
+	(3)  It is not in 2NF, therefore it is not in 3NF, and not in BCNF, too.\\\vspace{3pt}
+	
+	E.g., $\{A\} \rightarrow \{E\}$ is not trivial, the LHS is a subset of the candidate key $\{A,D\}$ and the RHS is not a prime attribute, therefore it violates 2NF.\\\vspace{3pt}
+	For 3NF and beyond, we find all FDs in the compact minimal cover are violations (all RHS are not prime attributes and all LHS are not superkeys).\\\vspace{5pt}
+	
+	(4) Recall the compact minimal cover:\\\vspace{3pt}
 	
 	$\{C,D\} \rightarrow \{E\},$
 	$\{A\}  \rightarrow \{E\},$
-	$\{D,E\} \rightarrow \{B,C\}.$\\\vspace{5pt}
+	$\{D,E\} \rightarrow \{B,C\}.$\\\vspace{3pt}
 	
-	Let's do 3NF synthesis:\\ \vspace{5pt}
-	\begin{columns}
-	\column{0.55\textwidth}
-	$R_1 = (\underline{C, D}, E),$\\
-	$R_2 = (\underline{A}, E),$\\
+	Let's do 3NF synthesis:\\ \vspace{3pt}
+	$R_1 = (\underline{C,D},E),$
+	$R_2 = (\underline{A}, E),$
 	$R_3 = (B, C, \underline{D, E}).$\\\vspace{3pt}
 	(The candidate key is not included in any relation fragment above, so we add a new fragment manually)\\\vspace{3pt}
 	$R_4 = (\underline{A, D}).$\\\vspace{3pt}
 	
-	\column{0.02\textwidth} $\rightarrow$
-	\column{0.3\textwidth}
-	So the simplified result is:\\
-	($R_1$ can be subsumed in $R_3$)
-	$R_2 = (\underline{A}, E),$\\
-	$R_3 = (B, \underline{C,D,E}),$\\
-	$R_4 = (\underline{A, D}),$\\
-	All 3 fragments are in BCNF.
+	All fragments are in BCNF.
 	
-	\end{columns}
 
 \end{frame}
 
 \begin{frame}[fragile]{\boss{Extra} - In-class Case 2 (Solution)}
-	\textcolor{red}{\textbf{\hl{Updated version (an error raised in class corrected)}}}\\
 	(5) Recall the compact minimal cover:\\
 	
-	$\{C,D\} \rightarrow \{E\},$\\
-	$\{A\}  \rightarrow \{E\},$\\
-	$\{D,E\} \rightarrow \{B,C\}.$\\\vspace{5pt}
+	$\{C,D\} \rightarrow \{E\},$
+	$\{A\}  \rightarrow \{E\},$
+	$\{D,E\} \rightarrow \{B,C\}.$\\\vspace{2pt}
 	
-	Decomposition at $\{C,D\} \rightarrow \{E\}$:\\\vspace{5pt}
+	Let's start decomposition at $\{A\} \rightarrow \{E\}$:\\\vspace{2pt}
 		
-	$R_1 = (\underline{C,D}, E),$\\
-	$R_2 = (\underline{A}, B, \underline{C,D}).$\\\vspace{5pt}
+	$R_1 = (\underline{A}, E),$\\
+	$R_2 = (\underline{A}, B, C, D).$\\\vspace{2pt}
 	
 	We can find that:\\\vspace{5pt}
-	$\Sigma_1 = \{\{C,D\}\rightarrow\{E\}\}$\\
-	$\Sigma_2 = \emptyset$
+	$\Sigma_1 = \{\{A\}\rightarrow\{E\}\},$ and
+	$\Sigma_2 = \{ \emptyset \}$\\ \vspace{2pt}
 	
-	Both relations are BCNF\\\vspace{5pt}
-	However, we lose lots of dependency in this decomposition. E.g., $\{A\}\rightarrow\{E\}, \{D,E\}\rightarrow\{B,C\}$.
+	We find both fragment are in BCNF, however we loss all FDs except $\{A\}\rightarrow\{E\}$.\\ \vspace{2pt}
+		
+\end{frame}
+
+\begin{frame}[fragile]{\boss{Extra} - In-class Case 2 (Solution)}
+	
+	If you try to use a FD other than $\{A\}  \rightarrow \{E\}$ in BCNF decomposition, you may encounter a dead loop of decomposing $\{B,C,D,E\}$.\\\vspace{10pt}
+	
+	This case may not be a good one for practice as the relation is pretty tricky. In fact there are more than one methods to perform BCNF decomposition. \\\vspace{10pt}
+	
+	According to the textbook referred in this module (Database Management Systems, Ramakrishnan \& Gehrke), there is another (more) ineffective algorithm to decompose $\{A,B\}$ into $\{C,D,E\}$. You can borrow the book from NUS library if you have interest to read.
+	
 \end{frame}
 
 \begin{frame}{}

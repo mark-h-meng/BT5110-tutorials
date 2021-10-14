@@ -454,6 +454,7 @@ def check_ddl_correctness(solution, question_index, comment=''):
             comment += '\n' 
         comment += "Num. tables: " + str(num_tables) + "; "
 
+        '''
         not_null_constraint_check = "Num. not null: " + str(num_not_null)
         if num_not_null < 4:
             not_null_constraint_check += " (CHECK CODE) "
@@ -463,6 +464,7 @@ def check_ddl_correctness(solution, question_index, comment=''):
         if num_fkey > 0:
             forigen_key_check += " (CHECK CODE) "
         comment += forigen_key_check + "; "
+        '''
         
         return comment
 
