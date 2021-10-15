@@ -389,16 +389,8 @@ DESC LIMIT 6
 
 
 \pagebreak
-\question\label{ques:er} Consider the  entity-relationship diagram in Figure~\ref{fig:er}.
+\question\label{ques:er} Consider the  entity-relationship diagram in Figure 1 (omitted).
 
-
-\begin{figure}
-\begin{center}
-%\includegraphics[width=.7\textwidth]{er.pdf}
-\caption{Entity-relationship diagram.}
-\label{fig:er}
-\end{center}
-\end{figure}
 \begin{parts}
 \part[5] Translate the entity-relationship diagram into SQL following the translation rules given in the lecture. Use ``\verb+TEXT+'' as the domain of the columns. Make sure that the design does not allow null values. The code should run for PostgreSQL version 13 and above (try it).
 \begin{solution}
@@ -454,7 +446,7 @@ D TEXT NOT UNIQUE NOT NULL);
 CREATE TABLE E2 (
 J TEXT ,
 K TEXT NOT NULL,
-G TEXT NOT PRIMARY KEY,
+G TEXT PRIMARY KEY,
 H TEXT NOT NOT NULL);
 \end{lstlisting}
 
@@ -478,8 +470,35 @@ PRIMARY KEY (C, A));
 
 \end{solution}
 
+\begin{figure}
+	\begin{center}
+		\includegraphics[width=.6\textwidth]{er.png}
+		\caption{Entity-relationship diagram.}
+		\label{fig:er}
+	\end{center}
+\end{figure}\vspace{-5pt}
+
 \part[2] Describe in English an original real world example to which the entity-relationship diagram in Figure~\ref{fig:er} could correspond. Give the real world meaning of entity sets $E_1$ and $E_2$, of relationship set $S$, and of attributes $A$, $B$, $C$, $D$, $F$, $G$, $H$, $J$, and $K$. Justify the candidate keys and participation constraints in the entity-relationship diagram.
 \begin{solution}
+
+\begin{center}
+	============ Solution provided by TA Mark Meng ============
+\end{center}\vspace{5pt}
+
+Please refer to the case that has been used in Tutorial 4, we reuse the model and propose a real-world example as shown in Fig.~\ref{fig:er}:	
+\vspace{5pt}
+
+\textbf{Candidate keys}: For E1, two candidate keys can be identified: name of the government department (A), or the composite of block number (C) and street name (D).
+For E2, there is only one candidate key, which is the NRIC number of the parliament member (G).
+
+\textbf{Participation}: As a typical commonwealth nation's cabinet, each government department (ministry level) has one and only one head, literally a (1,1) participation. The head of such government department needs be chosen from the parliament members belonging to the ruling political party. Therefore, for each parliament member, he/she may not been appointed as the head of any government department. In some cases, one parliament member can hold multiple appointments at different ministry at the same time (e.g., Minister of Law \& Minister of Home Affairs). For those reasons, the participation of E2 with regard of the relationship is (0,n).
+
+\vspace{5pt}
+\textbf{Poor examples (that should be avoided)}: \\
+(1) Take non-text information as example attributes (e.g., year of founded, which is DATE);\\
+(2) Take null-able information as example attributes (e.g., spouse);\\
+(3) Take information has an explicit not one-to-one dependency as example attributes (e.g., number of employees, which is better to be maintained with another table);\\
+(4) Take last name and first name as the composite primary key (C and D), because even the full name usually cannot identify a person.
 
 \end{solution}
 \end{parts}
