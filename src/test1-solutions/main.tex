@@ -189,6 +189,9 @@ app  & country  \\ \hline
 \vspace{0.2cm}
 
 \begin{solution}
+	
+\textcolor{red}{[Note by Mark]} Read the question carefully and don't miss ANY conditions given in the question body. Around half of our students' lose marks due to assuming all apps are for ``contact tracing'', which is actually not true.
+
 \begin{lstlisting}
 SELECT  a.name as app, c.name as country
 FROM appfunctionality a, available av, country c, store s1, store s2
@@ -231,7 +234,7 @@ name\\ \hline
 SELECT c1.name
 FROM country c1
 GROUP BY c1.name
-HAVING count(DISTINCT c1.continent_name) >1;
+HAVING count(DISTINCT c1.continent_name) > 1;
 \end{lstlisting}
 \end{solution}
 
@@ -244,7 +247,9 @@ FROM country c1, country c2
 WHERE c1.name = c2.name 
 AND c1.continent_name < c2.continent_name;
 \end{lstlisting}
-or
+
+\textcolor{red}{[Note by Mark]} You can obtain the same outputs by replacing ``$<$'' with either ``$>$'' or ``$<>$'', or query with the code below:
+
 \begin{lstlisting}
 SELECT DISTINCT * 
 FROM (SELECT name
@@ -254,7 +259,8 @@ FROM (SELECT name
   FROM country c1) 
 AS cross_continent_countries;
 \end{lstlisting}
-Need to be careful here because you cannot assume all cross continent countries only span 2 continents, e.g., France has territory in all continents except Asia: Oceania (Tahiti), Africa (Reunion), N.America (St. Pierre \& Miqueion) and S.America (French Guiana).
+
+\textcolor{red}{[Note by Mark]} Need to be careful here because you cannot assume all cross continent countries only span 2 continents, e.g., France has territory in all continents except Asia: Oceania (Tahiti), Africa (Reunion), N.America (St. Pierre \& Miqueion) and S.America (French Guiana).
 \end{solution}
 
 \part[3] (SQL) Find the names of the apps available in countries in Oceania that work for all recorded operating systems. The result should be similar to that in the table below in any order.  Make sure that your query produces the correct result in all possible database instances including when new apps with new operating systems are added (you may neither hardcode the operating systems as in Question 1.b nor the number of operating systems.)  Do not use an aggregate query.
@@ -280,6 +286,9 @@ name\\ \hline
 \vspace{0.2cm}
 
 \begin{solution}
+	
+\textcolor{red}{[Note by Mark]} Same as the note in Q1(b), you are suggested to be extremely sensitive to every word in the question body. ``... work for ALL recorded operating system'' means you are required to iterate all app stores recorded in the database rather than hardcoding ``Android'' and ``iOS''. Quiet a lot students lose marks for that reason.
+ 
 \begin{lstlisting}
 SELECT a.name
 FROM app a, available av, country c
@@ -330,6 +339,9 @@ name & count \\ \hline
 \vspace{0.2cm}
 
 \begin{solution}
+\\
+\textcolor{red}{[Note by Mark]} This question asks for ``countries with the top 6 largest number of apps'' rather than ``top 6 countries regarding the number of apps''. It is not the exactly same question with the one extra question (winner and loser case to solve top-K students) that has been demonstrated in class. This question asks you to ``dense rank'' countries, you may search on Internet for this term.
+
 \begin{lstlisting}
 SELECT c1.name, count(a1.name) as count
  FROM (SELECT DISTINCT c3.name, c3.code3 FROM country c3) AS c1 
@@ -392,103 +404,113 @@ DESC LIMIT 6
 
 
 \pagebreak
-\question\label{ques:er} Consider the  entity-relationship diagram in Figure 1 (omitted).
+\question\label{ques:er} Consider the entity-relationship diagram in Figure \ref{fig:er}.
+
+\begin{figure}
+	\begin{center}
+		\includegraphics[width=.7\textwidth]{er.pdf}
+		\caption{Entity-relationship diagram.}
+		\label{fig:er}
+	\end{center}
+\end{figure}\vspace{-5pt}
 
 \begin{parts}
 \part[5] Translate the entity-relationship diagram into SQL following the translation rules given in the lecture. Use ``\verb+TEXT+'' as the domain of the columns. Make sure that the design does not allow null values. The code should run for PostgreSQL version 13 and above (try it).
 \begin{solution}
 \begin{lstlisting}
 CREATE TABLE E1S (
-A TEXT UNIQUE NOT NULL,
-B TEXT NOT NULL,
-C TEXT,
-D TEXT,
-F TEXT NOT NULL,
-G TEXT REFERENCES E2(G),
-PRIMARY KEY (C, D));
+	A TEXT UNIQUE NOT NULL,
+	B TEXT NOT NULL,
+	C TEXT,
+	D TEXT,
+	F TEXT NOT NULL,
+	G TEXT REFERENCES E2(G),
+	PRIMARY KEY (C, D));
 \end{lstlisting}
 or
 \begin{lstlisting}
 CREATE TABLE E1S (
-A TEXT PRIMARY KEY,
-B TEXT NOT NULL,
-C TEXT NOT UNIQUE NOT NULL,
-D TEXT NOT UNIQUE NOT NULL,
-F TEXT NOT NULL,
-G TEXT REFERENCES E2(G));
+	A TEXT PRIMARY KEY,
+	B TEXT NOT NULL,
+	C TEXT UNIQUE NOT NULL,
+	D TEXT UNIQUE NOT NULL,
+	F TEXT NOT NULL,
+	G TEXT REFERENCES E2(G));
 \end{lstlisting}
 
 \begin{lstlisting}
 CREATE TABLE E2 (
-J TEXT ,
-K TEXT NOT NULL,
-G TEXT NOT PRIMARY KEY,
-H TEXT NOT NOT NULL);
+	J TEXT NOT NULL,
+	K TEXT NOT NULL,
+	G TEXT PRIMARY KEY,
+	H TEXT NOT NULL);
 \end{lstlisting}
 
 
 If the answer has three tables, for partial marks:
 \begin{lstlisting}
 CREATE TABLE E1 (
-A TEXT UNIQUE NOT NULL,
-B TEXT NOT NULL,
-C TEXT,
-D TEXT,
-PRIMARY KEY (C, D));
+	A TEXT UNIQUE NOT NULL,
+	B TEXT NOT NULL,
+	C TEXT,
+	D TEXT,
+	PRIMARY KEY (C, D));
 \end{lstlisting}
 or
 \begin{lstlisting}
 CREATE TABLE E1 (
-A TEXT PRIMARY KEY,
-B TEXT NOT NULL,
-C TEXT NOT UNIQUE NOT NULL,
-D TEXT NOT UNIQUE NOT NULL);
+	A TEXT PRIMARY KEY,
+	B TEXT NOT NULL,
+	C TEXT UNIQUE NOT NULL,
+	D TEXT UNIQUE NOT NULL);
 \end{lstlisting}
 
 \begin{lstlisting}
 CREATE TABLE E2 (
-J TEXT ,
-K TEXT NOT NULL,
-G TEXT PRIMARY KEY,
-H TEXT NOT NOT NULL);
+	J TEXT NOT NULL,
+	K TEXT NOT NULL,
+	G TEXT PRIMARY KEY,
+	H TEXT NOT  NULL);
 \end{lstlisting}
 
 \begin{lstlisting}
 CREATE TABLE S (
-C TEXT,
-D TEXT,
-F TEXT NOT NULL,
-G TEXT REFERENCES E2(G),
-FOREIGN KEY (C, D) REFERENCES E1(C, D),
-PRIMARY KEY (C, D, G));
+	C TEXT,
+	D TEXT,
+	F TEXT NOT NULL,
+	G TEXT REFERENCES E2(G),
+	FOREIGN KEY (C, D) REFERENCES E1(C, D),
+	PRIMARY KEY (C, D, G));
 \end{lstlisting}
 or
 \begin{lstlisting}
 CREATE TABLE S (
-A TEXT REFERENCES E1(A),
-F TEXT NOT NULL,
-G TEXT REFERENCES E2(G),
-PRIMARY KEY (C, A));
+	A TEXT REFERENCES E1(A),
+	F TEXT NOT NULL,
+	G TEXT REFERENCES E2(G),
+	PRIMARY KEY (C, A));
 \end{lstlisting}
 
 \end{solution}
 
 \begin{figure}
 	\begin{center}
-		\includegraphics[width=.6\textwidth]{er.png}
-		\caption{Entity-relationship diagram.}
-		\label{fig:er}
+		\includegraphics[width=.76\textwidth]{er-solution.png}
+		\caption{Entity-relationship diagram with examples.}
+		\label{fig:er-solution}
 	\end{center}
 \end{figure}\vspace{-5pt}
 
 \part[2] Describe in English an original real world example to which the entity-relationship diagram in Figure~\ref{fig:er} could correspond. Give the real world meaning of entity sets $E_1$ and $E_2$, of relationship set $S$, and of attributes $A$, $B$, $C$, $D$, $F$, $G$, $H$, $J$, and $K$. Justify the candidate keys and participation constraints in the entity-relationship diagram.
 \begin{solution}
 
+\textcolor{red}{[Note by Mark]} Although you have just define the primary keys in the last sub-question, you still need to present all candidate keys here. Many students submission only gave one option of defining primary key (which is correct for Q2(a)), but forgot to mention there are two candidate keys for E1 in this question.
+\\\vspace{10pt}
 \begin{center}
 	============ Solution provided by TA Mark Meng ============
 \end{center}\vspace{5pt}
 
-Please refer to the case that has been used in Tutorial 4, we reuse the model and propose a real-world example as shown in Fig.~\ref{fig:er}:	
+Please refer to the case that has been used in Tutorial 4, we reuse the model and propose a real-world example as shown in Fig.~\ref{fig:er-solution}:	
 \vspace{5pt}
 
 \textbf{Candidate keys}: For E1, two candidate keys can be identified: name of the government department (A), or the composite of block number (C) and street name (D).
