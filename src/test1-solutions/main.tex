@@ -246,12 +246,15 @@ AND c1.continent_name < c2.continent_name;
 \end{lstlisting}
 or
 \begin{lstlisting}
-SELECT c1.name
-FROM country c1
-EXCEPT ALL
-SELECT DISTINCT c1.name
-FROM country c1;
+SELECT DISTINCT * 
+FROM (SELECT name
+  FROM country c1
+  EXCEPT ALL
+  SELECT DISTINCT c1.name
+  FROM country c1) 
+AS cross_continent_countries;
 \end{lstlisting}
+Need to be careful here because you cannot assume all cross continent countries only span 2 continents, e.g., France has territory in all continents except Asia: Oceania (Tahiti), Africa (Reunion), N.America (St. Pierre \& Miqueion) and S.America (French Guiana).
 \end{solution}
 
 \part[3] (SQL) Find the names of the apps available in countries in Oceania that work for all recorded operating systems. The result should be similar to that in the table below in any order.  Make sure that your query produces the correct result in all possible database instances including when new apps with new operating systems are added (you may neither hardcode the operating systems as in Question 1.b nor the number of operating systems.)  Do not use an aggregate query.
