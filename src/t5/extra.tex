@@ -39,10 +39,10 @@
 		\item Fixed the decomposition mistake of Case 3 in page 16.\\
 		i.e., $R_1$ in the first option is not in BCNF, therefore a further decomposition is needed. 
 	\end{itemize}
-	Update on 12 Oct (Tuesday) has been recalled and pages 28 and afterwards are re-composed to avoid ambiguity.
-	%\begin{itemize}
-	%	\item Fixed the mistake in computing the minimal cover set and consequential sub-questions of In-class Case 2 in page 28-30.
-	%\end{itemize}
+	Updated on 17 Oct (Sunday):
+	\begin{itemize}
+		\item Updated the BCNF decomposition and highlight the process of finding ``projected functional dependency'' in the In-class Case 2 in page 30-32.
+	\end{itemize}
 \end{frame}
 
 \begin{frame}
@@ -543,24 +543,72 @@
 	
 	Let's start decomposition at $\{A\} \rightarrow \{E\}$:\\\vspace{2pt}
 		
-	$R_1 = (\underline{A}, E),$\\
-	$R_2 = (\underline{A}, B, C, D).$\\\vspace{2pt}
+	$R_1 = (\underline{A}, E),$
+	We can find that 
+	$\Sigma_1 = \{\{A\}\rightarrow\{E\}\},$ and\\\vspace{2pt}
 	
-	We can find that:\\\vspace{5pt}
-	$\Sigma_1 = \{\{A\}\rightarrow\{E\}\},$ and
-	$\Sigma_2 = \{ \emptyset \}$\\ \vspace{2pt}
+	$R_2 = (\underline{A,D}, B, C).$ \\
+	{\scriptsize\textcolor{red}{Now it's the most challenging part: \textbf{\underline{find all projected FDs in the fragment}}. Any mistake in this step would affect your determining if the fragment is in BCNF (according to the new candidate key(s)), and consequentially mislead your further decomposition.}}\\
 	
-	We find both fragment are in BCNF, however we loss all FDs except $\{A\}\rightarrow\{E\}$.\\ \vspace{2pt}
+	\begin{alertblock}{Find the projected FDs in a fragment}
+	Here we find none of FDs in the minimal cover could be preserved in $R_2$. But does it means we lost all FDs? How to find all remaining FDs in fragments?\\
+	\end{alertblock}
+
+\end{frame}
+
+\begin{frame}[fragile]{\boss{Extra} - In-class Case 2 (Solution)}
+	
+	Although $E$ is not presented in $R_2$, we still have $\{A,D\}\rightarrow\{B,C\}$ because of $\{A\}\rightarrow\{E\}$ and $\{D,E\}\rightarrow\{B,C\}$.\\
+	One way to find those FDs is to go back and look at the attribute closure, by removing those attributes do not exist in the current fragment, as follows:
+	\vspace{-4pt}
+	\begin{columns}
+	\column{0.45\textwidth}
+	\begin{scriptsize}\begin{align*} 
+			\Sigma^{+} = \{&\{A\}^{+} \rightarrow \{A,\cancel{E}\},\\
+			&\{B\}^{+} \rightarrow \{B\},\\
+			&\{C\}^{+} \rightarrow \{C\},\\
+			&\{D\}^{+} \rightarrow \{D\},\\
+			&\cancel{\{E\}^{+} \rightarrow \{E\}},\\
+			&\{A,B\}^{+} \rightarrow \{A,B,\cancel{E}\},\\
+			&\{A,C\}^{+} \rightarrow \{A,C,\cancel{E}\},\\
+			&\{A,D\}^{+} \rightarrow \{A,B,C,D,\cancel{E}\},\\
+			&\cancel{\{A,E\}^{+} \rightarrow \{A,B,E\}\}}\\
+			& ...\\
+			&\{A,C,D,\cancel{E}\}^{+} \rightarrow \{A,B,C,D,\cancel{E}\}\}\\
+			&\{A,B,C,D,\cancel{E}\}^{+} \rightarrow \{A,B,C,D,\cancel{E}\}\}.
+	\end{align*}\end{scriptsize} 
+	\column{0.53\textwidth}
+	Then we know $\{A,D\}$ is the candidate key for $R_2$.\\\vspace{3pt}
+	So the first round of BCNF decomposition gives us 2 fragments:\\\vspace{3pt} $R_1=\{\underline{A},E\}$ with $\Sigma_1=\{\{A\}\rightarrow\{E\}\}$;\\ and $R_2=\{\underline{A,D},B,C\}$ with $\Sigma_2=\{\{A,D\}\rightarrow\{B,C\}\}$.\\\vspace{3pt}
+	We find both fragment are in BCNF, however we loss all FDs except $\{A\}\rightarrow\{E\}$ from the minimal cover set.\\ \vspace{2pt}
+	\end{columns}
+	
 		
 \end{frame}
 
 \begin{frame}[fragile]{\boss{Extra} - In-class Case 2 (Solution)}
 	
-	If you try to use a FD other than $\{A\}  \rightarrow \{E\}$ in BCNF decomposition, you may encounter a dead loop of decomposing $\{B,C,D,E\}$.\\\vspace{10pt}
-	
-	This case may not be a good one for practice as the relation is pretty tricky. In fact there are more than one methods to perform BCNF decomposition. \\\vspace{10pt}
-	
-	According to the textbook referred in this module (Database Management Systems, Ramakrishnan \& Gehrke), there is another (more) ineffective algorithm to decompose $\{A,B\}$ into $\{C,D,E\}$. You can borrow the book from NUS library if you have interest to read.
+	If you try to use a FD other than $\{A\}  \rightarrow \{E\}$ in BCNF decomposition, for example $\{C,D\}\rightarrow\{E\}$, you may have two fragments $R_1=\{B,C,D,E\}$ (candidate keys to be unveiled later) and $R_2=\{\underline{A,C,D}\}$. \\\vspace{2pt}
+	Finding candidate key(s) and minimal cover of $R_1$ is the next challenge:\\\vspace{-3pt}
+	\begin{columns}
+		\column{0.47\textwidth}
+		\begin{scriptsize}\begin{align*} 
+				\Sigma_{1}^{+} = \{ & ...\\
+				&\{B,E\}^{+} \rightarrow \{B,E\},\\
+				&\{C,D\}^{+} \rightarrow \{B,C,D,E\},\\
+				&\{C,E\}^{+} \rightarrow \{C,E\},\\
+				&\{D,E\}^{+} \rightarrow \{B,C,D,E\},\\
+				& ...\\
+				&\{C,D,E\}^{+} \rightarrow \{B,C,D,E\},\\
+				&\{B,C,D,E\}^{+} \rightarrow \{B,C,D,E\}\}.
+		\end{align*}\end{scriptsize} 
+		\column{0.48\textwidth}
+		With the LHS, we identify $R_1$'s candidate key(s) as $\{D,E\}$ and $\{C,D\}$, and the FDs in the minimal cover of that fragment is $\{\{C,D\}\rightarrow\{E\}, \{D,E\}\rightarrow\{B,C\}\}$. \\\vspace{2pt}
+		Both of these two FDs are in BCNF.
+	\end{columns}\vspace{-16pt}
+	\begin{block}{}
+	{\scriptsize According to the textbook referred in this module (Database Management Systems, Ramakrishnan \& Gehrke), there is another (more) ineffective algorithm to decompose $\{A,B\}$ into $\{C,D,E\}$. You can borrow the book from NUS library if you have interest to read.}
+	\end{block}
 	
 \end{frame}
 
