@@ -1,0 +1,165 @@
+\title{BT5110 Data Management and Warehousing}
+
+\subtitle{Tutorial 9: Data Warehousing and Dimension Modelling}
+
+\author{Mark Meng Huasong}
+
+\institute[National University of Singapore] % (optional, but mostly needed)
+{
+	School of Computing\\
+	National University of Singapore
+}
+
+\titlegraphic{
+	\includegraphics[width=2cm]{nus-logo}
+}
+
+\date{13 - 17 Sep, 2021}
+
+\begin{frame}
+	\titlepage
+	\begin{tcolorbox}
+		\begin{center}
+			{\scriptsize \textcolor{red}{All the materials within presentation slides are protected by copyrights.\\
+					It is forbidden by NUS to upload these materials to the Internet.}}
+		\end{center}
+	\end{tcolorbox}
+\end{frame}
+
+\begin{frame}[fragile]{Quick Recap: End of Last Tutorial}
+	What we have done in the last week:\\\vspace{5pt}
+	(1) Write simple queries with aggregation;\\
+	(2) Write nested queries;\\
+	(3) Make use of double negation and left outer joining to achieve complex queries. \\\vspace{5pt}
+	\textcolor{brown}{(This tutorial does not use the existing book loan database)}
+\end{frame}
+
+\section*{Question 1}
+
+\begin{frame}[fragile]{Question 1}
+Answer the following questions by quoting the relevant excerpts in the chapter, recalling the relevant examples from the chapter, synthesising an answer in your own words while keeping the main keywords and proposing your own illustrating example or examples.\\\vspace{10pt}
+\textbf{Question}: What are the advantages of modeling the data warehouse around business processes rather than around organizational business departments or as a holistic organization wide data warehouse?
+\end{frame}
+
+\begin{frame}[fragile]{Question 1}
+\textbf{Solution}: In this document, we only provide the quote from Kimball but the complete answer should also contain Kimball's example, your answer and your own illustrating examples. From page 30 of \textit{Kimball} Chapter 2, ``By focusing on business processes, rather than on business departments, we can deliver consistent information more economically throughout the organization.''
+\\ \vspace{10pt}
+
+\end{frame}
+
+\section*{Question 2}
+
+\begin{frame}[fragile]{Question 2}
+\textbf{Question}: What question entails the choice of the facts?\\\vspace{10pt}
+
+\textbf{Solution}: From page 31 of \textit{Kimball} Chapter 2, ``Facts are determined by answering the question, ``What are we measuring?''.''
+\end{frame}
+
+\section*{Question 3}
+\begin{frame}[fragile]{Question 3}
+\textbf{Question}: What is an ``additive fact''? Give examples and counter-examples (semi-additive, non-additive).
+\end{frame}
+
+\begin{frame}[fragile]{Question 3 Cont.}
+\textbf{Solution}:\\ \vspace{10pt}
+\textbf{\textit{Additive facts}}: Facts that can be summed up through all dimensions in the fact table.
+\textbf{Solution}:\\ \vspace{5pt}
+\textbf{\textit{Semi-additive facts}}: Facts that can be summed up for some of the dimensions in the fact table, but not others.
+\textbf{Solution}:\\ \vspace{5pt}
+\textbf{\textit{Non-additive facts}}: Facts that cannot be summed up for any of the dimensions present in the fact table.
+\end{frame}
+
+\begin{frame}[fragile]{Question 3 Cont.}
+\texttt{Sales\_Amount} is an additive fact, because you can sum up this fact along any of the three dimensions present in the fact \texttt{table\_date}, \texttt{store}, and \texttt{product}.\\\vspace{5pt}
+
+\texttt{Current\_Balance} and \texttt{Profit\_Margin} are the facts.\\\vspace{5pt} \texttt{Current\_Balance} is a semi-additive fact, as it
+makes sense to add them up for all accounts (what's the total current balance for all accounts in the bank?), but it does not make sense to add them up through time (adding up all current balances for a given account for each day of the month does not give us any useful information). \texttt{Profit\_Margin} is a non-additive fact, for it does not make sense to add them up for the account level or the day level.\\\vspace{5pt}
+
+Square footage is semi additive but it is not a fact.
+\end{frame}
+
+\section*{Question 4}
+
+\begin{frame}[fragile]{Question 4}
+	\textbf{Question}: Should calculated (derived) facts be stored?\\\vspace{10pt}
+	
+	\textbf{Solution}: From page 37 of \textit{Kimball} Chapter 2, ``Dimensional modelers sometimes question whether a calculated fact should be stored physically in the database. We generally recommend that it be stored physically. In our case study, the gross profit calculation is straight-forward, but storing it \textbf{eliminates	the possibility of user error.}''. \\\vspace{5pt}
+	
+	Calculated fact eliminates error. They most likely do not consume
+	significantly more space. They can therefore be calculated at the time of staging. They could also be defined using views (the fact table becomes a view of background base tables). The views could be materialised.
+\end{frame}
+
+\section*{Question 5}
+
+\begin{frame}[fragile]{Question 5}
+	\textbf{Question}: What is the ``grain'' or ``granularity''? How to determine the appropriate grain?.\\\vspace{10pt}
+	
+	\textbf{Solution}: From page 31 of \textit{Kimball} Chapter 2, ``Declaring the grain means specifying exactly what an individual fact table row represents.  The grain conveys the level of detail associated with the fact table measurements.''\\\vspace{5pt}
+\end{frame}
+
+\section*{Question 6}
+
+\begin{frame}[fragile]{Question 6}
+	\textbf{Question}: Should there be null values in the fact table? Why?	
+\end{frame}
+
+\begin{frame}[fragile]{Question 6 (Cont.)}
+	\textbf{Solution}: From page 49 of \textit{Kimball} Chapter 2, ``You must avoid null keys in the fact table. A proper design includes a row in the corresponding dimension table to identify that the dimension is not applicable to the measurement.''\\\vspace{5pt}
+	
+	The fact table is composed of attributes corresponding to surrogate keys referencing dimensions and to facts corresponding to measurements. The former cannot be null. Special situations such as that of a description not being available can be handled by referencing to an explicit description of the situation in the dimension table. Measurements, however, can be null, if their value is unknown or does not exist. This is however to be handled with care when asking queries, given the not always appropriate handling of null values in SQL.
+\end{frame}
+\section*{Question 7}
+
+\begin{frame}[fragile]{Question 7}
+	\textbf{Question}: What questions entails the choice of the dimensions?\\\vspace{10pt}
+	
+	\textbf{Solution}: From page 37 of \textit{Kimball} Chapter 2, ``Dimensional modelers sometimes question whether a calculated fact should be stored physically in the database. We generally recommend that it be stored
+	physically. In our case study, the gross profit calculation is straight-forward, but storing it \textbf{eliminates	the possibility of user error.}''. \\\vspace{5pt}
+	Calculated fact eliminates error. They most likely do not consume
+	significantly more space. They can therefore be calculated at the time of staging. They could also be defined using views (the fact table becomes a view of background base tables). The views could be materialised.
+\end{frame}
+
+\section*{Question 8}
+
+\begin{frame}[fragile]{Question 8}
+	\textbf{Question}: What is the role of descriptive attributes in dimensions?\\\vspace{10pt}
+	
+	\textbf{Solution}: They are entry point for queries. There can be many and should be as many as needed.
+\end{frame}
+
+\section*{Question 9}
+
+\begin{frame}[fragile]{Question 9}
+	\textbf{Question}: Should there be null values in the dimension tables? Why? \\\vspace{10pt}
+	
+	\textbf{Solution}: Null values should be \textbf{avoided} in the dimension tables. Attributes of the dimension tables are used for aggregation. Group do not behave smoothly with null value
+\end{frame}
+
+\section*{Question 10}
+
+\begin{frame}[fragile]{Question 10}
+	\textbf{Question}: What is Kimball's argument in favour of surrogate keys?\\\vspace{10pt}
+	
+	\textbf{Solution}: From page 59 of \textit{Kimball} Chapter 2, ``In general, we want to avoid embedding intelligence in the data warehouse keys because any assumptions that we make eventually may be invalidated.''
+\end{frame}
+
+\section*{Question 11}
+
+\begin{frame}[fragile]{Question 11}
+	\textbf{Question}: What can be said about the relationship between grain and dimensions? \\\vspace{10pt}
+	
+	\textbf{Solution}: The finer the grain the more dimensions.
+\end{frame}
+
+\begin{frame}[fragile]{}
+	\centering  
+	For any further question, please feel free to email me:\vspace{10pt}
+	
+	huasong.meng@u.nus.edu \vspace{20pt}
+	
+	\begin{tcolorbox}
+		\begin{center}
+			\textcolor{red}{Cases in the extra practice are contributed by our students.\\\vspace{5pt}Copyright 2021 Mark H. Meng. All rights reserved.}
+		\end{center}
+	\end{tcolorbox}
+\end{frame}
