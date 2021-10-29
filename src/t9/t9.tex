@@ -14,7 +14,7 @@
 	\includegraphics[width=2cm]{nus-logo}
 }
 
-\date{13 - 17 Sep, 2021}
+\date{1 - 5 Nov, 2021}
 
 \begin{frame}
 	\titlepage
@@ -31,7 +31,7 @@
 	(1) Write simple queries with aggregation;\\
 	(2) Write nested queries;\\
 	(3) Make use of double negation and left outer joining to achieve complex queries. \\\vspace{5pt}
-	\textcolor{brown}{(This tutorial does not use the existing book loan database)}
+	
 \end{frame}
 
 \section*{Question 1}
@@ -70,10 +70,37 @@ Answer the following questions by quoting the relevant excerpts in the chapter, 
 \end{frame}
 
 \begin{frame}[fragile]{Question 3 Cont.}
-\texttt{Sales\_Amount} is an additive fact, because you can sum up this fact along any of the three dimensions present in the fact \texttt{table\_date}, \texttt{store}, and \texttt{product}.\\\vspace{5pt}
+\vspace{-13pt}
+\begin{columns}
+\column{0.2\textwidth}
+\column{0.22\textwidth}
+\begin{table}[]
+	\begin{tabular}{|c|}
+		\hline
+		Date          \\ \hline
+		Store         \\ \hline
+		Product       \\ \hline
+		Sales\_Amount \\ \hline
+	\end{tabular}
+\end{table}
+\column{0.22\textwidth}
+\begin{table}[]
+	\begin{tabular}{|c|}
+		\hline
+		Date          \\ \hline
+		Account         \\ \hline
+		Current\_Balance     \\ \hline
+		Profit\_Margin \\ \hline
+	\end{tabular}
+\end{table}
+\column{0.2\textwidth}
+\end{columns}
+\texttt{Sales\_Amount} is an \underline{additive fact}, because you can sum up this fact along any of the three dimensions present in the fact \texttt{table\_date}, \texttt{store}, and \texttt{product}.\\\vspace{3pt}
 
-\texttt{Current\_Balance} and \texttt{Profit\_Margin} are the facts.\\\vspace{5pt} \texttt{Current\_Balance} is a semi-additive fact, as it
-makes sense to add them up for all accounts (what's the total current balance for all accounts in the bank?), but it does not make sense to add them up through time (adding up all current balances for a given account for each day of the month does not give us any useful information). \texttt{Profit\_Margin} is a non-additive fact, for it does not make sense to add them up for the account level or the day level.\\\vspace{5pt}
+\texttt{Current\_Balance} and \texttt{Profit\_Margin} are the facts.\\\vspace{3pt}
+
+\texttt{Current\_Balance} is a \underline{semi-additive fact}, as it
+makes sense to add them up for all accounts (what's the total current balance for all accounts in the bank?), but it does not make sense to add them up through time (adding up all current balances for a given account for each day of the month does not give us any useful information). \texttt{Profit\_Margin} is a \underline{non-additive fact}, for it does not make sense to add them up for the account level or the day level.\\\vspace{3pt}
 
 Square footage is semi additive but it is not a fact.
 \end{frame}
