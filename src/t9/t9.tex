@@ -68,7 +68,11 @@ Main priorities: processing performance \& availability.
 	\begin{figure}
 		\includegraphics[width=1\textwidth, trim=0 0 0 0, clip]{t9/images/tables.png}
 	\end{figure}
-	\vspace{-20pt}
+	\vspace{-18pt}
+	\begin{center}
+		{\tiny (The FK in Date Dimension should be ``PK'', and the Date Key in the Fact Table is ``FK'')}
+	\end{center}
+	\vspace{-8pt}
 	\begin{footnotesize}
 	\begin{table}[]
 		\begin{tabular}{|p{5.2cm}|p{5.2cm}|}
@@ -108,7 +112,7 @@ Main priorities: processing performance \& availability.
 \textcolor{blue}{\textbf{Given an existing normalized ER diagram, how to transform it to a set of dimension models?}} \\\vspace{3pt}
 {\scriptsize (In the exam generally you are given some SQL and normalization questions prior to this)}\\\vspace{3pt}
 \begin{small}
-You need to know that the ER diagram is for the 2nd component of a data warehousing. 
+The ER diagram is for the 2nd component of a data warehousing environment. 
 Although a normalized ER diagram has many advantages (recall the ``anomalies'' part in the lecture of normalization), a normalized ER diagram is off-limits to business users' querying because of its poor understandably.\\\vspace{3pt}
 
 \textcolor{gray}{(Following content are cited from page 23, \textit{Kimball} Chapter 1)}
@@ -123,6 +127,11 @@ Keep the figure below (page 24, Kimball Chapter 1) in your mind, it is helpful t
 \begin{figure}
 	\includegraphics[width=0.8\textwidth, trim=0 0 0 0, clip]{t9/images/design.png}
 \end{figure}	
+\vspace{-25pt}
+\begin{center}
+	{\tiny (The Date in the Fact Table is ``FK'')}
+\end{center}
+\vspace{-8pt}
 \end{frame}
 
 \section*{Question 1}
