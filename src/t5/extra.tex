@@ -28,6 +28,7 @@
 \end{frame}
 
 \begin{frame}
+\begin{small}
 	Updated on 8 Oct (Friday):
 	\begin{itemize}
 		\item Fixed some errors that have been raised in-class for the Case 4 and In-class Case 2. Refer to the red color notice text in relevant pages, and pay attention while viewing the Zoom recording. 
@@ -43,6 +44,14 @@
 	\begin{itemize}
 		\item Updated the BCNF decomposition and highlight the process of finding ``projected functional dependency'' in the In-class Case 2 in page 30-32.
 	\end{itemize}
+	Updated on 9 Nov (Tuesday):
+	\begin{itemize}
+	\item Fixed the underline notation to indicate keys of $R_2$ in page 7.\\
+	i.e., $\underline{W},\underline{P} \rightarrow\underline{W,P}$
+	\item Fixed the underline notation to indicate keys of $R_2$ and further decomposition in page 12.\\
+	i.e., $\underline{S},\underline{M} \rightarrow\underline{S,M}$
+	\end{itemize}
+\end{small}
 \end{frame}
 
 \begin{frame}
@@ -118,7 +127,7 @@
 	(5) Decomposition at $\{W\} \rightarrow \{M\}$:\\\vspace{5pt}
 	
 	$R_1 = (\underline{W}, \underline{M}),$\\
-	$R_2 = (\underline{W}, \underline{P}, S).$\\\vspace{5pt}
+	$R_2 = (\underline{W,P}, S).$\\\vspace{5pt}
 	
 	It is (luckily) dependency preserving.
 	
@@ -193,18 +202,18 @@
 	(5) Decomposition at $\{F\} \rightarrow \{D\}$:\\\vspace{5pt}
 	
 	$R_1 = (\underline{F}, D),$\\
-	$R_2 = (\underline{S}, \underline{M}, G, N, F).$\\\vspace{5pt}
+	$R_2 = (\underline{S,M}, G, N, F).$\\\vspace{5pt}
 	
 	However, $R_2$ needs to be further decomposed, at $\{S\} \rightarrow \{N\}$:\\\vspace{5pt}
 	
 	$R_{2.1} = (\underline{S}, N, F).$\\
-	$R_{2.2} = (\underline{S}, \underline{M}, G).$\\\vspace{5pt}
+	$R_{2.2} = (\underline{S,M}, G).$\\\vspace{5pt}
 	
 	As the result, the BCNF decomposition is (luckily) dependency preserving and is given below:\\\vspace{5pt}
 	
 	$R_1 = (\underline{F}, D),$\\
 	$R_{2.1} = (\underline{S}, N, F).$\\
-	$R_{2.2} = (\underline{S}, \underline{M}, G).$\\\vspace{5pt}
+	$R_{2.2} = (\underline{S,M}, G).$\\\vspace{5pt}
 	
 	\textit{(In fact this decomposition result is same with the synthesis one)}
 \end{frame}
