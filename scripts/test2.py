@@ -21,6 +21,10 @@ drop_all_temp_views = "SELECT 'DROP VIEW IF EXISTS ' || table_name || ';' "\
 
 SPECIAL_PARAMS_Q1 = [' LIMIT 3 OFFSET 37;', ' LIMIT 3 offset 3756;']
 
+CORRECT_OUTPUT_LEN = 5335
+SLIGHTLY_WRONG_OUTPUT_LEN = 5336
+
+
 initialize_connection_command = "dbname='" + dbname + "' user='" + user + "' host='" + host + "' password='" + password + "'" 
 initialize_connection_command_no_db = "user='" + user + "' host='" + host + "' password='" + password + "'" 
 
@@ -127,6 +131,7 @@ def extract_student_answers(submission_files, project_questions, csv_format = ['
         solution_string = ''
 
         extra_comment = ''
+        output_comment = ''
         within_comment_block = False
     
 
@@ -146,6 +151,16 @@ def extract_student_answers(submission_files, project_questions, csv_format = ['
                         # rows = psql_execute_query(solution_string.replace('\n', ' '), question="("+project_questions[question_index]+")")
                         rows = psql_execute_query(solution_string, question="("+project_questions[question_index]+")", question_index=question_index)
                         student_row.append(summarize_sql_output(rows)) 
+                        
+                        if rows is None or len(rows) < 1:
+                            output_comment = 'No output;'
+                        else:
+                            if len(rows[0]) == CORRECT_OUTPUT_LEN:
+                                output_comment = 'Correct output; '
+                            elif len(rows[0]) == SLIGHTLY_WRONG_OUTPUT_LEN:
+                                output_comment = 'Tiny mistake in output row number;'
+                            else:
+                                output_comment = 'Wrong output;'
 
                         # We perform a special arrangement for the test 1 as for Q1(f) we are generating
                         #  four variants and run them for outputs separately. 
@@ -173,10 +188,13 @@ def extract_student_answers(submission_files, project_questions, csv_format = ['
                         
 
                     # Leave an empty cell for comments and/or grading                    
-                    for col in csv_format:
-                        student_row.append(extra_comment) 
-                        extra_comment = ""
+                    #for col in csv_format:
+                    student_row.append(output_comment) 
+                    student_row.append(extra_comment) 
+                    student_row.append("")
+                    extra_comment = ""
                     
+                    output_comment = ''
                     extra_comment = ''
                     solution_string = ''
                 print('.', end = "")
@@ -249,9 +267,11 @@ def extract_student_answers(submission_files, project_questions, csv_format = ['
             rows = psql_execute_query(solution_string, question="("+project_questions[question_index]+")", question_index=question_index)
             student_row.append(summarize_sql_output(rows)) 
         
-        for col in csv_format:
-            student_row.append(extra_comment) 
-            extra_comment = ""
+        #for col in csv_format:
+        student_row.append("") 
+        student_row.append(extra_comment) 
+        student_row.append("")
+        extra_comment = ""
         
         writer.writerow(student_row)
         
@@ -335,20 +355,28 @@ def check_usage_of_keywords(solution, question_index, comment=''):
 
     if question_index >= 1:
         return comment
-    clue_str = []
-    if re.search('coalesce', solution, re.IGNORECASE):
-        clue_str.append('COALESCE')
-    if re.search('rollup', solution, re.IGNORECASE):
-        clue_str.append('ROLLUP')
-    if re.search('with ', solution, re.IGNORECASE):
-        clue_str.append('WITH')
-    if re.search('view ', solution, re.IGNORECASE):
-        clue_str.append('VIEW')
     
-    if len(clue_str) > 0:
+    clue_str_to_have = ['COALESCE', 'ROLLUP']
+    if re.search('coalesce', solution, re.IGNORECASE):
+        clue_str_to_have.remove('COALESCE')
+    if re.search('rollup', solution, re.IGNORECASE):
+        clue_str_to_have.remove('ROLLUP')
+    
+    if len(clue_str_to_have) > 0:
         if len(comment) > 0:
             comment += '\n' 
-        comment = 'Keyword ' + str(clue_str)+ ' is used; '  
+        if 'COALESCE' in clue_str_to_have:
+            comment += 'Missing COALESCE; '
+        if 'ROLLUP' in clue_str_to_have:
+            comment += 'Missing ROLLUP; '
+
+    clue_str = []
+    if re.search('with ', solution, re.IGNORECASE):
+        clue_str.append('Usage of WITH detected; ')
+    if re.search('view ', solution, re.IGNORECASE):
+        clue_str.append('Usage of VIEW detected; ')
+    
+
     return comment
 
 def perform_extra_checking(solution, question_index, comment=''):
@@ -367,5 +395,5 @@ arr = retrieve_all_submission_files(dirpath)
 questions = ['1.a',  '2.a', '2.b', '2.c',  '3.a', '3.b', '4.a', '4.b', '4.c', '4.d']
 extract_student_answers(arr, 
     project_questions = questions, 
-    csv_format = ['comment', 'grade'], 
+    csv_format = ['comment_output', 'comment_answer', 'grade'], 
     output_file = 'test2.csv')
