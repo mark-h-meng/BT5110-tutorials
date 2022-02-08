@@ -1,4 +1,5 @@
-\title{CS4221/CS5421\\Database Applications Design and Tuning}
+%\title{CS4221/CS5421 Database Applications Design and Tuning}
+\title{CS4221/CS5421}
 
 \subtitle{Tutorial 3: Dependency}
 
@@ -26,6 +27,21 @@
 	\end{tcolorbox}
 \end{frame}
 
+\section*{Greeting!}
+
+\begin{frame}[fragile]{Greeting!}
+	Welcome to CS5221/CS5421!\vspace{15pt}
+	
+	\textbf{Mark MENG Huasong} (\includegraphics[height=\fontcharht\font`\B]{t1/images/chn-chars.png}) \vspace{15pt}
+	
+	B.Eng.(Hons), Computer Science, Nanyang Technological University
+	
+	M.Comp., Infocomm Security, National University of Singapore\vspace{15pt}
+	
+	Been in cyber-security R\&D industry since 2014, came back NUS for PhD in 2019\vspace{15pt}
+	
+	I will be your TA for the remaining of this semester!
+\end{frame}
 
 \section*{Question 1 Functional Dependencies}
 
@@ -65,7 +81,7 @@ $\Sigma=\{\{A, B\} \rightarrow \{C\}, \{D\} \rightarrow \{D, B\}, \{B\} \rightar
 \end{columns}
 \end{frame}
 
-\begin{frame}[fragile]{Question 1 (a) Cont.}
+\begin{frame}[fragile]{Question 1 (a-b) Cont.}
 	We see the candidate keys are $\{A,B\}$, $\{A,D\}$ and $\{A,E\}$.\\
 	\textcolor{blue}{This is the answer for 1(b)}\\
 	\vspace{15pt}
@@ -75,7 +91,7 @@ $\Sigma=\{\{A, B\} \rightarrow \{C\}, \{D\} \rightarrow \{D, B\}, \{B\} \rightar
 	\end{figure}
 \end{frame}
 
-\begin{frame}[fragile]{Question 1 (a) Cont.}
+\begin{frame}[fragile]{Question 1 (a-b) Cont.}
 	Now let's remove those information that is not essential from this closure:\\\vspace{3pt}
 	We can remove from the RHS the members of the set on the LHS, as it also keeps all the essential information:\\\vspace{6pt}
 	\begin{columns}[t]
@@ -99,7 +115,7 @@ $\Sigma=\{\{A, B\} \rightarrow \{C\}, \{D\} \rightarrow \{D, B\}, \{B\} \rightar
 	\end{columns}
 \end{frame}
 
-\begin{frame}[fragile]{Question 1 (a) Cont.}
+\begin{frame}[fragile]{Question 1 (a-b) Cont.}
 	Remark: We can even remove an equality if the LHS is a superset of another equality LHS and its RHS is a subset of the RHS (e.g., give $\{E\}^{+}= \{B, D\}$ and $\{C, D, E\}^{+}= \{B\}$, we can omit the second one). It also keeps all the essential information:\\\vspace{6pt}
 
 	$\{A, B\}^{+}= \{C, D, E\}$\\
@@ -109,111 +125,133 @@ $\Sigma=\{\{A, B\} \rightarrow \{C\}, \{D\} \rightarrow \{D, B\}, \{B\} \rightar
 		$\{D\}^{+}= \{B, E\}$\\
 		$\{E\}^{+}= \{B, D\}$\\ \vspace{7pt}
 	
-	\textbf{(b) What are the candidate keys of $R$ with $\Sigma$?}\\\vspace{3pt}
+	\textbf{(b) What are the candidate keys of $R$ with $\Sigma$?}\\ \vspace{3pt}
 	The candidate keys are $\{A,B\}$, $\{A,D\}$ and $\{A,E\}$.\\
 \end{frame}
 
-\begin{frame}[fragile]{Question 1 (c-d) Minimal Cover}
-	(c) Find a minimal cover of $R$ with $\Sigma$ that can be reached from $\Sigma$ using the algorithm from the lecture.\\ \vspace{5pt}
-	\textbf{Solution}: The candidate keys are $\{A, E\}$ and $\{B, E\}$. \\\vspace{35pt}
-
-	(d) Find all the minimal covers of $R$ with $\Sigma$\\ \vspace{5pt}
-	\textbf{Solution}: The prime attributes are $A$, $B$ and $E$.
-\end{frame}
-
-\begin{frame}[fragile]{Question 1 (e) Armstrong Axioms}
-	(e) Prove, using the three Armstrong axioms, that the following set of functional dependencies is equivalent to $\Sigma$. \\\vspace{5pt}
-	$\Sigma''''=\{\{A, B\} \rightarrow \{C, D, E\}, \{A, D\} \rightarrow \{B, C, E\}, \{A, E\} \rightarrow \{B, C, D\}, \{B\} \rightarrow \{D, E\}, \{D\} \rightarrow \{B, E\}, \{E\} \rightarrow \{B, D\}\}$.\\\vspace{5pt}
-	 \vspace{5pt}
-	\textbf{Solution}: The candidate keys are $\{A, E\}$ and $\{B, E\}$. \\\vspace{35pt}
-	
-\end{frame}
-
-\section*{Question 2 Minimal Cover}
-
-\begin{frame}[fragile]{Question 2 (a) Minimal Cover.}
-	(a) Compute a minimal cover of $R$ with $\Sigma$.\vspace{10pt}
-
-	\textbf{Solution}: \\\vspace{3pt}
+\begin{frame}[fragile]{Question 1 (c) Minimal Cover}
+	\textbf{(c) Find a minimal cover of $R$ with $\Sigma$ that can be reached from $\Sigma$ using the algorithm from the lecture.}\\ \vspace{5pt}
+	\textbf{Solution}: Use the three step approach then you should be able to find one.\\\vspace{5pt}
 	We start from $\Sigma$: \\\vspace{5pt}
-	$\{A\} \rightarrow \{A, B, C\}$\\
-	$\{A, B\} \rightarrow \{A\}$\\
-	$\{B, C\} \rightarrow \{A, D\}$\\
-	$\{B\} \rightarrow \{A, B\}$\\
-	$\{C\} \rightarrow \{D\}$\\\vspace{5pt}
-	Step 1, we simplify the right-hand sides:\\\vspace{3pt}
+	$\{A, B\} \rightarrow \{C\}$\\
+	$\{D\} \rightarrow \{D, B\}$\\
+	$\{B\} \rightarrow \{E\}$\\
+	$\{E\} \rightarrow \{D\}$\\
+	$\{A, B, D\} \rightarrow \{A, B, C, D\}$\\\vspace{5pt}
+	\textbf{Step 1}, we simplify the right-hand sides to obtain $\Sigma'$:\\\vspace{3pt}
 	\begin{columns}[t]
-	\column{0.45\textwidth}
-	$\{A\} \rightarrow \{A\}$\\
-	$\{A\} \rightarrow \{B\}$\\
-	$\{A\} \rightarrow \{C\}$\\
-	$\{A, B\} \rightarrow \{A\}$\\
-	$\{B, C\} \rightarrow \{A\}$
-	\column{0.45\textwidth}
-	$\{B, C\} \rightarrow \{D\}$\\
-	$\{B\} \rightarrow \{A\}$\\
-	$\{B\} \rightarrow \{B\}$\\
-	$\{C\} \rightarrow \{D\}$
+		\column{0.45\textwidth}
+		$\{A, B\} \rightarrow \{C\}$\\
+		\underline{$\{D\} \rightarrow \{D\}$}\\
+		\underline{$\{D\} \rightarrow \{B\}$}\\
+		$\{B\} \rightarrow \{E\}$\\
+		$\{E\} \rightarrow \{D\}$\\
+		\column{0.45\textwidth}
+		\underline{$\{A, B, D\} \rightarrow \{A\}$}\\	
+		\underline{$\{A, B, D\} \rightarrow \{B\}$}\\	
+		\underline{$\{A, B, D\} \rightarrow \{C\}$}\\	
+		\underline{$\{A, B, D\} \rightarrow \{D\}$}\\
 	\end{columns}
 \end{frame}
 
-\begin{frame}[fragile]{Question 2 (a) Cont.}
-	Step 2, we simplify the left-hand sides:\\\vspace{3pt}
-	$\{A\} \rightarrow \{A\}$.\\	
-	$\{A\} \rightarrow \{B\}$.\\	
-	$\{A\} \rightarrow \{C\}$.\\	
-	$\{A,\cancel{B}\} \rightarrow \{A\}$ because $\{A\} \rightarrow \{A\}$.\\	
-	$\{B, \cancel{C}\} \rightarrow \{A\}$ because $\{B\} \rightarrow \{A\}$.\\	
-	$\{B, \cancel{C}\} \rightarrow \{D\}$ because $\{B\} \rightarrow \{D\}$ \\\vspace{3pt}
-	(we could also do $\{\cancel{B}, C\} \rightarrow \{D\}$ because $\{C\} \rightarrow \{D\}$). Note that we know that $\{B\} \rightarrow \{D\}$ because $\{B\}^{+}= \{A, B, C, D\}$.\\\vspace{3pt}
-	$\{B\} \rightarrow \{A\}$.\\
-	$\{B\} \rightarrow \{B\}$.\\
-	$\{C\} \rightarrow \{D\}$.
+\begin{frame}[fragile]{Question 1 (c) Cont.}
+	\textbf{Step 2}, we construct $\Sigma''$, which is equivalent to $\Sigma'$ (and to $\Sigma$), by minimizing the LHS of every functional dependency in $\Sigma'$. We may have the choice between several possible simplifications. We only need to choose one:\\\vspace{3pt}
+	\begin{columns}[t]
+		\column{0.23\textwidth}
+		$\{A, B\} \rightarrow \{C\}$\\
+		$\{D\} \rightarrow \{D\}$\\
+		$\{D\} \rightarrow \{B\}$\\
+		$\{B\} \rightarrow \{E\}$\\
+		$\{E\} \rightarrow \{D\}$\\
+		\column{0.7\textwidth}
+		$\{A, \cancel{B, D}\} \rightarrow \{A\}$ because $\{A\} \rightarrow \{A\}$\\	
+		$\{\cancel{A}, B, \cancel{D}\} \rightarrow \{B\}$ because $\{B\} \rightarrow \{B\}$\\	
+		$\cancel{\{A, B, D\} \rightarrow \{C\}}$ because $\{A, B\} \rightarrow \{C\}$\\	
+		$\{\cancel{A, B}, D\} \rightarrow \{D\}$because $\{D\} \rightarrow \{D\}$\\
+	\end{columns}
 \end{frame}
 
-\begin{frame}[fragile]{Question 2 (a) Cont.}
-	Step 3, we simplify the set:\\\vspace{3pt}
-	$\cancel{\{A\} \rightarrow \{A\}}$ because it is trivial.\\	
-	$\{A\} \rightarrow \{B\}$.\\	
-	$\{A\} \rightarrow \{C\}$.\\	
-	$\{B\} \rightarrow \{A\}$.\\	
-	$\cancel{\{B\} \rightarrow \{D\}}$ because it can be derived from the others.\\	
-	$\cancel{\{B\} \rightarrow \{B\}}$ $\cancel{\{A\} \rightarrow \{A\}}$.\\	
-	$\{C\} \rightarrow \{D\}$.\\\vspace{5pt}
+\begin{frame}[fragile]{Question 1 (c) Cont.}
+	\textbf{Step 3}, we construct $\Sigma'''$, which is equivalent to $\Sigma''$ (and to $\Sigma$), by minimizing the whole set $\Sigma''$ (e.g., removing trivial ones). We may have the choice between several possible simplifications. The choice depends on the order in which we consider the functional dependency:\\\vspace{3pt}
+	$\{A, B\} \rightarrow \{C\}$\\
+	$\cancel{\{D\} \rightarrow \{D\}}$ because it is trivial.\\
+	$\{D\} \rightarrow \{B\}$\\
+	$\{B\} \rightarrow \{E\}$\\
+	$\{E\} \rightarrow \{D\}$\\\vspace{3pt}
 	
-	\textbf{The result is:} \\\vspace{3pt}
-	$\{A\} \rightarrow \{B\}$\\	
-	$\{A\} \rightarrow \{C\}$\\	
-	$\{B\} \rightarrow \{A\}$\\
-	$\{C\} \rightarrow \{D\}$
+	\textbf{The (not unique) result is:} \\\vspace{3pt}
+	$\Sigma'''=\{\{A, B\} \rightarrow \{C\}, \{D\} \rightarrow \{B\}, \{B\} \rightarrow \{E\}, \{E\} \rightarrow \{D\}\}$
 \end{frame}
 
-\begin{frame}[fragile]{Question 2 (a) Cont.}
-	\begin{alertblock}{Notice}
-	Note that there can be other minimal covers that the algorithm can compute by considering the functional dependencies in a different order at each step of the algorithm. This is not the case in the example.
-	\end{alertblock}\vspace{5pt}
-
-	However, there is a minimal cover that the algorithm cannot compute:\\\vspace{5pt}
-	$\{A\} \rightarrow \{B\}$\\
-	$\{B\} \rightarrow \{A\}$\\
-	$\{B\} \rightarrow \{C\}$\\
-	$\{C\} \rightarrow \{D\}$\\\vspace{10pt}	
-	If the algorithm starts from $\Sigma^{+}$, then it can find all minimal covers.
-\end{frame}
-
-\begin{frame}[fragile]{Question 2 (b)}
-	(b) Compute a compact minimal cover of $R$ with $\Sigma$.\vspace{10pt}
+\begin{frame}[fragile]{Question 1 (d) Minimal Cover}
+	\textbf{(d) Find all the minimal covers of $R$ with $\Sigma$}\\ \vspace{5pt}
+	\textbf{Solution}: There are \textbf{15} different minimal covers.\\\vspace{2pt}
+	{\footnotesize
+	(1)  $\Sigma'''=\{\{A, B\} \rightarrow \{C\}, \{D\} \rightarrow \{B\}, \{B\} \rightarrow \{E\}, \{E\} \rightarrow \{D\}\}$ \\\vspace{2pt}
+	(2)  $\Sigma'''=\{\{A, B\} \rightarrow \{C\}, \{B\} \rightarrow \{D\}, \{E\} \rightarrow \{B\}, \{D\} \rightarrow \{E\}\}$ \\\vspace{2pt}
+	(3)  $\Sigma'''=\{\{A, B\} \rightarrow \{C\}, \{B\} \rightarrow \{D\}, \{D\} \rightarrow \{B\}, \{B\} \rightarrow \{E\}, \{E\} \rightarrow \{B\}\}$ \\\vspace{2pt}
+	(4)  $\Sigma'''=\{\{A, B\} \rightarrow \{C\}, \{B\} \rightarrow \{D\}, \{D\} \rightarrow \{B\}, \{E\} \rightarrow \{D\}, \{D\} \rightarrow \{E\}\}$ \\\vspace{2pt}
+	(5)  $\Sigma'''=\{\{A, B\} \rightarrow \{C\}, \{E\} \rightarrow \{B\}, \{B\} \rightarrow \{E\}, \{E\} \rightarrow \{D\}, \{D\} \rightarrow \{E\}\}$ \\\vspace{2pt}
 	
-	\textbf{Solution}: \\\vspace{5pt}
-	Given the minimal cover of $R$ with $\Sigma$:\\\vspace{3pt}
-	$\{A\} \rightarrow \{B\}$\\	
-	$\{A\} \rightarrow \{C\}$\\	
-	$\{B\} \rightarrow \{A\}$\\
-	$\{C\} \rightarrow \{D\}$\\\vspace{5pt}
-	The \textbf{compact minimal cover} is:\\\vspace{3pt}
-	$\{A\} \rightarrow \{B, C\}$\\	
-	$\{B\} \rightarrow \{A\}$\\	
-	$\{C\} \rightarrow \{D\}$
+	(6)  $\Sigma'''=\{\{A, D\} \rightarrow \{C\}, \{D\} \rightarrow \{B\}, \{B\} \rightarrow \{E\}, \{E\} \rightarrow \{D\}\}$ \\\vspace{2pt}
+	(7)  $\Sigma'''=\{\{A, D\} \rightarrow \{C\}, \{B\} \rightarrow \{D\}, \{E\} \rightarrow \{B\}, \{D\} \rightarrow \{E\}\}$ \\\vspace{2pt}
+	(8)  $\Sigma'''=\{\{A, D\} \rightarrow \{C\}, \{B\} \rightarrow \{D\}, \{D\} \rightarrow \{B\}, \{B\} \rightarrow \{E\}, \{E\} \rightarrow \{B\}\}$ \\\vspace{2pt}
+	(9)  $\Sigma'''=\{\{A, D\} \rightarrow \{C\}, \{B\} \rightarrow \{D\}, \{D\} \rightarrow \{B\}, \{E\} \rightarrow \{D\}, \{D\} \rightarrow \{E\}\}$ \\\vspace{2pt}
+	(10) $\Sigma'''=\{\{A, D\} \rightarrow \{C\}, \{E\} \rightarrow \{B\}, \{B\} \rightarrow \{E\}, \{E\} \rightarrow \{D\}, \{D\} \rightarrow \{E\}\}$ \\\vspace{2pt}
+	
+	(11) $\Sigma'''=\{\{A, E\} \rightarrow \{C\}, \{D\} \rightarrow \{B\}, \{B\} \rightarrow \{E\}, \{E\} \rightarrow \{D\}\}$ \\\vspace{2pt}
+	(12) $\Sigma'''=\{\{A, E\} \rightarrow \{C\}, \{B\} \rightarrow \{D\}, \{E\} \rightarrow \{B\}, \{D\} \rightarrow \{E\}\}$ \\\vspace{2pt}
+	(13) $\Sigma'''=\{\{A, E\} \rightarrow \{C\}, \{B\} \rightarrow \{D\}, \{D\} \rightarrow \{B\}, \{B\} \rightarrow \{E\}, \{E\} \rightarrow \{B\}\}$ \\\vspace{2pt}
+	(14) $\Sigma'''=\{\{A, E\} \rightarrow \{C\}, \{B\} \rightarrow \{D\}, \{D\} \rightarrow \{B\}, \{E\} \rightarrow \{D\}, \{D\} \rightarrow \{E\}\}$ \\\vspace{2pt}
+	(15) $\Sigma'''=\{\{A, E\} \rightarrow \{C\}, \{E\} \rightarrow \{B\}, \{B\} \rightarrow \{E\}, \{E\} \rightarrow \{D\}, \{D\} \rightarrow \{E\}\}$ \\\vspace{2pt}
+	}
+\end{frame}
+
+\begin{frame}[fragile]{Question 1 (d) Minimal Cover}
+	You may confuse at the first glance. But don't worry, it's easy :D\\\vspace{2pt}
+	Let's look at the first 5 minimal covers, with the visualization of $\Sigma$ as the reference:\\\vspace{3pt}
+	{\footnotesize
+		$\Sigma'''=\{\{A, B\} \rightarrow \{C\}, \{D\} \rightarrow \{B\}, \{B\} \rightarrow \{E\}, \{E\} \rightarrow \{D\}\}$ \\\vspace{2pt}
+		$\Sigma'''=\{\{A, B\} \rightarrow \{C\}, \{B\} \rightarrow \{D\}, \{E\} \rightarrow \{B\}, \{D\} \rightarrow \{E\}\}$ \\\vspace{4pt}
+		$\Sigma'''=\{\{A, B\} \rightarrow \{C\}, \textcolor{red}{\{B\} \rightarrow \{D\}, \{D\} \rightarrow \{B\}}, \textcolor{blue}{\{B\} \rightarrow \{E\}, \{E\} \rightarrow \{B\}}\}$ \\\vspace{2pt}
+		$\Sigma'''=\{\{A, B\} \rightarrow \{C\}, \textcolor{red}{\{B\} \rightarrow \{D\}, \{D\} \rightarrow \{B\}}, \textcolor{brown}{\{E\} \rightarrow \{D\}, \{D\} \rightarrow \{E\}}\}$ \\\vspace{2pt}
+		$\Sigma'''=\{\{A, B\} \rightarrow \{C\}, \textcolor{blue}{\{B\} \rightarrow \{E\}, \{E\} \rightarrow \{B\}}, \textcolor{brown}{\{E\} \rightarrow \{D\}, \{D\} \rightarrow \{E\}}\}$ \\\vspace{2pt}
+	}
+	\vspace{5pt}
+	\begin{columns}[t]
+		\column{0.4\textwidth}
+	\begin{figure}
+		\includegraphics[width=1\textwidth, trim=0 0 0 0, clip]{4221-t3/images/q1.png}
+	\end{figure}
+
+	\column{0.55\textwidth}
+	{\small
+	We find for each $\{??\} \rightarrow \{C\}$, there are \textbf{five} legal minimal covers. \\\vspace{2pt}
+	Then we know there are \textbf{three} $\{??\} \rightarrow \{C\}$ possible $\{??\} \rightarrow \{C\}$.\\\vspace{2pt}
+	Thus there exists $3\times 5=15$ different minimal covers. 
+	}
+\end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Question 1 (e) Armstrong Axioms}
+	\textbf{(e) Prove, using the three Armstrong axioms, that the following set of functional dependencies is equivalent to $\Sigma$.} \\\vspace{5pt}
+	$\Sigma''''=\{\{A, B\} \rightarrow \{C, D, E\}, \{A, D\} \rightarrow \{B, C, E\}, \{A, E\} \rightarrow \{B, C, D\}, \{B\} \rightarrow \{D, E\}, \{D\} \rightarrow \{B, E\}, \{E\} \rightarrow \{B, D\}\}$.\\\vspace{5pt}
+	
+	\textbf{Solution}: We prove that every functional dependency in one of $\Sigma$ and $\Sigma''''$ can obtained from those in the other set.\\\vspace{2pt}
+	For example $\{B\} \rightarrow \{D,E\}$ can be obtained from $\Sigma$.
+	
+	\begin{enumerate}
+		\item We know that $\{B\} \rightarrow \{E\}$.
+		\item We know that $\{E\} \rightarrow \{D\}$.
+		\item Therefore we have $\{E\} \rightarrow \{D, E\}$ by Augmentation of (2) with $\{E\}$.
+		\item Therefore we have $\{B\} \rightarrow \{D, E\}$ by Transitivity of (1) and (3).
+	\end{enumerate}
+
+	Q.E.D.\\\vspace{7pt}
+	
+	\textit{In fact you can prove by change (3) to:}\\
+	Therefore we have $\{B\} \rightarrow \{D\}$ by by Transitivity of (1) and (2).\\ 
+	Then we have $\{B\} \rightarrow \{D, E\}$ by Augmentation of (3) with (1).
 \end{frame}
 
 
