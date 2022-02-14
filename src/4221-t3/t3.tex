@@ -27,8 +27,15 @@
 	\end{tcolorbox}
 \end{frame}
 
-\section*{Greeting!}
+\begin{frame}
+	Updated on 12 Feb (Saturday):
+	\begin{itemize}
+		\item Added some notes regarding finding all minimal covers on page 10 and 12.
+	\end{itemize}
+\end{frame}
 
+\begin{comment}
+\section*{Greeting!}
 \begin{frame}[fragile]{Greeting!}
 	Welcome to CS5221/CS5421!\vspace{15pt}
 	
@@ -42,6 +49,7 @@
 	
 	I will be your TA for the remaining of this semester!
 \end{frame}
+\end{comment}
 
 \section*{Question 1 Functional Dependencies}
 
@@ -181,6 +189,8 @@ $\Sigma=\{\{A, B\} \rightarrow \{C\}, \{D\} \rightarrow \{D, B\}, \{B\} \rightar
 	
 	\textbf{The (not unique) result is:} \\\vspace{3pt}
 	$\Sigma'''=\{\{A, B\} \rightarrow \{C\}, \{D\} \rightarrow \{B\}, \{B\} \rightarrow \{E\}, \{E\} \rightarrow \{D\}\}$
+	\\\vspace{5pt}
+	\textcolor{red}{\textbf{NOTES FROM TA:} There is another minimal cover can be derived by this 3-step method, with the order of dependency reshuffled. You may download and refer to the Luminus files (Tutorials/Dependency/Tutorial Dependency (some answers).pdf) for more details.\\Both minimal cover are so called ``reachable with the algorithm''.} 
 \end{frame}
 
 \begin{frame}[fragile]{Question 1 (d) Minimal Cover}
@@ -208,6 +218,7 @@ $\Sigma=\{\{A, B\} \rightarrow \{C\}, \{D\} \rightarrow \{D, B\}, \{B\} \rightar
 \end{frame}
 
 \begin{frame}[fragile]{Question 1 (d) Minimal Cover}
+	{\small\textcolor{red}{\textbf{NOTES FROM TA:} These 15 minimal covers contains those cannot be obtained (aka. not reachable) through the 3-step method. You may design your algorithm to look into the \textbf{closure} ($\Sigma^{+}$) rather than the original $\Sigma$ to find all of them.}} \\
 	You may confuse at the first glance. But don't worry, it's easy :D\\\vspace{2pt}
 	Let's look at the first 5 minimal covers, with the visualization of $\Sigma$ as the reference:\\\vspace{3pt}
 	{\footnotesize
@@ -221,7 +232,7 @@ $\Sigma=\{\{A, B\} \rightarrow \{C\}, \{D\} \rightarrow \{D, B\}, \{B\} \rightar
 	\begin{columns}[t]
 		\column{0.4\textwidth}
 	\begin{figure}
-		\includegraphics[width=1\textwidth, trim=0 0 0 0, clip]{4221-t3/images/q1.png}
+		\includegraphics[width=0.75\textwidth, trim=0 0 0 0, clip]{4221-t3/images/q1.png}
 	\end{figure}
 
 	\column{0.55\textwidth}
