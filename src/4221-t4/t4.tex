@@ -83,9 +83,6 @@ The original question is:\\ $\Sigma=\{\{A\} \rightarrow \{A, B, C\}, \{A, B\} \r
 	The candidate keys are $\{A, E\}$ and $\{B, E\}$. \\\vspace{10pt}
 	The prime attributes are $A$, $B$ and $E$.\\ \vspace{10pt}
 	Superkeys include  $\{A, E\}$, $\{B, E\}$, $\{A, B, E\}$, $\{A, C, E\}$, $\{B, C, E\}$ , $\{A, D, E\}$, $\{B, D, E\}$, $\{A, B, C, E\}$, $\{A, C, D, E\}$, $\{A, B, D, E\}$, $\{B, C, D, E\}$ and $\{A, B, C, D, E\}$.\\ \vspace{15pt}
-	\begin{figure}
-		\includegraphics[width=0.6\textwidth, trim=0 0 0 0, clip]{t5/images/keys.png}
-	\end{figure}
 \end{frame}
 
 \begin{frame}[fragile]{Question 1 (a) Cont.}
@@ -129,12 +126,13 @@ The original question is:\\ $\Sigma=\{\{A\} \rightarrow \{A, B, C\}, \{A, B\} \r
 
 \begin{frame}[fragile]{Question 1 (a) Cont.}
 	Step 3, we simplify the set:\\\vspace{3pt}
+	\textit{(for each \{A\}->\{B\}, ensure there does not exist an X that \{A\}->\{X\} and \{X\}->\{B\})}\\\vspace{5pt}
 	$\cancel{\{A\} \rightarrow \{A\}}$ because it is trivial.\\	
 	$\{A\} \rightarrow \{B\}$.\\	
 	$\{A\} \rightarrow \{C\}$.\\	
 	$\{B\} \rightarrow \{A\}$.\\	
 	$\cancel{\{B\} \rightarrow \{D\}}$ because it can be derived from the others.\\	
-	$\cancel{\{B\} \rightarrow \{B\}}$ $\cancel{\{A\} \rightarrow \{A\}}$.\\	
+	$\cancel{\{B\} \rightarrow \{B\}}$ because it is trivial..\\	
 	$\{C\} \rightarrow \{D\}$.\\\vspace{5pt}
 	
 	\textbf{The result is:} \\\vspace{3pt}
@@ -181,13 +179,9 @@ Now let's look back the relation $R$ with all FDs ($\Sigma$) \textcolor{red}{\te
 \end{frame}
 
 \begin{frame}[fragile]{Question 1 (b-c) Normal Forms}
-(*) Is $R$ with $\Sigma$ in 2NF? (Just for recap purpose)\\
-(b) Is $R$ with $\Sigma$ in 3NF?\\
+(*) Is $R$ with $\Sigma$ in 2NF? (Just for recap purpose)\\\vspace{10pt}
+(b) Is $R$ with $\Sigma$ in 3NF?\\\vspace{10pt}
 (c) Is $R$ with $\Sigma$ in BCNF?\\\vspace{10pt}
-
-\begin{figure}
-	\includegraphics[width=0.75\textwidth, trim=0 0 0 0, clip]{t5/images/normal_forms.png}
-\end{figure}
 \end{frame}
 
 \begin{frame}[fragile]{Question 1 (b-c) Cont.}
@@ -407,28 +401,6 @@ The algorithm guarantees that the result is in 3NF. In this case, it is also in 
 To wrap-up, BCNF decomposition is \textbf{not always optimal}, as it aims to dismiss some ``unnecessary'' dependencies among attributes. (sometimes 3NF is good enough)\\\vspace{5pt}
 \end{frame}
 
-\begin{comment}
-	
-\section*{Extra Practice}
-
-\begin{frame}[fragile]{\boss{Extra Practice}}
-	Challenging questions ahead!!! I share with you 4 practice questions and each one may cost you 5-10 mins.\\\vspace{10pt}
-	\textcolor{brown}{If you can UNDERSTAND \& SOLVE them, you basically uderstand all key knowledge of this tutorial and you should be fine for the exam/test.}\\\vspace{10pt}
-	
-	\begin{columns}[t]
-	\column{0.65\textwidth}
-	\\\vspace{5pt}
-	\textbf{Free lunch, Die-die must try!}\\\vspace{10pt}
-	(Due to time limitation, solutions will be posted on Luminus and elaborated right after zoom TG10 session (Fri 9:30 PM onwards). You can feel free to join the TG10 zoom or watch the video recording later)
-	\column{0.25\textwidth}
-	\begin{figure}
-		\includegraphics[width=1\textwidth, trim=0 0 0 0, clip]{t5/images/mario.png}
-	\end{figure}
-\end{columns}
-\end{frame}
-
-\end{comment}
-% \input{t5/extra_questions_only}
 
 \begin{frame}{}
 	\begin{figure}
@@ -438,6 +410,7 @@ To wrap-up, BCNF decomposition is \textbf{not always optimal}, as it aims to dis
 	Enjoy the recess week and have a good rest. Keep safe!
 \end{center} 
 \end{frame}
+
 \begin{frame}{}
 	\centering  
 	For any further question, please feel free to email me:\vspace{10pt}
