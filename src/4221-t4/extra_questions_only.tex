@@ -58,3 +58,24 @@
 	(5) If it is not BCNF, \textbf{decomposite} the relations to make it BCNF and verify the \textbf{dependency preservation}. 
 \end{frame}
 
+\begin{frame}[fragile]{\boss{Extra} - Case 5}
+	Given a relation $R=\{A, B, C\}$ with functional dependency set:\\ 
+	$\Sigma=\{\{A\} \rightarrow \{B\},\{B\} \rightarrow \{C\}, \{A, B\} \rightarrow \{C\},\{B, C\} \rightarrow \{A\}\}.$\\\vspace{10pt}
+	\textbf{Questions}:\\
+	(1) Find \textbf{candidate key(s)} and \textbf{prime attribute(s)} from attribute closures $\Sigma^{+}$.\\
+	(2) Compute the \textbf{compact minimal cover} of $R$ with all FDs $\Sigma$.\\
+	(3) Determine if it is \textbf{2NF}? If yes, is it \textbf{3NF}? If yes, is it \textbf{BCNF}?\\
+	(4) If it is not 3NF, \textbf{synthesis} the relations to make it 3NF.\\
+	(5) If it is not BCNF, \textbf{decomposite} the relations to make it BCNF and verify the \textbf{dependency preservation}. 
+\end{frame}
+
+\begin{frame}[fragile]{\boss{Extra} - Case 6}
+	Given a relation $R=\{A, B, C, D, E\}$ with functional dependency set:\\ 
+	$\Sigma=\{\{C,D\} \rightarrow \{E\},\{A,B\} \rightarrow \{B\}, \{A,C,D\} \rightarrow \{E\},\{A\} \rightarrow \{E\},\{D,E\} \rightarrow \{B,C\},\{A\} \rightarrow \{A\}\}.$\\\vspace{10pt}
+	\textbf{Questions}:\\
+	(1) Find \textbf{candidate key(s)} and \textbf{prime attribute(s)} from attribute closures $\Sigma^{+}$.\\
+	(2) Compute the \textbf{compact minimal cover} of $R$ with all FDs $\Sigma$.\\
+	(3) Determine if it is \textbf{2NF}? If yes, is it \textbf{3NF}? If yes, is it \textbf{BCNF}?\\
+	(4) If it is not 3NF, \textbf{synthesis} the relations to make it 3NF.\\
+	(5) If it is not BCNF, \textbf{decomposite} the relations to make it BCNF and verify the \textbf{dependency preservation}. 	
+\end{frame}

@@ -1,0 +1,86 @@
+{
+    "A0083629W": [
+        "SELECT DISTINCT per.empid,per.lname FROM employee per WHERE (per.empid,per.lname) NOT IN ( (SELECT per.empid, per.lname  FROM payroll pay  WHERE per.empid = pay.empid AND pay.salary < 189170) UNION (SELECT per.empid, per.lname  FROM payroll pay  WHERE per.empid = pay.empid AND pay.salary > 189170) ) GROUP BY per.empid,per.lname ORDER BY per.empid,per.lname;"
+    ],
+    "A0094501M": [
+        "SELECT per.empid, per.lname FROM employee per GROUP BY 1, 2 HAVING ( SELECT a.empid FROM ( SELECT p.empid, pay.empid as payempid FROM payroll pay FULL OUTER JOIN employee p ON per.empid = pay.empid WHERE pay.salary = 189170) a WHERE a.empid IS NOT NULL AND payempid IS NOT NULL LIMIT 1 ) IS NOT NULL ORDER BY per.empid, per.lname;"
+    ],
+    "A0094616Y": [
+        "SELECT per.empid, per.lname FROM employee per WHERE 0 < (SELECT COUNT(*)    FROM payroll pay    WHERE (pay.empid NOT IN (SELECT pay.empid   FROM payroll pay   WHERE pay.empid <> per.empid AND pay.empid IS NOT NULL   ORDER BY pay.empid DESC) )    AND (pay.salary NOT IN ((SELECT pay.salary FROM payroll pay WHERE pay.salary NOT IN (SELECT pay.salary  FROM payroll pay  WHERE pay.salary NOT IN (SELECT pay.salary  FROM payroll pay  WHERE pay.salary < 189170  AND pay.salary IS NOT NULL   ORDER BY pay.salary DESC)  AND pay.salary IS NOT NULL  ORDER BY pay.salary ASC ) AND pay.salary IS NOT NULL ORDER BY pay.salary DESC)  UNION  (SELECT pay.salary FROM payroll pay WHERE pay.salary NOT IN (SELECT pay.salary  FROM payroll pay  WHERE pay.salary NOT IN (SELECT pay.salary  FROM payroll pay  WHERE pay.salary > 189170  AND pay.salary IS NOT NULL   ORDER BY pay.salary DESC  )  AND pay.salary IS NOT NULL  ORDER BY pay.salary ASC ) AND pay.salary IS NOT NULL ORDER BY pay.salary DESC)  )  )  ) ORDER BY per.empid, per.lname;"
+    ],
+    "A0097088M": [
+        "SELECT per.empid, per.lname FROM employee per, payroll pay WHERE per.empid = pay.empid AND per.empid NOT IN (SELECT per2.empid FROM employee per2 WHERE pay.empid = per2.empid AND per2.empid NOT IN (SELECT nested.empid  FROM (SELECT pay2.empid, CASE WHEN pay2.salary < 189170 THEN 0 WHEN pay2.salary > 189170 THEN 1 ELSE 2 END AS boolnum FROM payroll pay2) nested  WHERE nested.boolnum = 2)) ORDER BY per.empid, per.lname;"
+    ],
+    "A0107513R": [
+        "SELECT per.empid, per.lname FROM employee per WHERE per.empid NOT IN ( SELECT pay.empid FROM payroll pay CROSS JOIN employee per1 WHERE pay.salary <> 189170 ORDER BY pay.bonus, pay.salary, per1.fname, per1.address, per1.city, per1.state, per1.zip, per1.lname, pay.empid ) ORDER BY per.empid, per.lname;"
+    ],
+    "A0114286H": [
+        "SELECT distinct per.empid, (select distinct lname from employee c where empid NOT IN (SELECT empid from (select * from payroll where salary<>189170)d where salary<>189170)and c.empid=per.empid) as lname FROM employee per,payroll pay WHERE per.empid NOT IN (SELECT empid from (select * from payroll where salary<>189170)a where salary<>189170)  and per.empid in (SELECT empid from (select * from payroll where salary=189170)b where salary=189170) group by per.empid, (select distinct lname from employee c where empid NOT IN (SELECT empid from (select * from payroll where salary<>189170)d where salary<>189170)and c.empid=per.empid) ORDER BY per.empid, (select distinct lname from employee c where empid NOT IN (SELECT empid from (select * from payroll where salary<>189170)d where salary<>189170)and c.empid=per.empid);"
+    ],
+    "A0126486X": [
+        "SELECT per.empid, per.lname FROM employee per CROSS JOIN (SELECT * FROM payroll pay WHERE pay.empid is not NULL) pay WHERE per.empid is not NULL AND per.empid = pay.empid AND pay.empid NOT IN (SELECT pays.empid FROM payroll pays WHERE NOT EXISTS (SELECT * FROM payroll payx WHERE pays.salary = 189170)) ORDER BY per.empid, per.lname;"
+    ],
+    "A0127481E": [
+        "SELECT per.empid, per.lname from employee per WHERE per.empid NOT IN (SELECT empid FROM payroll WHERE salary <> 189170 and per.empid = empid) ORDER BY per.empid, per.lname;"
+    ],
+    "A0139315H": [
+        "SELECT per.empid, per.lname FROM employee per, payroll pay GROUP BY per.empid, per.lname HAVING per.empid IN (SELECT empid FROM payroll WHERE salary = 189170) ORDER BY per.empid, per.lname;"
+    ],
+    "A0144362L": [
+        "SELECT fcc.empid, fcc.lname FROM (SELECT per.empid, per.lname    FROM employee per    UNION   (SELECT per.empid,per.lname    FROM employee per    WHERE per.empid NOT IN ( SELECT per.empid                FROM employee per                INNER JOIN                ((SELECT per.empid,                 CASE WHEN per.empid>pay.empid THEN 1 END AS wanted                 FROM employee per, payroll pay                 WHERE (CASE WHEN per.empid > pay.empid THEN 1 END)=1)                 UNION                 (SELECT per.empid,                 CASE WHEN per.empid<pay.empid THEN 1 END AS wanted                 FROM employee per, payroll pay                 WHERE CASE WHEN per.empid<pay.empid THEN 1 END =1))fee                 ON fee.empid=per.empid)))fcc                 INNER JOIN                 (SELECT pay.empid                 FROM payroll pay                 WHERE pay.empid NOT IN (SELECT pay.empid                             FROM payroll pay                             INNER JOIN                             ((SELECT pay.empid,                              COUNT(CASE WHEN pay.salary>189170 THEN 1 END) AS wanted                              FROM payroll pay                              GROUP BY pay.empid                              HAVING COUNT(CASE WHEN pay.salary>189170 THEN 1 END)= (SELECT MAX(wanted)                                                          FROM(SELECT pay.empid,                                                            CASE WHEN pay.salary>189170 THEN 1 END AS wanted                                                            FROM payroll pay                                                            GROUP BY pay.empid, pay.salary                                                            ORDER BY pay.empid,pay.salary)temp, payroll pay)                                                            UNION                                                            SELECT pay.empid,                                                            COUNT(CASE WHEN pay.salary<189170 THEN 1 END) AS wanted                                                            FROM payroll pay                                GROUP BY pay.empid                                                            HAVING COUNT(CASE WHEN pay.salary<189170 THEN 1 END)=(SELECT MAX(wanted)                             FROM(SELECT pay.empid,                                                                                          CASE WHEN pay.salary<189170 THEN 1 END AS wanted                                                                                          FROM payroll pay                                                                                          GROUP BY pay.empid, pay.salary                                                                                          ORDER BY pay.empid,pay.salary)temp, payroll pay)))faa                                                                                        ON faa.empid=pay.empid))fdd  ON fcc.empid=fdd.empid                                                                                          ORDER BY fcc.empid, fcc.lname;"
+    ],
+    "A0158409X": [
+        "SELECT DISTINCT per.empid, per.lname FROM employee per FULL OUTER JOIN payroll pay ON per.empid = pay.empid WHERE 189170 = (SELECT CAST(SUM(pay.salary) / COUNT(*) AS INT) FROM payroll pay WHERE pay.empid NOT IN (SELECT pay1.empid FROM payroll pay1 WHERE pay1.empid != per.empid   ORDER BY pay.empid DESC) AND pay.salary NOT IN (SELECT pay.salary  FROM payroll pay  WHERE pay.salary NOT IN (SELECT pay1.salary  FROM payroll pay1  WHERE pay.salary NOT IN (SELECT pay2.salary FROM payroll pay2 WHERE pay.salary != 189170) AND pay.salary IS NOT NULL ORDER BY pay.salary ASC))) ORDER BY per.empid, per.lname;"
+    ],
+    "A0174092E": [
+        "SELECT temp.per_empid AS empid, temp.per_lname AS lname FROM ( (SELECT per.empid AS per_empid, per.lname AS per_lname, pay.empid AS pay_empid FROM employee AS per, payroll AS pay) EXCEPT (SELECT per.empid AS per_empid, per.lname AS per_lname, pay.empid AS pay_empid FROM employee AS per, payroll AS pay  WHERE per.empid != pay.empid OR pay.salary != 189170) ) AS temp;"
+    ],
+    "A0176642Y": [
+        "SELECT per1.empid, per1.lname FROM employee per1 WHERE per1.empid NOT IN ( SELECT per.empid FROM (SELECT employee.empid, employee.lname FROM employee) AS per FULL OUTER JOIN (SELECT payroll.empid, payroll.salary FROM payroll) AS pay ON per.empid = pay.empid WHERE salary <> 189170 AND per1.empid = pay.empid ) ORDER BY per1.empid, per1.lname;"
+    ],
+    "A0183569M": [
+        "SELECT per.empid, per.lname FROM employee per WHERE per.empid NOT IN (SELECT per2.empid FROM employee per2, payroll pay WHERE per2.empid = pay.empid AND pay.salary IN (SELECT pay2.salary FROM payroll pay2 WHERE pay2.empid = pay.empid AND pay2.salary < 189170 UNION SELECT pay3.salary FROM payroll pay3 WHERE pay3.empid = pay.empid AND pay3.empid NOT IN (SELECT pay4.empid  FROM payroll pay4  WHERE pay4.salary <= 189170)) UNION SELECT per3.empid FROM employee per3 WHERE per3.empid NOT IN (SELECT pay5.empid  FROM payroll pay5)) ORDER BY per.empid, per.lname;"
+    ],
+    "A0183823B": [
+        "SELECT emp_temp.empid, emp_temp.lname FROM ( SELECT * FROM employee per EXCEPT SELECT * FROM employee per2 WHERE per2.empid IN (  SELECT emp_salary_ranks.empid  FROM (   SELECT per3.empid, CASE    WHEN ABS(pay2.salary - 189170) = 0 THEN 0    ELSE RANK() OVER ( ORDER BY ABS(pay2.salary - 189170) ASC)    END rank_num    FROM employee per3, payroll pay2    WHERE per3.empid = pay2.empid  ) AS emp_salary_ranks  WHERE per2.empid = emp_salary_ranks.empid   AND emp_salary_ranks.rank_num <> 0 )) AS emp_temp ORDER BY emp_temp.empid, emp_temp.lname;"
+    ],
+    "A0187652U": [
+        "SELECT per.empid, per.lname FROM employee per WHERE ( SELECT COUNT(*) FROM payroll pay WHERE pay.empid = per.empid AND pay.salary = 189170 ) > 0 ORDER BY per.empid, per.lname;"
+    ],
+    "A0188044B": [
+        "SELECT per.empid, per.lname FROM employee per WHERE EXISTS ( SELECT * FROM payroll EXCEPT (SELECT * FROM payroll pay WHERE pay.salary != 189170 UNION SELECT * FROM payroll pay WHERE pay.empid != per.empid)) ORDER BY per.empid, per.lname;"
+    ],
+    "A0189173U": [
+        "SELECT e1.empid, e1.lname FROM employee e1, payroll p1 WHERE e1.empid = p1.empid EXCEPT SELECT e1.empid, e1.lname FROM employee e1, payroll p1 WHERE (p1.empid, e1.lname) IN (SELECT empid, lname FROM  (SELECT empid, lname,  CASE WHEN indexed = -1 THEN 0  ELSE  RANK() OVER (ORDER BY indexed)  END  AS ranking  FROM  (SELECT e.empid, e.lname,   CASE WHEN pp.salary <> 189170 THEN  ROW_NUMBER() OVER(PARTITION BY pp.salary)  ELSE -1  END as indexed  FROM employee e, payroll pp  WHERE e.empid = pp.empid ) AS indexing ) AS ranked_table WHERE ranking <> 0 AND e1.empid = ranked_table.empid AND ranked_table.lname = e1.lname ) AND p1.empid = e1.empid ORDER BY empid, lname;"
+    ],
+    "A0190367Y": [
+        "SELECT per.empid, per.lname FROM employee per WHERE per.empid NOT IN (SELECT per1.empid FROM employee per1, payroll pay WHERE pay.salary < 189170 AND per.empid = pay.empid) AND per.empid NOT IN (SELECT per2.empid  FROM employee per2, payroll pay1  WHERE pay1.salary > 189170  AND per2.empid = pay1.empid) ORDER BY per.empid, per.lname;"
+    ],
+    "A0190403R": [
+        "SELECT E1.empid, E1.lname FROM employee E1 WHERE NOT EXISTS ( SELECT empid FROM ( SELECT * FROM payroll WHERE CASE WHEN EXISTS ( SELECT * FROM payroll WHERE empid = E1.empid AND salary < ALL ( SELECT salary FROM payroll WHERE salary > 189170) AND salary > ALL ( SELECT salary FROM payroll WHERE salary < 189170)) THEN empid = E1.empid ELSE TRUE END ) AS S WHERE NOT EXISTS ( SELECT 1 FROM employee AS E2 WHERE E2.empid = S.empid AND E2.lname = E1.lname)) ORDER BY E1.empid, E1.lname;"
+    ],
+    "A0200284U": [
+        "SELECT emp.empid, emp.lname FROM employee emp WHERE emp.empid NOT IN(   SELECT per.empid   FROM employee per   WHERE emp.empid = per.empid   EXCEPT   (     SELECT pay.empid     FROM payroll pay     WHERE pay.salary > 189169     AND emp.empid = pay.empid     INTERSECT     SELECT pay2.empid     FROM payroll pay2     WHERE pay2.salary < 189171     AND emp.empid = pay2.empid   ) ) ORDER BY emp.empid, emp.lname;"
+    ],
+    "A0202155W": [
+        "SELECT per.empid, per.lname FROM employee per WHERE per.empid <> ALL(SELECT pay.empid FROM payroll pay WHERE pay.salary <> 189170) ORDER BY per.empid, per.lname;"
+    ],
+    "A0204679W": [
+        "SELECT per.empid, per.lname FROM employee AS per, payroll AS pay WHERE per.empid = pay.empid AND per.empid NOT IN (SELECT DISTINCT empid  FROM payroll AS p  WHERE per.empid = p.empid AND p.empid IN (SELECT e2.empid FROM payroll AS p2, employee AS e2   WHERE e2.empid = p2.empid AND p2.salary <> 189170   AND p2.empid = pay.empid)) ORDER BY per.empid, per.lname;"
+    ],
+    "A0206849U": [
+        "SELECT per.empid, per.lname FROM employee per WHERE (per.empid NOT IN ( SELECT pay.empid FROM payroll pay WHERE pay.salary > 189170 AND per.empid = pay.empid UNION SELECT pay.empid FROM payroll pay WHERE pay.salary < 189170 AND per.empid = pay.empid ));"
+    ],
+    "A0209966M": [
+        "SELECT per.empid , per. lname FROM employee per , payroll pay WHERE per. empid = ANY ( SELECT pay.empid FROM payroll p) AND per. empid NOT IN (SELECT pay.empid from payroll pay where pay.salary <> 189170) AND per. empid IS NOT NULL AND pay.empid IS NOT NULL ORDER BY per.empid , per. lname;"
+    ],
+    "A0210988W": [
+        "select per.empid, per.lname from employee per, (select emp.empid from employee emp except select pay.empid from payroll pay where pay.salary <> 189170 ) AS X where per.empid IN ( select pay.empid from payroll pay where pay.empid = X.empid and X.empid in ( select Y.empid from payroll Y where Y.salary <= pay.salary and Y.empid in ( select H.empid from payroll H where H.salary is not NULL order by H.salary, H.bonus, H.empid asc ) intersect select Z.empid from payroll Z where Z.salary >= pay.salary and Z.empid in ( select H.empid from payroll H where H.salary is not NULL order by H.salary, H.bonus, H.empid desc ) order by empid desc ) order by pay.salary, pay.bonus, pay.empid asc ) ORDER BY per.empid, per.lname;"
+    ],
+    "A0211008B": [
+        "SELECT per.empid, per.lname FROM employee per, payroll pay WHERE per.empid in (select distinct empid from payroll where salary = 189170) ORDER BY per.empid, per.lname;"
+    ],
+    "A0212201J": [
+        "SELECT tmp.empid, tmp.lname FROM ( SELECT per.empid, per.lname, row_number() OVER( PARTITION BY per.empid, per.lname ORDER BY per.empid, per.lname ) AS row_num FROM employee per, payroll pay WHERE per.empid != ALL ( SELECT pay1.empid FROM payroll pay1 WHERE pay1.salary != 189170 ) AND pay.salary != ALL ( SELECT pay2.salary FROM payroll pay2 WHERE pay2.salary != 189170 ) ) AS tmp WHERE tmp.row_num = 1 ORDER BY tmp.empid, tmp.lname;"
+    ]
+}
