@@ -1,7 +1,7 @@
 
-\title{BT5110 Data Management and Warehousing}
+\title{CS4221/CS5421}
 
-\subtitle{Tutorial 5: Normalisation\\ \textbf{(Extra Practice)}}
+\subtitle{Normal Forms and Normalisation\\ \textbf{(Extra Practice)}}
 
 \author{Mark Meng Huasong}
 
@@ -15,7 +15,7 @@
 	\includegraphics[width=2cm]{nus-logo}
 }
 
-\date{4 - 8 Oct, 2021}
+\date{Week 7, 2022 Spring}
 
 \begin{frame}
 	\titlepage
@@ -28,45 +28,18 @@
 \end{frame}
 
 \begin{frame}
-\begin{small}
-	Updated on 8 Oct (Friday):
-	\begin{itemize}
-		\item Fixed some errors that have been raised in-class for the Case 4 and In-class Case 2. Refer to the red color notice text in relevant pages, and pay attention while viewing the Zoom recording. 
-	\end{itemize}
-	Updated on 10 Oct (Sunday):
-	\begin{itemize}
-		\item Fixed the underline notation to indicate keys of $R_1$ in page 11.\\
-		i.e., $\underline{S},\underline{M} \rightarrow\underline{S,M}$
-		\item Fixed the decomposition mistake of Case 3 in page 16.\\
-		i.e., $R_1$ in the first option is not in BCNF, therefore a further decomposition is needed. 
-	\end{itemize}
-	Updated on 17 Oct (Sunday):
-	\begin{itemize}
-		\item Updated the BCNF decomposition and highlight the process of finding ``projected functional dependency'' in the In-class Case 2 in page 30-32.
-	\end{itemize}
-	Updated on 9 Nov (Tuesday):
-	\begin{itemize}
-	\item Fixed the underline notation to indicate keys of $R_2$ in page 7.\\
-	i.e., $\underline{W},\underline{P} \rightarrow\underline{W,P}$
-	\item Fixed the underline notation to indicate keys of $R_2$ and further decomposition in page 12.\\
-	i.e., $\underline{S},\underline{M} \rightarrow\underline{S,M}$
-	\end{itemize}
-\end{small}
-\end{frame}
-
-\begin{frame}
 	{\large \textbf{Agenda}}
 	\begin{itemize}
 		\item Extra Case No.1 - Warehouse management system
 		\item Extra Case No.2 - University transcript issuing system
-		\item Extra Case No.3 (Abstract) - \textcolor{red}{\textit{Non dependency preserving decomposition}}
-		\item Extra Case No.4 (Abstract) $\ddagger$ - \textcolor{red}{\textit{Candidate keys with different sizes}}
-		\item In-class Case No.1 (Abstract) 
-		\item In-class Case No.2 (Abstract) $\ddagger$ - \textcolor{red}{\textit{Trick of finding candidate key(s)}}
+		\item Extra Case No.3 (Abstract) - \textcolor{red}{\textit{\footnotesize Non dependency preserving decomposition}}
+		\item Extra Case No.4 (Abstract) - \textcolor{red}{\textit{\footnotesize Candidate keys with different sizes}}
+		\item Extra Case No.5 (Abstract) 
+		\item Extra Case No.6 (Abstract) - \textcolor{red}{\textit{\footnotesize Trick in finding candidate key(s)}}
 		
 	\end{itemize}\vspace{20pt}
 
-	\textcolor{red}{\textbf{\hl{$\ddagger$ Updated in the latest version as some errors raised in-class have been fixed}}}
+	%\textcolor{red}{\textbf{\hl{$\ddagger$ Updated in the latest version as some errors raised in-class have been fixed}}}
 \end{frame}
 
 \begin{frame}[fragile]{\boss{Extra} - Case 1}
@@ -126,8 +99,8 @@
 	
 	(5) Decomposition at $\{W\} \rightarrow \{M\}$:\\\vspace{5pt}
 	
-	$R_1 = (\underline{W}, \underline{M}),$\\
-	$R_2 = (\underline{W,P}, S).$\\\vspace{5pt}
+	$R_1 = (\underline{W}, \underline{M})$, with $\Sigma_1 =\{\{W\} \rightarrow \{M\}, \{M\}  \rightarrow \{W\}\}$\\
+	$R_2 = (\underline{W,P}, S)$, with $\Sigma_2 =\{\{W,P\} \rightarrow \{S\}\}$\\ \vspace{5pt}
 	
 	It is (luckily) dependency preserving.
 	
@@ -188,26 +161,28 @@
 	$\{S\}  \rightarrow \{N, F\},$\\
 	$\{F\} \rightarrow \{D\}.$\\\vspace{5pt}
 	
-	(3)  No it is not 2NF (e.g., $\{S\}\rightarrow\{N, F\}$, \{N, F\} are not prime attributes and $S$ is a subset of candidate key). Therefore it is not 3NF, and not BCNF, too.\\\vspace{5pt}
+	(3)  No it is not 2NF (e.g., $\{S\}\rightarrow\{N, F\}$, \{N, F\} are \textbf{not} prime attributes and $S$ \textbf{is} a subset of candidate key). Therefore it is not 3NF, and not BCNF, too.\\
+	(Besides $\{S\}\rightarrow\{N, F\}$, $\{F\}\rightarrow\{D\}$ violates 3NF and BCNF, too)
+	\vspace{5pt}
 	
 	(4) Synthesis result has 3 relations and is (luckily) BCNF: \\\vspace{5pt}
 	
-	$R_1 = (\underline{S,M}, G),$\\
-	$R_2 = (\underline{S}, N, F),$\\
-	$R_3 = (\underline{F}, D).$\\\vspace{5pt}
+	$R_1 = (\underline{S,M}, G)$, with $\Sigma_1 =\{\{S,M\} \rightarrow \{G\}\}$\\
+	$R_2 = (\underline{S}, N, F)$, with $\Sigma_2 =\{\{S\} \rightarrow \{N,F\}\}$\\
+	$R_3 = (\underline{F}, D)$, with $\Sigma_3 =\{\{F\} \rightarrow \{D\}\}$\\\vspace{5pt}
 	
 \end{frame}
 
 \begin{frame}[fragile]{\boss{Extra} - Case 2 (Solution)}
 	(5) Decomposition at $\{F\} \rightarrow \{D\}$:\\\vspace{5pt}
 	
-	$R_1 = (\underline{F}, D),$\\
-	$R_2 = (\underline{S,M}, G, N, F).$\\\vspace{5pt}
+	$R_1 = (\underline{F}, D)$, with $\Sigma_1 =\{\{F\} \rightarrow \{D\}\}$, which is in BCNF\\
+	$R_2 = (\underline{S,M}, G, N, F)$, with $\Sigma_2 =\{\{S,M\} \rightarrow \{G\}, \{S\} \rightarrow \{N,F\}\}$\\\vspace{5pt}
 	
-	However, $R_2$ needs to be further decomposed, at $\{S\} \rightarrow \{N\}$:\\\vspace{5pt}
+	The $\{S\} \rightarrow \{N,F\}$ violates BCNF because the LHS is not a superkey, therefore $R_2$ needs to be further decomposed, at $\{S\} \rightarrow \{N,F\}$:\\\vspace{5pt}
 	
-	$R_{2.1} = (\underline{S}, N, F).$\\
-	$R_{2.2} = (\underline{S,M}, G).$\\\vspace{5pt}
+	$R_{2.1} = (\underline{S}, N, F)$, with $\Sigma_{2.1} =\{\{S\} \rightarrow \{N,F\}\}$\\
+	$R_{2.2} = (\underline{S,M}, G)$, with $\Sigma_{2.2} =\{\{S,M\} \rightarrow \{G\}\}$\\\vspace{5pt}
 	
 	As the result, the BCNF decomposition is (luckily) dependency preserving and is given below:\\\vspace{5pt}
 	
@@ -272,12 +247,12 @@
 \begin{frame}[fragile]{\boss{Extra} - Case 3 (Solution)}
 	(5) Decomposition at $\{C\} \rightarrow \{D\}$:\\\vspace{3pt}
 	
-	$R_1 = (A, \underline{C}, D),$\\
-	$R_2 = (\underline{B}, \underline{C}).$\\\vspace{3pt}
+	$R_1 = (A, \underline{C}, D)$, with $\Sigma_1 =\{\{C\} \rightarrow \{D\}, \{D\} \rightarrow \{A\}\}$\\
+	$R_2 = (\underline{B,C})$, with $\Sigma_2 =\emptyset$\\\vspace{3pt}
 	
-	The $R_1$ is not in BCNF (e.g., $\{D\} \rightarrow \{A\}$), let's further decompose it:\\
-	$R_{1.1} = (A, \underline{D}),$\\
-	$R_{1.2} = (\underline{C}, D),$\\\vspace{3pt}
+	The $R_1$ is not in BCNF (e.g., $\{D\} \rightarrow \{A\}$, the LHS is not superkey), let's further decompose it:\\
+	$R_{1.1} = (A, \underline{D})$, with $\Sigma_{1.1} =\{\{D\} \rightarrow \{A\}\}$\\
+	$R_{1.2} = (\underline{C}, D)$, with $\Sigma_{1.2} =\{\{C\} \rightarrow \{D\}\}$\\\vspace{3pt}
 	
 	In this way all 3 relations ($R_{1.1}$, $R_{1.2}$ and $R_{2}$) are BCNF, but we lose a dependency $\{A, B\} \rightarrow \{C\}$.\\\vspace{10pt}
 	
@@ -286,9 +261,8 @@
 	Decomposition at $\{D\} \rightarrow \{A\}$:\\\vspace{3pt}
 	
 	$R_1 = (A, \underline{D}),$\\
-	$R_2 = (B, \underline{C}, D).$\\\vspace{5pt}
-	
-	In this way both relations are BCNF, but we (still) lose that dependency $\{A, B\} \rightarrow \{C\}$.
+	$R_2 = (\underline{B,C}, D).$\\\vspace{5pt}
+	Then $R_2$ needs to be further decomposed to $R_{2}.1 = (\underline{C}, D), R_{2.2} = (\underline{B,C}).$ to ensure all of them are BCNF. However, we (still) lose that dependency $\{A, B\} \rightarrow \{C\}$.
 \end{frame}
 
 \begin{frame}[fragile]{\boss{Extra} - Case 4}
@@ -317,8 +291,8 @@
 			&\{C\}^{+} \rightarrow \{C\},\\
 			&\{D\}^{+} \rightarrow \{D\},\\
 			&\{A, B\}^{+} \rightarrow \{A, B, C, D\},\\
-			&\{A, C\}^{+} \rightarrow \{A, B, C, D\} (trivial),\\
-			&\{A, D\}^{+} \rightarrow \{A, B, C, D\} (trivial),\\
+			&\{A, C\}^{+} \rightarrow \{A, B, C, D\} \text{(not minimal)},\\
+			&\{A, D\}^{+} \rightarrow \{A, B, C, D\} \text{(not minimal)},\\
 			&\{B, C\}^{+} \rightarrow \{A, B, C, D\}\\
 			&\{B, D\}^{+} \rightarrow \{B, D\}, ...
 		\end{align*}
@@ -385,7 +359,7 @@
 	
 \end{frame}
 
-\begin{frame}[fragile]{\boss{Extra} - In-class Case 1}
+\begin{frame}[fragile]{\boss{Extra} - Case 5}
 	Given a relation $R=\{A, B, C\}$ with functional dependency set:\\ 
 	$\Sigma=\{\{A\} \rightarrow \{B\},\{B\} \rightarrow \{C\}, \{A, B\} \rightarrow \{C\},\{B, C\} \rightarrow \{A\}\}.$\\\vspace{10pt}
 	\textbf{Questions}:\\
@@ -396,7 +370,7 @@
 	(5) If it is not BCNF, \textbf{decomposite} the relations to make it BCNF and verify the \textbf{dependency preservation}. 
 \end{frame}
 
-\begin{frame}[fragile]{\boss{Extra} - In-class Case 1 (Solution)}
+\begin{frame}[fragile]{\boss{Extra} - Case 5 (Solution)}
 	$R=\{A, B, C\}$\\ 
 	$\Sigma=\{\{A\} \rightarrow \{B\},\{B\} \rightarrow \{C\}, \{A, B\} \rightarrow \{C\},\{B, C\} \rightarrow \{A\}\}.$\\\vspace{5pt}
 	
@@ -416,18 +390,19 @@
 	Prime attributes: $A, B$
 \end{frame}
 
-\begin{frame}[fragile]{\boss{Extra} - In-class Case 1 (Solution)}
+\begin{frame}[fragile]{\boss{Extra} - Case 5 (Solution)}
 	$\Sigma=\{\{A\} \rightarrow \{B\},\{B\} \rightarrow \{C\}, \{A, B\} \rightarrow \{C\},\{B, C\} \rightarrow \{A\}\}.$\\\vspace{25pt}
 	
 	(2) The minimal cover is:\\\vspace{5pt}
 	
 	$\{A\} \rightarrow \{B\},$\\
 	$\{B\}  \rightarrow \{C\},$\\
-	$\{B,C\} \rightarrow \{A\}.$\\\vspace{5pt}
+	$\{B\} \rightarrow \{A\}.$\\\vspace{5pt}
 	
 	This is the compact minimal cover, too.\\\vspace{5pt}
 	
-	(3)  Yes it is 2NF, 3NF, and BCNF, too.\\\vspace{5pt}
+	(3)  Yes it is 2NF, 3NF, and BCNF, too.\\\vspace{2pt}
+	\textcolor{red}{(Hint: All LHS are superkeys)}\\\vspace{5pt}
 	
 	(4) Omitted as it is 3NF. \\\vspace{5pt}
 	
@@ -435,7 +410,7 @@
 	
 \end{frame}
 
-\begin{frame}[fragile]{\boss{Extra} - In-class Case 2}
+\begin{frame}[fragile]{\boss{Extra} - Case 6}
 	Given a relation $R=\{A, B, C, D, E\}$ with functional dependency set:\\ 
 	$\Sigma=\{\{C,D\} \rightarrow \{E\},\{A,B\} \rightarrow \{B\}, \{A,C,D\} \rightarrow \{E\},\{A\} \rightarrow \{E\},\{D,E\} \rightarrow \{B,C\},\{A\} \rightarrow \{A\}\}.$\\\vspace{10pt}
 	\textbf{Questions}:\\
@@ -444,9 +419,11 @@
 	(3) Determine if it is \textbf{2NF}? If yes, is it \textbf{3NF}? If yes, is it \textbf{BCNF}?\\
 	(4) If it is not 3NF, \textbf{synthesis} the relations to make it 3NF.\\
 	(5) If it is not BCNF, \textbf{decomposite} the relations to make it BCNF and verify the \textbf{dependency preservation}. 
+	\\
+	\textcolor{red}{(This question's BCNF decomposition requests some tricks. It is out of the scope so don't worry if you feel hard to understand)}
 \end{frame}
 
-\begin{frame}[fragile]{\boss{Extra} - In-class Case 2 (Solution)}
+\begin{frame}[fragile]{\boss{Extra} - Case 6 (Solution)}
 	$\Sigma=\{\{C,D\} \rightarrow \{E\},\{A,B\} \rightarrow \{B\}, \{A,C,D\} \rightarrow \{E\},\{A\} \rightarrow \{E\},\{D,E\} \rightarrow \{B,C\},\{A\} \rightarrow \{A\}\}.$\\\vspace{5pt}
 	
 	\textbf{Solution}:\\
@@ -462,7 +439,7 @@
 		&\{A,B\}^{+} \rightarrow \{A,B,E\},\\
 		&\{A,C\}^{+} \rightarrow \{A,C,E\},\\
 		&\{A,D\}^{+} \rightarrow \{A,B,C,D,E\},\\
-		&\{A,E\}^{+} \rightarrow \{A,B,E\}\}\\
+		&\{A,E\}^{+} \rightarrow \{A,E\}\}\\
 		& ...\\
 		&\{A,C,D,E\}^{+} \rightarrow \{A,B,C,D,E\}\}\\
 		&\{A,B,C,D,E\}^{+} \rightarrow \{A,B,C,D,E\}\}.
@@ -477,7 +454,7 @@
 	
 \end{frame}
 
-\begin{frame}[fragile]{\boss{Extra} - In-class Case 2 (Solution)}
+\begin{frame}[fragile]{\boss{Extra} - Case 6 (Solution)}
 	$\Sigma=\{\{C,D\} \rightarrow \{E\},\{A,B\} \rightarrow \{B\}, \{A,C,D\} \rightarrow \{E\},\{A\} \rightarrow \{E\},\{D,E\} \rightarrow \{B,C\},\{A\} \rightarrow \{A\}\}.$\\\vspace{5pt}
 	
 	(2) The compact minimal cover is:\\\vspace{5pt}
@@ -519,7 +496,7 @@
 \end{frame}
 
 
-\begin{frame}[fragile]{\boss{Extra} - In-class Case 2 (Solution)}
+\begin{frame}[fragile]{\boss{Extra} - Case 6 (Solution)}
 	(3)  It is not in 2NF, therefore it is not in 3NF, and not in BCNF, too.\\\vspace{3pt}
 	
 	E.g., $\{A\} \rightarrow \{E\}$ is not trivial, the LHS is a subset of the candidate key $\{A,D\}$ and the RHS is not a prime attribute, therefore it violates 2NF.\\\vspace{3pt}
@@ -532,18 +509,18 @@
 	$\{D,E\} \rightarrow \{B,C\}.$\\\vspace{3pt}
 	
 	Let's do 3NF synthesis:\\ \vspace{3pt}
-	$R_1 = (\underline{C,D},E),$
+	$R_1 = (\underline{C,D},E)$ (subsumed by $R_3$),
 	$R_2 = (\underline{A}, E),$
 	$R_3 = (B, C, \underline{D, E}).$\\\vspace{3pt}
 	(The candidate key is not included in any relation fragment above, so we add a new fragment manually)\\\vspace{3pt}
 	$R_4 = (\underline{A, D}).$\\\vspace{3pt}
 	
-	All fragments are in BCNF.
+	The results are $R_2$, $R_3$ and $R_4$.
 	
 
 \end{frame}
 
-\begin{frame}[fragile]{\boss{Extra} - In-class Case 2 (Solution)}
+\begin{frame}[fragile]{\boss{Extra} - Case 6 (Solution)}
 	(5) Recall the compact minimal cover:\\
 	
 	$\{C,D\} \rightarrow \{E\},$
@@ -565,7 +542,7 @@
 
 \end{frame}
 
-\begin{frame}[fragile]{\boss{Extra} - In-class Case 2 (Solution)}
+\begin{frame}[fragile]{\boss{Extra} - Case 6 (Solution)}
 	
 	Although $E$ is not presented in $R_2$, we still have $\{A,D\}\rightarrow\{B,C\}$ because of $\{A\}\rightarrow\{E\}$ and $\{D,E\}\rightarrow\{B,C\}$.\\
 	One way to find those FDs is to go back and look at the attribute closure, by removing those attributes do not exist in the current fragment, as follows:
@@ -595,9 +572,9 @@
 		
 \end{frame}
 
-\begin{frame}[fragile]{\boss{Extra} - In-class Case 2 (Solution)}
+\begin{frame}[fragile]{\boss{Extra} - Case 6 (Solution)}
 	
-	If you try to use a FD other than $\{A\}  \rightarrow \{E\}$ in BCNF decomposition, for example $\{C,D\}\rightarrow\{E\}$, you may have two fragments $R_1=\{B,C,D,E\}$ (candidate keys to be unveiled later) and $R_2=\{\underline{A,C,D}\}$. \\\vspace{2pt}
+	If you try to use a FD other than $\{A\}  \rightarrow \{E\}$ in BCNF decomposition, for example $\{C,D\}\rightarrow\{E\}$, you may have two fragments $R_1=\{B,C,D,E\}$ (candidate keys to be unveiled later) and $R_2=\{\underline{A,D},C\}$. \\\vspace{2pt}
 	Finding candidate key(s) and minimal cover of $R_1$ is the next challenge:\\\vspace{-3pt}
 	\begin{columns}
 		\column{0.47\textwidth}
