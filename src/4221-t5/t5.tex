@@ -72,7 +72,8 @@ $\Sigma=\{\{C\}\rightarrow\{A\}, \{D\}\rightarrow\{D,B\}, \{B\}\rightarrow\{E\},
 3. We see that $\{D\}\subset\{A,D\}$.\\\vspace{2pt}
 4. We see that $\{B\}\cap \{A,D\}=\emptyset$\\\vspace{2pt}
 5. Therefore $\{E\}\rightarrow\{D\}$ by Coalescence of (1), (2), (3) and (4).\\\vspace{2pt}
-Q.E.D.
+\hfill Q.E.D.\\\vspace{10pt}
+Try the same question with the Chase (answer not provided).
 \end{frame}
 
 \begin{frame}[fragile]{Question 3}
@@ -81,7 +82,17 @@ Consider the relation $R(A,B,C,D,E,G)$ with the following set, $F$, of functiona
 $F=\{\{A,B\}\rightarrow\{C\}, \{A,B\}\twoheadrightarrow\{E\},\{C,D\}\twoheadrightarrow\{A,B\}\}$\\ \vspace{5pt}
 	
 Prove that the decomposition of $R$ into $R_1(A,B,C,D,G)$ and $R_2(C,D,E)$ is lossless using the Chase algorithm (as shown in the lecture).\\ \vspace{5pt}
-	
+
+\textbf{\textcolor{blue}{How to solve this question?}}\\\vspace{5pt}
+\textcolor{blue}{Recall the lecture note ``\emph{Testing if a decomposition is lossless}''.
+We first analyze the decomposition to find out what is the $X$ of ``$R=X\cup Y\cup Z$''. We have $X=\{C,D\}$.\\\vspace{2pt}
+Then we need to use the Chase method to chase $\{C,D\}\twoheadrightarrow\{E\}$ ({\small or $\{C,D\}\twoheadrightarrow\{A,B,G\}$ equivalently, according to Complementation rule of Armstrong Axiom}).}\\\vspace{5pt}
+
+\textcolor{blue}{Now the question becomes:\\
+$\{\{A,B\}\rightarrow\{C\}, \{A,B\}\twoheadrightarrow\{E\},\{C,D\}\twoheadrightarrow\{A,B\}\} \models \{C,D\}\twoheadrightarrow\{E\}$?.}
+\end{frame}
+
+\begin{frame}[fragile]{Question 3 (Cont.)}	
 \textbf{Solution:}\\ \vspace{2pt}
 1. Initial table.\\
 \begin{figure}
@@ -96,11 +107,19 @@ Prove that the decomposition of $R$ into $R_1(A,B,C,D,G)$ and $R_2(C,D,E)$ is lo
 \end{frame}
 
 \begin{frame}[fragile]{Question 3 (Cont.)}
-3. Apply $\{C,D\} \twoheadrightarrow \{A,B\}$ by copying two tuples that have the same $C$ and $D$ values but swapping their $A$ and $B$ values.\\
+3. Apply $\{C,D\} \twoheadrightarrow \{A,B\}$ by copying two tuples that have the same $C$ and $D$ values but swapping their $A$ and $B$ values.\\\vspace{10pt}
+
+\textcolor{blue}{{\small Below are cited from the ``Chasing the Chase'' part of the lecture note:\\\vspace{5pt}
+\textit{For each multi-valued dependency $Z\twoheadrightarrow V\in\Sigma$, if there are 2 tuples in the table with the \textbf{SAME $Z$-value}, then add two new tuples with \textbf{all the same values and except} for their $V$-values that are \textbf{SWAPPED}.}}}
+
 \begin{figure}
 	\includegraphics[width=0.4\textwidth, trim=0 0 0 0, clip]{4221-t5/images/3-3.png}
 \end{figure}
 
+\end{frame}
+
+
+\begin{frame}[fragile]{Question 3 (Cont.)}
 4. Apply $\{A,B\} \twoheadrightarrow \{E\}$ by copying two tuples that have the same $A$ and $B$ values but swapping their $A$ and $E$ values.\\
 \begin{figure}
 	\includegraphics[width=0.4\textwidth, trim=0 0 0 0, clip]{4221-t5/images/3-4.png}
@@ -109,12 +128,15 @@ Prove that the decomposition of $R$ into $R_1(A,B,C,D,G)$ and $R_2(C,D,E)$ is lo
 
 
 \begin{frame}[fragile]{Question 3 (Cont.)}
-	5. Applying $\{A,B\} \rightarrow \{C\}$ do not change the table.\\\vspace{5pt}
-	6. Sort the table and proved that $\{C,D\}\twoheadrightarrow\{E\}$ 
+5. Applying $\{A,B\} \rightarrow \{C\}$ do not change the table.\\\vspace{5pt}
+\textcolor{blue}{{\small \textit{Because we cannot find for any two tuples $\{a1,b1,c1,...\}$ and $\{a2,b2,c2,...\}$ s.t. $\{a1,b1\}=\{a2,b2\}$ but $c1 \ne c2$}.}}\\\vspace{10pt}
+
+6. Sort the table and proved that $\{C,D\}\twoheadrightarrow\{E\}$ 
 	\begin{figure}
 		\includegraphics[width=0.4\textwidth, trim=0 0 0 0, clip]{4221-t5/images/3-6.png}
 	\end{figure}
 
+\textcolor{blue}{{\small \textit{Because we cannot find any counterexample.}}}\\\vspace{10pt}
 	\hfill Q.E.D
 \end{frame}
 
