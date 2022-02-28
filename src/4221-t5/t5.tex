@@ -28,7 +28,7 @@
 
 \section*{Question 1 Entity-relationship Design}
 
-\begin{frame}[fragile]{Question 1}
+\begin{frame}[fragile]{Question 1 Entity-relationship Design}
 Consider the entity-relationship diagram of Figure 1.
 \begin{figure}
 	\includegraphics[width=0.75\textwidth, trim=0 0 0 0, clip]{4221-t5/images/q1.png}
@@ -59,7 +59,7 @@ For instance, we could know that $\{E\}\twoheadrightarrow\{F\}$, which we could 
 
 \section*{Question 2 MVD \& Chase}
 
-\begin{frame}[fragile]{Question 2}
+\begin{frame}[fragile]{Question 2 MVD}
 Consider the relational schema $R = \{A,B,C,D,E\}$ with the following set of functional and multi-valued dependencies.\\ \vspace{5pt}
 
 $\Sigma=\{\{C\}\rightarrow\{A\}, \{D\}\rightarrow\{D,B\}, \{B\}\rightarrow\{E\},\{E\}\twoheadrightarrow\{A,D\},\{A,B,D\}\rightarrow\{A,B,C,D\},\{B\}\rightarrow\{D\}\}$\\ \vspace{5pt}
@@ -76,7 +76,7 @@ $\Sigma=\{\{C\}\rightarrow\{A\}, \{D\}\rightarrow\{D,B\}, \{B\}\rightarrow\{E\},
 Try the same question with the Chase (answer not provided).
 \end{frame}
 
-\begin{frame}[fragile]{Question 3}
+\begin{frame}[fragile]{Question 3 Chase}
 Consider the relation $R(A,B,C,D,E,G)$ with the following set, $F$, of functional and multi-valued dependencies.\\ \vspace{5pt}
 	
 $F=\{\{A,B\}\rightarrow\{C\}, \{A,B\}\twoheadrightarrow\{E\},\{C,D\}\twoheadrightarrow\{A,B\}\}$\\ \vspace{5pt}
@@ -141,7 +141,7 @@ $\{\{A,B\}\rightarrow\{C\}, \{A,B\}\twoheadrightarrow\{E\},\{C,D\}\twoheadrighta
 \end{frame}
 
 
-\begin{frame}[fragile]{Question 4}
+\begin{frame}[fragile]{Question 4 Chase}
 	Consider the relation $R(A,B,C,D,E,F,G)$ with the following set, $\Sigma$, of functional dependencies.\\ \vspace{5pt}
 	
 	$\Sigma=\{\{A,B\}\rightarrow\{C\},\{C\}\rightarrow\{D,E\},\{E\}\rightarrow\{D\},\{F\}\rightarrow\{G\}\}$\\ \vspace{5pt}
@@ -179,7 +179,7 @@ $\{\{A,B\}\rightarrow\{C\}, \{A,B\}\twoheadrightarrow\{E\},\{C,D\}\twoheadrighta
 \end{frame}
 
 
-\begin{frame}[fragile]{Question 5}
+\begin{frame}[fragile]{Question 5 Chase with the Distinguished Attributes}
 	Consider the relation $R(A,B,C,D,E)$ with the following set, $F$, of functional dependencies.\\ \vspace{5pt}
 	
 	$\Sigma=\{\{A\}\rightarrow\{B,C\}, \{B\}\rightarrow\{A\},\{C\}\rightarrow\{D\}\}$\\ \vspace{5pt}
@@ -210,10 +210,16 @@ $\{\{A,B\}\rightarrow\{C\}, \{A,B\}\twoheadrightarrow\{E\},\{C,D\}\twoheadrighta
 	\hfill Q.E.D
 \end{frame}
 
-\begin{comment}
-	
 \section*{Extra Practice}
-\begin{frame}[fragile]{Extra Practice: Participation vs. Logical Design}
+\begin{frame}[fragile]{Extra Practice (A): Chase}
+\underline{Q2 Revisit}: consider the relational schema $R = \{A,B,C,D,E\}$ with the following set of functional and multi-valued dependencies.\\ \vspace{5pt}
+
+$\Sigma=\{\{C\}\rightarrow\{A\}, \{D\}\rightarrow\{D,B\}, \{B\}\rightarrow\{E\},\{E\}\twoheadrightarrow\{A,D\},\{A,B,D\}\rightarrow\{A,B,C,D\},\{B\}\rightarrow\{D\}\}$\\ \vspace{5pt}
+
+Prove that $\{E\}\rightarrow\{D\}$ using the \textbf{Chase algorithm}.\\ \vspace{5pt}
+\end{frame}
+
+\begin{frame}[fragile]{Extra Practice (B): ER Participation vs. Logical Design}
 Can you spot the difference among the 4 cases below? Can you explain what they look like in the logical design? Can you give an example from the real world for each case?\\ \vspace{4pt}
 	
 \begin{figure}
@@ -258,7 +264,7 @@ Can you spot the difference among the 4 cases below? Can you explain what they l
 \column{0.01\textwidth}
 \column{0.47\textwidth}
 \underline{\textbf{Table E1}}: \\\faIcon{key} name,\\ secretary\_general \\\vspace{5pt}
-\textit{or alternatively, we define}\\\vspace{5pt}
+\textit{or \underline{alternatively}, we define}\\\vspace{5pt}
 \underline{\textbf{Table E2}}:\\\faIcon{key} name\\ leading\_party,
 \end{columns}
 \end{frame}
@@ -400,8 +406,6 @@ Can you spot the difference among the 4 cases below? Can you explain what they l
 		\underline{\textbf{Table E2}}: \\\faIcon{key} name
 	\end{columns}
 \end{frame}
-\end{comment}
-
 	
 \begin{frame}{}
 	\centering  
