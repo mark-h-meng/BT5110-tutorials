@@ -66,6 +66,25 @@ $\Sigma=\{\{C\}\rightarrow\{A\}, \{D\}\rightarrow\{D,B\}, \{B\}\rightarrow\{E\},
 
 (a) Prove that $\{E\}\rightarrow\{D\}$ using the Armstrong and multi-valued dependencies axioms.\\ \vspace{5pt}
 
+\end{frame}
+\begin{frame}[fragile]{Question 2 MVD (Cont.)}
+	\textbf{\underline{Quick Recap:}}\\\vspace{20pt}
+	\begin{small}
+	\textbf{\textit{Complementation}} $\left( X\twoheadrightarrow Y \right) \Longrightarrow \left( X\twoheadrightarrow R-X-Y \right) $
+	 \\\vspace{5pt}
+	\textbf{\textit{Augmentation}} $\left( \left( X\twoheadrightarrow Y \right) \land \left( V\subset W \right) \right) \Longrightarrow \left( X\cup W\twoheadrightarrow Y\cup V \right) $
+	\\\vspace{5pt}
+	\textbf{\textit{Transitivity}} $\left( \left( X\twoheadrightarrow Y \right) \land \left( Y\twoheadrightarrow Z \right) \right) \Longrightarrow \left( X\twoheadrightarrow Z-Y \right) 
+	$\\\vspace{5pt}
+	\textbf{\textit{Replication/Promotion}} $\left( X\rightarrow Y \right) \Longrightarrow \left( X\twoheadrightarrow Y \right) $ \\\vspace{5pt}
+	\textbf{\textit{Coalescence}} $\left( \left( X\twoheadrightarrow Y \right) \land \left( W\rightarrow Z \right) \land \left( Z\subset Y \right) \land \left( W\cap Y=\emptyset \right) \right) \Longrightarrow \left( X\rightarrow Z \right) $ \\\vspace{5pt}
+	\textbf{\textit{Union}} $\left( \left( X\twoheadrightarrow Y \right) \land \left( X\twoheadrightarrow Z \right) \right) \Longrightarrow \left( X\twoheadrightarrow Y\cup Z \right) $ \\\vspace{5pt}
+	\textbf{\textit{Intersection}} $\left( \left( X\twoheadrightarrow Y \right) \land \left( X\twoheadrightarrow Z \right) \right) \Longrightarrow \left( X\twoheadrightarrow Y\cap Z \right) $ \\\vspace{5pt}
+	\textbf{\textit{Difference}} $\left( \left( X\twoheadrightarrow Y \right) \land \left( X\twoheadrightarrow Z \right) \right) \Longrightarrow \left( X\twoheadrightarrow Y-Z \right) $ \\\vspace{5pt}
+	\end{small}
+
+\end{frame}
+\begin{frame}[fragile]{Question 2 MVD (Cont.)}
 \textbf{Solution:}\\ \vspace{5pt}
 1. We know that $\{E\}\twoheadrightarrow\{A,D\}$.\\ \vspace{2pt}
 2. We know that $\{B\}\rightarrow\{D\}$.\\\vspace{2pt}
@@ -129,14 +148,18 @@ $\{\{A,B\}\rightarrow\{C\}, \{A,B\}\twoheadrightarrow\{E\},\{C,D\}\twoheadrighta
 
 \begin{frame}[fragile]{Question 3 (Cont.)}
 5. Applying $\{A,B\} \rightarrow \{C\}$ do not change the table.\\\vspace{5pt}
-\textcolor{blue}{{\small \textit{Because we cannot find for any two tuples $\{a1,b1,c1,...\}$ and $\{a2,b2,c2,...\}$ s.t. $\{a1,b1\}=\{a2,b2\}$ but $c1 \ne c2$}.}}\\\vspace{10pt}
+\textcolor{blue}{{\small \textit{Because we cannot find for any two tuples $\{a1,b1,c1,...\}$ and $\{a2,b2,c2,...\}$ s.t. $\{a1,b1\}=\{a2,b2\}$ but $c1 \ne c2$}.}}\\\vspace{5pt}
 
 6. Sort the table and proved that $\{C,D\}\twoheadrightarrow\{E\}$ 
 	\begin{figure}
 		\includegraphics[width=0.4\textwidth, trim=0 0 0 0, clip]{4221-t5/images/3-6.png}
 	\end{figure}
 
-\textcolor{blue}{{\small \textit{Because we cannot find any counterexample.}}}\\\vspace{10pt}
+\textcolor{red}{{\small \textit{Refer to the lecture slides ``Dependencies'' page 77 for the definition of a MVD.}}}\\\vspace{5pt}
+OR \textcolor{blue}{{\small \textit{Because we cannot find any counterexample.}}}
+\textcolor{red}{{\small \textit{Refer to the lecture slides ``The Chase'' page 18: The Chase always builds a counter example if it exists and does not if it does not exists.}}}\\\vspace{10pt}
+
+
 	\hfill Q.E.D
 \end{frame}
 
@@ -211,12 +234,15 @@ $\{\{A,B\}\rightarrow\{C\}, \{A,B\}\twoheadrightarrow\{E\},\{C,D\}\twoheadrighta
 \end{frame}
 
 \section*{Extra Practice}
-\begin{frame}[fragile]{Extra Practice (A): Chase}
+\begin{frame}[fragile]{Extra Practice (A): MVD \& Chase}
 \underline{Q2 Revisit}: consider the relational schema $R = \{A,B,C,D,E\}$ with the following set of functional and multi-valued dependencies.\\ \vspace{5pt}
 
 $\Sigma=\{\{C\}\rightarrow\{A\}, \{D\}\rightarrow\{D,B\}, \{B\}\rightarrow\{E\},\{E\}\twoheadrightarrow\{A,D\},\{A,B,D\}\rightarrow\{A,B,C,D\},\{B\}\rightarrow\{D\}\}$\\ \vspace{5pt}
 
-Prove that $\{E\}\rightarrow\{D\}$ using the \textbf{Chase algorithm}.\\ \vspace{5pt}
+Prove that $\{E\}\rightarrow\{D\}$ using the \textbf{Chase algorithm}.\\ \vspace{25pt}
+
+\underline{Q3-4 Revisit}: prove them by using Armstrong axiom.\\ 
+
 \end{frame}
 
 \begin{frame}[fragile]{Extra Practice (B): ER Participation vs. Logical Design}
