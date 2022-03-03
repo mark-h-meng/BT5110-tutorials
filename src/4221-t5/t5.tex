@@ -1,4 +1,5 @@
 \title{CS4221/CS5421}
+\newcommand {\mvd}{\mbox{$\; \rightarrow \! \! \! \! \rightarrow \; $}}
 
 \subtitle{Tutorial 5: Dependencies, entity-relationship modelling and the Chase}
 
@@ -45,7 +46,7 @@ $\Sigma = \{\{A\}\rightarrow\{B\}, \{D\}\rightarrow\{E,F\}, \{A,D\}\rightarrow\{
 Multi-valued dependencies depend on the translation of this design into tables. The entity-
 relationship diagram and its translation will only result in ``not interesting'' multi-valued dependencies, those are trivial or correspond to the table or the functional dependencies.\\ \vspace{5pt}
 If we canonically translate this design into three tables, we have
-$\{A\} \twoheadrightarrow \{B\}$ and $\{D\}\twoheadrightarrow \{E,F\}$ and many more (none of them being useful for normalisation), for instance.
+$\{A\} \mvd \{B\}$ and $\{D\}\mvd \{E,F\}$ and many more (none of them being useful for normalisation), for instance.
 \end{frame}
 
 \begin{frame}[fragile]{Question 1 (Cont.)}
@@ -54,7 +55,7 @@ Note that additional knowledge of the application could tell us additional funct
 
 For instance, we could know that $\{E\}\rightarrow\{F\}$ (which would suggest that the entity-relationship design is probably missing entities and relationships that have been merged too early), which we could use to produce a design in the Boyce-Codd normal by splitting the table $R_3(D,E,F)$ into two tables $R_{3.1}=(\underline{D},E)$ and $R_{3.2}=(\underline{E},F)$.\\ \vspace{5pt}
 
-For instance, we could know that $\{E\}\twoheadrightarrow\{F\}$, which we could use to produce a design in the fifth normal by splitting the table $R_3(D,E,F)$ into two tables $R_{3.1}=(\underline{D},E)$ and $R_{3.2}=(\underline{E,F})$.	
+For instance, we could know that $\{E\}\mvd\{F\}$, which we could use to produce a design in the fifth normal by splitting the table $R_3(D,E,F)$ into two tables $R_{3.1}=(\underline{D},E)$ and $R_{3.2}=(\underline{E,F})$.	
 \end{frame}
 
 \section*{Question 2 MVD \& Chase}
@@ -62,7 +63,7 @@ For instance, we could know that $\{E\}\twoheadrightarrow\{F\}$, which we could 
 \begin{frame}[fragile]{Question 2 MVD}
 Consider the relational schema $R = \{A,B,C,D,E\}$ with the following set of functional and multi-valued dependencies.\\ \vspace{5pt}
 
-$\Sigma=\{\{C\}\rightarrow\{A\}, \{D\}\rightarrow\{D,B\}, \{B\}\rightarrow\{E\},\{E\}\twoheadrightarrow\{A,D\},\{A,B,D\}\rightarrow\{A,B,C,D\},\{B\}\rightarrow\{D\}\}$\\ \vspace{5pt}
+$\Sigma=\{\{C\}\rightarrow\{A\}, \{D\}\rightarrow\{D,B\}, \{B\}\rightarrow\{E\},\{E\}\mvd\{A,D\},\{A,B,D\}\rightarrow\{A,B,C,D\},\{B\}\rightarrow\{D\}\}$\\ \vspace{5pt}
 
 (a) Prove that $\{E\}\rightarrow\{D\}$ using the Armstrong and multi-valued dependencies axioms.\\ \vspace{5pt}
 
@@ -70,23 +71,23 @@ $\Sigma=\{\{C\}\rightarrow\{A\}, \{D\}\rightarrow\{D,B\}, \{B\}\rightarrow\{E\},
 \begin{frame}[fragile]{Question 2 MVD (Cont.)}
 	\textbf{\underline{Quick Recap:}}\\\vspace{20pt}
 	\begin{small}
-	\textbf{\textit{Complementation}} $\left( X\twoheadrightarrow Y \right) \Longrightarrow \left( X\twoheadrightarrow R-X-Y \right) $
+	\textbf{\textit{Complementation}} $\left( X\mvd Y \right) \Longrightarrow \left( X\mvd R-X-Y \right) $
 	 \\\vspace{5pt}
-	\textbf{\textit{Augmentation}} $\left( \left( X\twoheadrightarrow Y \right) \land \left( V\subset W \right) \right) \Longrightarrow \left( X\cup W\twoheadrightarrow Y\cup V \right) $
+	\textbf{\textit{Augmentation}} $\left( \left( X\mvd Y \right) \land \left( V\subset W \right) \right) \Longrightarrow \left( X\cup W\mvd Y\cup V \right) $
 	\\\vspace{5pt}
-	\textbf{\textit{Transitivity}} $\left( \left( X\twoheadrightarrow Y \right) \land \left( Y\twoheadrightarrow Z \right) \right) \Longrightarrow \left( X\twoheadrightarrow Z-Y \right) 
+	\textbf{\textit{Transitivity}} $\left( \left( X\mvd Y \right) \land \left( Y\mvd Z \right) \right) \Longrightarrow \left( X\mvd Z-Y \right) 
 	$\\\vspace{5pt}
-	\textbf{\textit{Replication/Promotion}} $\left( X\rightarrow Y \right) \Longrightarrow \left( X\twoheadrightarrow Y \right) $ \\\vspace{5pt}
-	\textbf{\textit{Coalescence}} $\left( \left( X\twoheadrightarrow Y \right) \land \left( W\rightarrow Z \right) \land \left( Z\subset Y \right) \land \left( W\cap Y=\emptyset \right) \right) \Longrightarrow \left( X\rightarrow Z \right) $ \\\vspace{5pt}
-	\textbf{\textit{Union}} $\left( \left( X\twoheadrightarrow Y \right) \land \left( X\twoheadrightarrow Z \right) \right) \Longrightarrow \left( X\twoheadrightarrow Y\cup Z \right) $ \\\vspace{5pt}
-	\textbf{\textit{Intersection}} $\left( \left( X\twoheadrightarrow Y \right) \land \left( X\twoheadrightarrow Z \right) \right) \Longrightarrow \left( X\twoheadrightarrow Y\cap Z \right) $ \\\vspace{5pt}
-	\textbf{\textit{Difference}} $\left( \left( X\twoheadrightarrow Y \right) \land \left( X\twoheadrightarrow Z \right) \right) \Longrightarrow \left( X\twoheadrightarrow Y-Z \right) $ \\\vspace{5pt}
+	\textbf{\textit{Replication/Promotion}} $\left( X\rightarrow Y \right) \Longrightarrow \left( X\mvd Y \right) $ \\\vspace{5pt}
+	\textbf{\textit{Coalescence}} $\left( \left( X\mvd Y \right) \land \left( W\rightarrow Z \right) \land \left( Z\subset Y \right) \land \left( W\cap Y=\emptyset \right) \right) \Longrightarrow \left( X\rightarrow Z \right) $ \\\vspace{5pt}
+	\textbf{\textit{Union}} $\left( \left( X\mvd Y \right) \land \left( X\mvd Z \right) \right) \Longrightarrow \left( X\mvd Y\cup Z \right) $ \\\vspace{5pt}
+	\textbf{\textit{Intersection}} $\left( \left( X\mvd Y \right) \land \left( X\mvd Z \right) \right) \Longrightarrow \left( X\mvd Y\cap Z \right) $ \\\vspace{5pt}
+	\textbf{\textit{Difference}} $\left( \left( X\mvd Y \right) \land \left( X\mvd Z \right) \right) \Longrightarrow \left( X\mvd Y-Z \right) $ \\\vspace{5pt}
 	\end{small}
 
 \end{frame}
 \begin{frame}[fragile]{Question 2 MVD (Cont.)}
 \textbf{Solution:}\\ \vspace{5pt}
-1. We know that $\{E\}\twoheadrightarrow\{A,D\}$.\\ \vspace{2pt}
+1. We know that $\{E\}\mvd\{A,D\}$.\\ \vspace{2pt}
 2. We know that $\{B\}\rightarrow\{D\}$.\\\vspace{2pt}
 3. We see that $\{D\}\subset\{A,D\}$.\\\vspace{2pt}
 4. We see that $\{B\}\cap \{A,D\}=\emptyset$\\\vspace{2pt}
@@ -98,17 +99,17 @@ Try the same question with the Chase (answer not provided).
 \begin{frame}[fragile]{Question 3 Chase}
 Consider the relation $R(A,B,C,D,E,G)$ with the following set, $F$, of functional and multi-valued dependencies.\\ \vspace{5pt}
 	
-$F=\{\{A,B\}\rightarrow\{C\}, \{A,B\}\twoheadrightarrow\{E\},\{C,D\}\twoheadrightarrow\{A,B\}\}$\\ \vspace{5pt}
+$F=\{\{A,B\}\rightarrow\{C\}, \{A,B\}\mvd\{E\},\{C,D\}\mvd\{A,B\}\}$\\ \vspace{5pt}
 	
 Prove that the decomposition of $R$ into $R_1(A,B,C,D,G)$ and $R_2(C,D,E)$ is lossless using the Chase algorithm (as shown in the lecture).\\ \vspace{5pt}
 
 \textbf{\textcolor{blue}{How to solve this question?}}\\\vspace{5pt}
 \textcolor{blue}{Recall the lecture note ``\emph{Testing if a decomposition is lossless}''.
 We first analyze the decomposition to find out what is the $X$ of ``$R=X\cup Y\cup Z$''. We have $X=\{C,D\}$.\\\vspace{2pt}
-Then we need to use the Chase method to chase $\{C,D\}\twoheadrightarrow\{E\}$ ({\small or $\{C,D\}\twoheadrightarrow\{A,B,G\}$ equivalently, according to Complementation rule of Armstrong Axiom}).}\\\vspace{5pt}
+Then we need to use the Chase method to chase $\{C,D\}\mvd\{E\}$ ({\small or $\{C,D\}\mvd\{A,B,G\}$ equivalently, according to Complementation rule of Armstrong Axiom}).}\\\vspace{5pt}
 
 \textcolor{blue}{Now the question becomes:\\
-$\{\{A,B\}\rightarrow\{C\}, \{A,B\}\twoheadrightarrow\{E\},\{C,D\}\twoheadrightarrow\{A,B\}\} \models \{C,D\}\twoheadrightarrow\{E\}$?.}
+$\{\{A,B\}\rightarrow\{C\}, \{A,B\}\mvd\{E\},\{C,D\}\mvd\{A,B\}\} \models \{C,D\}\mvd\{E\}$?.}
 \end{frame}
 
 \begin{frame}[fragile]{Question 3 (Cont.)}	
@@ -118,7 +119,7 @@ $\{\{A,B\}\rightarrow\{C\}, \{A,B\}\twoheadrightarrow\{E\},\{C,D\}\twoheadrighta
 	\includegraphics[width=0.4\textwidth, trim=0 0 0 0, clip]{4221-t5/images/3-1.png}
 \end{figure}
 
-2. We want to chase $\{C,D\} \twoheadrightarrow \{E\}$, make $C$ and $D$ values the same.\\
+2. We want to chase $\{C,D\} \mvd \{E\}$, make $C$ and $D$ values the same.\\
 \begin{figure}
 	\includegraphics[width=0.4\textwidth, trim=0 0 0 0, clip]{4221-t5/images/3-2.png}
 \end{figure}
@@ -126,10 +127,10 @@ $\{\{A,B\}\rightarrow\{C\}, \{A,B\}\twoheadrightarrow\{E\},\{C,D\}\twoheadrighta
 \end{frame}
 
 \begin{frame}[fragile]{Question 3 (Cont.)}
-3. Apply $\{C,D\} \twoheadrightarrow \{A,B\}$ by copying two tuples that have the same $C$ and $D$ values but swapping their $A$ and $B$ values.\\\vspace{10pt}
+3. Apply $\{C,D\} \mvd \{A,B\}$ by copying two tuples that have the same $C$ and $D$ values but swapping their $A$ and $B$ values.\\\vspace{10pt}
 
 \textcolor{blue}{{\small Below are cited from the ``Chasing the Chase'' part of the lecture note:\\\vspace{5pt}
-\textit{For each multi-valued dependency $Z\twoheadrightarrow V\in\Sigma$, if there are 2 tuples in the table with the \textbf{SAME $Z$-value}, then add two new tuples with \textbf{all the same values and except} for their $V$-values that are \textbf{SWAPPED}.}}}
+\textit{For each multi-valued dependency $Z\mvd V\in\Sigma$, if there are 2 tuples in the table with the \textbf{SAME $Z$-value}, then add two new tuples with \textbf{all the same values and except} for their $V$-values that are \textbf{SWAPPED}.}}}
 
 \begin{figure}
 	\includegraphics[width=0.4\textwidth, trim=0 0 0 0, clip]{4221-t5/images/3-3.png}
@@ -139,7 +140,7 @@ $\{\{A,B\}\rightarrow\{C\}, \{A,B\}\twoheadrightarrow\{E\},\{C,D\}\twoheadrighta
 
 
 \begin{frame}[fragile]{Question 3 (Cont.)}
-4. Apply $\{A,B\} \twoheadrightarrow \{E\}$ by copying two tuples that have the same $A$ and $B$ values but swapping their $A$ and $E$ values.\\
+4. Apply $\{A,B\} \mvd \{E\}$ by copying two tuples that have the same $A$ and $B$ values but swapping their $A$ and $E$ values.\\
 \begin{figure}
 	\includegraphics[width=0.4\textwidth, trim=0 0 0 0, clip]{4221-t5/images/3-4.png}
 \end{figure}
@@ -150,14 +151,14 @@ $\{\{A,B\}\rightarrow\{C\}, \{A,B\}\twoheadrightarrow\{E\},\{C,D\}\twoheadrighta
 5. Applying $\{A,B\} \rightarrow \{C\}$ do not change the table.\\\vspace{5pt}
 \textcolor{blue}{{\small \textit{Because we cannot find for any two tuples $\{a1,b1,c1,...\}$ and $\{a2,b2,c2,...\}$ s.t. $\{a1,b1\}=\{a2,b2\}$ but $c1 \ne c2$}.}}\\\vspace{5pt}
 
-6. Sort the table and proved that $\{C,D\}\twoheadrightarrow\{E\}$ 
+6. Sort the table and proved that $\{C,D\}\mvd\{E\}$ 
 	\begin{figure}
 		\includegraphics[width=0.6\textwidth, trim=0 0 0 0, clip]{4221-t5/images/3-6a.png}
 	\end{figure}
 
 \textcolor{red}{{\small \textit{Refer to the lecture slides ``Dependencies'' page 77 for the definition of a MVD.}}}\\\vspace{5pt}
-OR \textcolor{blue}{{\small \textit{Because we cannot find any counterexample.}}}
-\textcolor{red}{{\small \textit{Refer to the lecture slides ``The Chase'' page 18: The Chase always builds a counter example if it exists and does not if it does not exists.}}}\\\vspace{10pt}
+%OR \textcolor{blue}{{\small \textit{Because we cannot find any counterexample.}}}
+%\textcolor{red}{{\small \textit{Refer to the lecture slides ``The Chase'' page 18: The Chase always builds a counter example if it exists and does not if it does not exists.}}}\\\vspace{10pt}
 
 
 	\hfill Q.E.D
@@ -177,7 +178,7 @@ OR \textcolor{blue}{{\small \textit{Because we cannot find any counterexample.}}
 		\includegraphics[width=0.4\textwidth, trim=0 0 0 0, clip]{4221-t5/images/4-1.png}
 	\end{figure}
 	
-	2. We want to chase $\{A,B\} \twoheadrightarrow \{C,D,E\}$, make $A$ and $B$ values the same.\\
+	2. We want to chase $\{A,B\} \mvd \{C,D,E\}$, make $A$ and $B$ values the same.\\
 	\begin{figure}
 		\includegraphics[width=0.4\textwidth, trim=0 0 0 0, clip]{4221-t5/images/4-2.png}
 	\end{figure}	
@@ -196,7 +197,7 @@ OR \textcolor{blue}{{\small \textit{Because we cannot find any counterexample.}}
 
 	5. Applying $\{E\} \rightarrow \{D\}$ does not change the table.\\\vspace{5pt}
 	6. Applying $\{F\} \rightarrow \{G\}$ does not change the table.\\\vspace{5pt}
-	7. Proved that $\{A,B\} \twoheadrightarrow \{C,D,E\}.$\\
+	7. Proved that $\{A,B\} \mvd \{C,D,E\}.$\\
 	\hfill Q.E.D
 	
 \end{frame}
@@ -232,12 +233,12 @@ OR \textcolor{blue}{{\small \textit{Because we cannot find any counterexample.}}
 	5. $R_1$ has distinguished variables in all of the columns, therefore the decomposition is lossless.\\
 	\hfill Q.E.D
 \end{frame}
-
+	
 \section*{Extra Practice}
 \begin{frame}[fragile]{Extra Practice (A): MVD \& Chase}
 \underline{Q2 Revisit}: consider the relational schema $R = \{A,B,C,D,E\}$ with the following set of functional and multi-valued dependencies.\\ \vspace{5pt}
 
-$\Sigma=\{\{C\}\rightarrow\{A\}, \{D\}\rightarrow\{D,B\}, \{B\}\rightarrow\{E\},\{E\}\twoheadrightarrow\{A,D\},\{A,B,D\}\rightarrow\{A,B,C,D\},\{B\}\rightarrow\{D\}\}$\\ \vspace{5pt}
+$\Sigma=\{\{C\}\rightarrow\{A\}, \{D\}\rightarrow\{D,B\}, \{B\}\rightarrow\{E\},\{E\}\mvd\{A,D\},\{A,B,D\}\rightarrow\{A,B,C,D\},\{B\}\rightarrow\{D\}\}$\\ \vspace{5pt}
 
 Prove that $\{E\}\rightarrow\{D\}$ using the \textbf{Chase algorithm}.\\ \vspace{25pt}
 
