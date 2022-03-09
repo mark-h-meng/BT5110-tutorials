@@ -1,0 +1,11 @@
+{
+    "A0212755H": [
+        "SELECT per.empid, per.lname FROM (SELECT per.empid, per.lname FROM employee per WHERE per.empid NOT IN (SELECT pay.empid FROM payroll pay WHERE pay.salary > 189170 AND per.empid = pay.empid) INTERSECT SELECT per.empid, per.lname FROM employee per WHERE per.empid NOT IN (SELECT pay.empid FROM payroll pay WHERE pay.salary < 189170 AND per.empid = pay.empid)) AS per ORDER BY per.empid, per.lname;"
+    ],
+    "A0230406W": [
+        "SELECT per.empid, per.lname FROM employee per WHERE per.empid NOT IN (SELECT per.empid FROM employee per FULL OUTER JOIN payroll pay   ON per.empid = pay.empid   WHERE pay.empid is NULL OR pay.salary <>189170) ORDER BY per.empid, per.lname;"
+    ],
+    "A0236359W": [
+        "SELECT DISTINCT * FROM (SELECT per.empid, per.lname FROM employee per WHERE per.empid IN (SELECT per.empid FROM employee per, payroll pay WHERE per.empid = pay.empid)  AND per.empid NOT IN (SELECT pay.empid FROM payroll pay WHERE pay.salary <> 189170 AND per.empid = pay.empid  AND NOT EXISTS (SELECT * FROM employee per, payroll pay WHERE pay.salary < 0)) ORDER BY per.empid, per.lname)AS x;"
+    ]
+}

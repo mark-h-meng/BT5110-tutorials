@@ -13,16 +13,18 @@ user='postgres'
 password='admin'
 host='localhost'
 
+repeat = 10
+
 json_filepath = '4221-p1-question3.json'
 
 initialize_connection_command = "dbname='" + dbname + "' user='" + user + "' host='" + host + "' password='" + password + "'" 
-
+'''
 long_query_list = ['A0041688X', 'A0119430N', 'A0179033E (LATE)',
                     'A0218877L', 'A0218915Y', 
                     'A0231857Y', 'A0231863E', 'A0231872E', 
                     'A0231902R', 'A0231906J', 'A0231907H', 
                     'A0231909A','A0231921N', 'A0232004A', 'A0232013A']
-
+'''
 
 def generate_random_output_filename(filename):
     random.seed(42)
@@ -99,9 +101,9 @@ if __name__ == "__main__":
             
                 if len(output_rows[0])==4:
                     
-                    benchmark_query = "SELECT test('" + query.replace('\'', '\'\'') + "', 1);"
+                    benchmark_query = "SELECT test('" + query.replace('\'', '\'\'') + "', " + str(repeat) + ");"
                     # benchmark_rows = execute_query(benchmark_query, timeout=360000)
-                    benchmark_rows = execute_query(benchmark_query, timeout=910000)
+                    benchmark_rows = execute_query(benchmark_query, timeout=910000*repeat)
                     benchmarks.append(benchmark_rows)
                     print(benchmark_rows)
                 else:

@@ -1,0 +1,4 @@
+student,answer,output,planning time,execution time
+A0212755H,"SELECT per.empid, per.lname FROM (SELECT per.empid, per.lname FROM employee per WHERE per.empid NOT ","[[(' 02883   ', 'YFXUNCRKRJRKCRJ'), (' 03315   ', 'LTQIQGUWBHRMDPN'), (' 04572   ', 'AIBRIQSFSKFFTUT'), (' 07328   ', 'WWVELFSBRXMORNH')]]",1.14 , 19114.49
+A0230406W,"SELECT per.empid, per.lname FROM employee per WHERE per.empid NOT IN (SELECT per.empid FROM employee","[[(' 02883   ', 'YFXUNCRKRJRKCRJ'), (' 03315   ', 'LTQIQGUWBHRMDPN'), (' 04572   ', 'AIBRIQSFSKFFTUT'), (' 07328   ', 'WWVELFSBRXMORNH')]]",0.90 , 14.12
+A0236359W,"SELECT DISTINCT * FROM (SELECT per.empid, per.lname FROM employee per WHERE per.empid IN (SELECT per","[[(' 02883   ', 'YFXUNCRKRJRKCRJ'), (' 03315   ', 'LTQIQGUWBHRMDPN'), (' 04572   ', 'AIBRIQSFSKFFTUT'), (' 07328   ', 'WWVELFSBRXMORNH')]]",1.01 , 8103.61
