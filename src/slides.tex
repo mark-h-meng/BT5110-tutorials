@@ -29,6 +29,7 @@
 \usepackage{tcolorbox}
 \usepackage{cancel}
 
+\usepackage[export]{adjustbox}
 \usepackage[scaled=0.85]{beramono}
 \usepackage[T1]{fontenc}
 
@@ -87,6 +88,20 @@
 \lstdefinestyle{sql-small}{
 	basicstyle=\scriptsize\ttfamily,
 	commentstyle=\color{ForestGreen}\scriptsize\ttfamily,
+}
+
+\lstdefinestyle{xml-small}{
+	basicstyle=\scriptsize\ttfamily,
+	language=xml,
+	commentstyle=\color{ForestGreen}\scriptsize\ttfamily,
+}
+
+\lstdefinestyle{xml-small-nomargin}{
+	basicstyle=\scriptsize\ttfamily,
+	language=xml,
+	commentstyle=\color{ForestGreen}\scriptsize\ttfamily,
+	xleftmargin=0em,
+	numbers=none,
 }
 
 \lstdefinestyle{error}{
@@ -179,6 +194,7 @@
 %%\input{4221-t4/extra_questions_only}
 %%\input{4221-t4/extra}
 %%\input{4221-t4/t4}
-\input{4221-t5/t5}
+%%\input{4221-t5/t5}
+\input{4221-t7/t7}
 
 \end{document}
