@@ -1,0 +1,39 @@
+
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE library [
+	<!ELEMENT library (album*)>
+	<!ELEMENT album (title,artists,songs,genres,year)>
+	<!ELEMENT artists (artist*)>
+	<!ELEMENT genres (genre*)>
+	<!ELEMENT songs (song+)>
+	<!ELEMENT artist (name,country)>
+	<!ELEMENT song (title,duration)>
+	<!ELEMENT title (#PCDATA)>
+	<!ELEMENT name (#PCDATA)>
+	<!ELEMENT country (#PCDATA)>
+	<!ELEMENT duration (#PCDATA)>
+	<!ELEMENT genre (#PCDATA)>
+	<!ELEMENT year (#PCDATA)>
+]>
+
+<album>
+<title>Discovery</title>
+<artists>
+<artist><name>Electric Light Orchestra</name><country>US</country></artist>
+</artists>
+<songs>
+<song><title>Shine A Little Love</title><duration>4:42</duration></song>
+<song><title>Confusion</title><duration>3:42</duration></song>
+<song><title>Need Her Love</title><duration>5:09</duration></song>
+<song><title>The Diary Of Horace Wimp</title><duration>4:17</duration></song>
+<song><title>Last Train To London</title><duration>4:31</duration></song>
+<song><title>Midnight Blue</title><duration>4:20</duration></song>
+<song><title>On The Run</title><duration>3:56</duration></song>
+<song><title>Wishing</title><duration>4:14</duration></song>
+<song><title>Dont Bring Me Down</title><duration>4:08</duration></song>
+</songs>
+<genres>
+<genre>Pop</genre><genre>Rock</genre>
+</genres>
+<year>1979</year>
+</album>

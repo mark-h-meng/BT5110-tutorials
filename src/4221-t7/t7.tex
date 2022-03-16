@@ -28,6 +28,13 @@
 	\end{tcolorbox}
 \end{frame}
 
+\begin{frame}[fragile]{Announcement}
+Please pay attention to Zemmy's announcement on 14 March (6pm): \\\vspace{20pt}
+\textit{Apparently, the newest version of eXist-db cannot validate DTD properly.}
+\textit{Please install eXist-db version 5.2.0 instead:} \url{https://github.com/eXist-db/exist/releases/tag/eXist-5.2.0}
+
+\end{frame}
+
 \section*{Question 1 XML}
 
 \begin{frame}[fragile]{Question 1 XML}
@@ -44,6 +51,7 @@
 \begin{frame}[fragile]{Question 1 Cont.}
 	
 \textbf{Solution:}
+You can just feed the data into the XML code below:
 
 \begin{lstlisting}[style=xml-small]
 <album>
@@ -65,12 +73,48 @@
 \end{lstlisting}
 \end{frame}
 
-\section*{Question 2 DTD}
-\begin{frame}[fragile]{Question 2 DTD}
+\begin{frame}[fragile]{Question 1 Cont}
+Take the album ``Discovery'' (\url{https://www.discogs.com/release/9529524-Electric-Light-Orchestra-Discovery}) as example.
+\vspace{3pt}
+	
+\begin{figure}
+	\includegraphics[width=0.9\textwidth,frame]{4221-t7/sample_album.png}
+\end{figure}\vspace{-10pt}
+\end{frame}
 
-\textbf{Q2.1} Add an internal DTD for the XML document above. Make the DTD as tight as possible.
+\begin{frame}[fragile]{Question 1 Cont.}
+We can just append the code below to the library.xml.		
+\begin{lstlisting}[style=xml-small-nomargin]
+<album>
+	<title>Discovery</title>
+	<artists>
+	<artist>
+		<name>Electric Light Orchestra</name>
+		<country>US</country></artist>
+	</artists>
+	<songs>
+		<song><title>Shine A Little Love</title><duration>4:42</duration></song>
+		<song><title>Confusion</title><duration>3:42</duration></song>
+		<song><title>Need Her Love</title><duration>5:09</duration></song>
+		<song><title>The Diary Of Horace Wimp</title><duration>4:17</duration></song>
+		<song><title>Last Train To London</title><duration>4:31</duration></song>
+		<song><title>Midnight Blue</title><duration>4:20</duration></song>
+		<song><title>On The Run</title><duration>3:56</duration></song>
+		<song><title>Wishing</title><duration>4:14</duration></song>
+		<song><title>Don&apos;t Bring Me Down</title><duration>4:08</duration></song>
+	</songs>
+	<genres><genre>Pop</genre><genre>Rock</genre></genres>
+	<year>1979</year>
+</album>
+\end{lstlisting}
+\end{frame}
 
-\textbf{Solution:}
+\section*{Question 2 Document Type Definition (DTD)}
+\begin{frame}[fragile]{Question 2 Document Type Definition (DTD)}
+
+\textbf{Q2.1} Add an internal DTD for the XML document above. Make the DTD as tight as possible.\\\vspace{3pt}
+
+\textbf{Solution:} Add the DTD in the header of library.xml.
 
 \begin{lstlisting}[style=xml-small]
 <?xml version="1.0" encoding="UTF-8"?>
@@ -90,14 +134,14 @@
 	<!ELEMENT year (#PCDATA)>
 ]>
 <library>
-	... <!-- Place your library data here -->
+	<!-- Place your library data here -->
 </library>
 \end{lstlisting}
 \end{frame}
 
 \begin{frame}[fragile]{Question 2}
 \begin{block}{DTD Syntax}
-Note that \textbf{``*'' means zero or more}, \textbf{``+'' means one or more} and \textbf{no sign after the text means exactly one}. 
+Note that \textbf{``*'' means zero or more}, \textbf{``+'' means one or more}, \textbf{``?'' means zero or one occurrences}, and \textbf{no sign after the text means exactly one}. 
 Of these, exactly one is of course the most tight but not necessarily possible for the document we are working with. \\
 \textbf{\#PCDATA} is parsed character data, which we for this module essentially can think of as where we store raw values, i.e., values that do not consist of sub elements.
 \end{block}	
@@ -163,12 +207,12 @@ Find the names of the Indonesian artists interpreting songs published between 19
 \textbf{Solution}: \\
 (Query expression with the descendant)
 \begin{lstlisting}[style=xml-small-nomargin]
-doc("library.xml")/descendant::album[child::year>=1990 and child::year <=2000]
+doc("library.xml")/descendant::album[child::year>=1990 and child::year<=2000]
 /child::artists/child::artist[child::country='Indonesia']/child::name
 \end{lstlisting}\vspace{5pt}
 ...or, equivalently,
 \begin{lstlisting}[style=xml-small-nomargin]
-doc("library.xml")//album[year>=1990 and year <=2000]/artists/artist[country='Indonesia']/name
+doc("library.xml")//album[year>=1990 and year<=2000]/artists/artist[country='Indonesia']/name
 \end{lstlisting}\vspace{5pt}
 
 \begin{block}{To read more...}

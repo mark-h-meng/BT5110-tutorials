@@ -70,6 +70,9 @@
 
 
 % ADDED FOR THE PURPOSE OF SHOWING ALGORITHM
+\definecolor{forestgreen}{RGB}{34,139,34}
+\definecolor{orangered}{RGB}{239,134,64}
+\definecolor{darkblue}{rgb}{0.0,0.0,0.6}
 \lstset{
 	language=SQL,
 	showspaces=false,
@@ -94,12 +97,24 @@
 	basicstyle=\scriptsize\ttfamily,
 	language=xml,
 	commentstyle=\color{ForestGreen}\scriptsize\ttfamily,
+	morecomment=[s]{<?}{?>},
+	morecomment=[s][\color{forestgreen}]{<!--}{-->},
+	keywordstyle=\color{orangered},
+	stringstyle=\ttfamily\color{black}\normalfont,
+	tagstyle=\color{darkblue},
+	morekeywords={attribute,xmlns,version,type,release},
 }
 
 \lstdefinestyle{xml-small-nomargin}{
 	basicstyle=\scriptsize\ttfamily,
 	language=xml,
 	commentstyle=\color{ForestGreen}\scriptsize\ttfamily,
+	morecomment=[s]{<?}{?>},
+	morecomment=[s][\color{forestgreen}]{<!--}{-->},
+	keywordstyle=\color{orangered},
+	stringstyle=\ttfamily\color{black}\normalfont,
+	tagstyle=\color{darkblue},
+	morekeywords={attribute,xmlns,version,type,release},
 	xleftmargin=0em,
 	numbers=none,
 }
