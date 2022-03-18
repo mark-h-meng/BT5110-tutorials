@@ -1,20 +1,4 @@
-
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE library [
-	<!ELEMENT library (album*)>
-	<!ELEMENT album (title,artists,songs,genres,year)>
-	<!ELEMENT artists (artist*)>
-	<!ELEMENT genres (genre*)>
-	<!ELEMENT songs (song+)>
-	<!ELEMENT artist (name,country)>
-	<!ELEMENT song (title,duration)>
-	<!ELEMENT title (#PCDATA)>
-	<!ELEMENT name (#PCDATA)>
-	<!ELEMENT country (#PCDATA)>
-	<!ELEMENT duration (#PCDATA)>
-	<!ELEMENT genre (#PCDATA)>
-	<!ELEMENT year (#PCDATA)>
-]>
+{Q1 XML}
 
 <album>
 <title>Discovery</title>
@@ -37,3 +21,44 @@
 </genres>
 <year>1979</year>
 </album>
+
+{Q2 DTD} 
+
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE library [
+	<!ELEMENT library (album*)>
+	<!ELEMENT album (title,artists,songs,genres,year)>
+	<!ELEMENT artists (artist*)>
+	<!ELEMENT genres (genre*)>
+	<!ELEMENT songs (song+)>
+	<!ELEMENT artist (name,country)>
+	<!ELEMENT song (title,duration)>
+	<!ELEMENT title (#PCDATA)>
+	<!ELEMENT name (#PCDATA)>
+	<!ELEMENT country (#PCDATA)>
+	<!ELEMENT duration (#PCDATA)>
+	<!ELEMENT genre (#PCDATA)>
+	<!ELEMENT year (#PCDATA)>
+]>
+
+{Q3.1}
+doc("library.xml")/child::library/child::album/child::songs/child::song/child::title
+
+{Q3.1 - Wrong}
+doc("library.xml")/descendant::title
+
+{Q3.2}
+doc("library.xml")/descendant::album[child::year>=1990 and child::year<=2000]/child::artists/child::artist[child::country='Indonesia']/child::name
+
+{Q3.3}
+count(doc("library.xml")/child::library/child::album[child::artists/child::artist/child::name= 'Anang Ashanty']/child::songs/child::song)
+
+{Q3.4}
+doc("library.xml")/child::library/child::album[count(child::songs/child::song)>=4]/child::title
+
+{Q3.5}
+doc("library.xml")/child::library/child::album/child::artists[child::artist/child::name= 'Anang Ashanty']/ancestor::album/child::title
+
+<!-- OR -->
+
+doc("library.xml")/library/album/artists[artist/name= 'Anang Ashanty']/ancestor::album/title
