@@ -1,0 +1,143 @@
+{Q1}
+
+<albums>{
+	for $album in doc("library.xml")/child::library/child::album
+	let $title := $album/child::title/text()
+	let $count := count($album/child::songs/child::song)
+	where $count ge 3
+	order by $count descending
+	return
+		<album>
+			<title>{$title}</title>
+			<count>{$count}</count>
+		</album>
+}</albums>
+
+{Q2}
+
+declare function local:duration-in-sec($duration-str as xs:string) as xs:int {
+	let $min-secs := tokenize($duration-str, ':')
+	return 60 * xs:int($min-secs[1]) + xs:int($min-secs[2])
+};
+
+<songs>{
+	for $song in doc("library.xml")/child::library/child::album[child::artists/child::artist/
+		child::country = 'Indonesia']/child::songs/child::song
+		order by local:duration-in-sec($song/child::duration) descending
+		return $song
+}</songs>
+
+<!-- With let-binding -->
+<songs>{
+	for $song in doc("library.xml")/child::library/child::album[child::artists/child::artist/
+		child::country = 'Indonesia']/child::songs/child::song
+		let $duration := local:duration-in-sec($song/child::duration)
+		order by $duration descending
+		return $song
+}</songs>
+
+{Q3}
+
+declare function local:duration-in-sec($duration-str as xs:string) as xs:int {
+	let $min-secs := tokenize($duration-str, ':')
+	return 60 * xs:int($min-secs[1]) + xs:int($min-secs[2])
+};
+
+<html>
+	<body>
+		<ul>{
+			for $album in doc("library.xml")/child::library/child::album[child::artists/child::artist/
+			child::country = 'Indonesia']
+			let $album-title := $album/child::title/text()
+			order by $album-title
+			return
+				<li>
+					<h2>{$album-title}</h2>
+				<ul>{
+					for $song in $album/child::songs/child::song
+					order by local:duration-in-sec($song/child::duration) descending
+					return
+						<li>{$song/child::duration/text()} - {$song/child::title/text()}</li>
+				}</ul>
+				</li>
+		}</ul>
+	</body>
+</html>
+
+{Q4}
+
+declare function local:duration-in-sec($duration-str as xs:string) as xs:int {
+	let $min-secs := tokenize($duration-str, ':')
+	return 60 * xs:int($min-secs[1]) + xs:int($min-secs[2])
+};
+
+<html>
+	<body>
+		<ul>{
+		for $album in doc("library.xml")/child::library/child::album[child::artists/child::artist/child::country = 'Indonesia']
+		let $album-title := $album/child::title/text()
+		order by $album-title
+		return
+		<li>
+		<h2>{$album-title}</h2>
+		<ul>{
+		for $song in $album/child::songs/child::song
+		let $duration := local:duration-in-sec($song/child::duration)
+		order by $duration descending
+		return
+		element li {
+		attribute style {if ($duration >= 600) then 'color:green;' else 'color:red;'},
+		$song/child::duration/text() || ' - ' || $song/child::title/text()
+		}
+		}</ul>
+		</li>
+		}</ul>
+	</body>
+</html>
+
+{Q5}
+
+declare function local:duration-in-sec($duration-str as xs:string) as xs:int {
+	let $min-secs := tokenize($duration-str, ':')
+	return 60 * xs:int($min-secs[1]) + xs:int($min-secs[2])
+};
+
+<albums>{
+	for $album in doc("library.xml")/child::library/child::album
+		let $title := $album/child::title/text()
+		let $durations := $album/child::songs/child::song/child::duration
+		let $total-duration := sum(for $duration in $durations return local:duration-in-sec($duration))
+		where $total-duration gt 1100
+		order by $title
+		return
+			<album>
+				<title>{$title}</title>
+				<duration>{$total-duration}</duration>
+			</album>
+}</albums>
+
+{Q2.1}
+
+<?xml version="1.0" encoding="UTF-8"?>
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">
+<xsl:template match="/">
+	<html>
+		<body>
+			<ul>
+			<xsl:apply-templates select="child::library/child::album[child::genres/child::genre='Pop']"/>
+			</ul>
+		</body>
+	</html>
+</xsl:template>
+
+<xsl:template match="album">
+	<li>
+		Album <xsl:value-of select="title"/> (<xsl:value-of select="year"/>)
+	</li>
+</xsl:template>
+
+</xsl:stylesheet>
+
+{Q2.2}
+
+transform:transform(doc("library.xml"), doc("library.xsl"), ())
