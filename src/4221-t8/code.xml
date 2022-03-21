@@ -1,4 +1,4 @@
-{Q1}
+{Q1.1}
 
 <albums>{
 	for $album in doc("library.xml")/child::library/child::album
@@ -13,7 +13,7 @@
 		</album>
 }</albums>
 
-{Q2}
+{Q1.2}
 
 declare function local:duration-in-sec($duration-str as xs:string) as xs:int {
 	let $min-secs := tokenize($duration-str, ':')
@@ -36,7 +36,7 @@ declare function local:duration-in-sec($duration-str as xs:string) as xs:int {
 		return $song
 }</songs>
 
-{Q3}
+{Q1.3}
 
 declare function local:duration-in-sec($duration-str as xs:string) as xs:int {
 	let $min-secs := tokenize($duration-str, ':')
@@ -64,7 +64,7 @@ declare function local:duration-in-sec($duration-str as xs:string) as xs:int {
 	</body>
 </html>
 
-{Q4}
+{Q1.4}
 
 declare function local:duration-in-sec($duration-str as xs:string) as xs:int {
 	let $min-secs := tokenize($duration-str, ':')
@@ -95,7 +95,39 @@ declare function local:duration-in-sec($duration-str as xs:string) as xs:int {
 	</body>
 </html>
 
-{Q5}
+
+(: Alternative :)
+
+declare function local:duration-in-sec($duration-str as xs:string) as xs:int {
+	let $min-secs := tokenize($duration-str, ':')
+	return 60 * xs:int($min-secs[1]) + xs:int($min-secs[2])
+};
+
+<html>
+	<body>
+		<ul>{
+			for $album in doc("library.xml")/child::library/child::album[child::artists/child::artist/
+			child::country = 'Indonesia']
+			let $album-title := $album/child::title/text()
+			order by $album-title
+			return
+				<li>
+					<h2>{$album-title}</h2>
+				<ul>{
+					for $song in $album/child::songs/child::song
+            		let $duration := local:duration-in-sec($song/child::duration)
+					let $li-color := (if ($duration >= 300) then 'green' else 'red')
+					order by local:duration-in-sec($song/child::duration) descending
+					return
+						<li style="color:{$li-color};"> {$song/child::duration/text()} - {$song/child::title/text()}</li>
+				}</ul>
+				</li>
+		}</ul>
+	</body>
+</html>
+
+
+{Q1.5}
 
 declare function local:duration-in-sec($duration-str as xs:string) as xs:int {
 	let $min-secs := tokenize($duration-str, ':')
