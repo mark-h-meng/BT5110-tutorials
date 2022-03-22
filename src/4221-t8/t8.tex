@@ -39,7 +39,29 @@ This week's tutorial covers XQuery and XSLT (e\underline{X}tensible \underline{S
 
 \section*{Section 1 XQuery}
 
-\begin{frame}[fragile]{Question 1.1}
+\begin{frame}[fragile]{Question 1.1 (FLWOR Expression)}
+A breif intro:\\\vspace{10pt}
+(F) \textbf{for} + (L) \textbf{let} + (W) \textbf{where} + (O) \textbf{order by} + (R) \textbf{return} = FLWOR\\\vspace{10pt}
+
+\begin{lstlisting}[style=xml-small-nomargin]
+for $loop_var in doc("library.xml")/child::library/...
+	let $var := $loop_var/child::.../text()
+	let $var_2 := count($loop_var/child::...)
+	...
+	where $var [eq, ne, lt, le, gt, be, =, !=, <, >, <=, >=] {const}
+	...
+	order by $var [ascending, descending]
+	return 
+		{XML_expression_with_$var}
+\end{lstlisting}
+
+\begin{block}{XQuery Syntax for Where Clause}
+	For the difference of general comparisons (e.g., =, <=, and etc) and value comparisons (e.g., eq, le, and etc), you may go to W3 School tutorial to read more details. \\
+	\url{https://www.w3schools.com/xml/xquery_syntax.asp}
+\end{block}
+\end{frame}
+
+\begin{frame}[fragile]{Question 1.1 Cont.}
 Find the albums where the number of songs is greater than or equal to 3. Return the album title and count sorted by the count with the highest count appearing first. Your query should be written in the form of a FLWOR expression.\\\vspace{10pt}
 
 For reference, your XML output should look somewhat similar to this:\\
@@ -81,7 +103,40 @@ For reference, your XML output should look somewhat similar to this:\\
 \end{lstlisting}
 \end{frame}
 
-\begin{frame}[fragile]{Question 1.2}
+\begin{frame}[fragile]{Question 1.1 Cont.}
+	
+There is an alternative of writing XML expression in element-wise manner\\\vspace{5pt}
+
+\textbf{Native XML approach}:
+\begin{lstlisting}[style=xml-small-nomargin]
+<album>
+	for $album in doc("library.xml")/child::library/child::album
+	...
+	return
+		<album>
+			<title>{$title}</title>
+			<count>{$count}</count>
+		</album>
+}</albums>
+\end{lstlisting}
+
+
+\textbf{Element-wise approach} (out-of-scope and not recommended).:
+\begin{lstlisting}[style=xml-small-nomargin]
+<album>
+	for $album in doc("library.xml")/child::library/child::album
+	...
+	return
+		element album{
+			element title {$title},
+			element count {$count}
+		}
+}</albums>
+\end{lstlisting}
+
+\end{frame}
+
+\begin{frame}[fragile]{Question 1.2 (FLWOR Expression with Local Functions)}
 	
 Show the title and duration of the songs made by Indonesian artists sorted by duration in descending order. \\\vspace{5pt}
 You may find declaring a local helper function as well as the built-in \texttt{tokenize(\$input, \$pattern)} function useful. For reference, your output should look something like this:\\\vspace{5pt}
@@ -124,6 +179,18 @@ You may find declaring a local helper function as well as the built-in \texttt{t
 \end{frame}
 
 \begin{frame}[fragile]{Question 1.2 Cont.}
+
+The definition of a local function is like:	
+\begin{lstlisting}[style=xml-small-nomargin]
+declare function local:function_name($param_var as param_type) as return_type {
+	let $local_var := ...
+	return ...
+};
+\end{lstlisting}
+
+\textbf{Reference of XQuery Types}: \url{https://docs.oracle.com/cd/E13214_01/wli/docs92/xref/xqtypecon.html}.\\
+(e.g., xs:sting, xs:integer, xs:float, xs:double, xs:boolean, and etc)\vspace{10pt}
+
 \textbf{Solution:} Start by declaring a function to get the duration as the number of seconds with type integer:\\\vspace{5pt}
 \begin{lstlisting}[style=xml-small]
 declare function local:duration-in-sec($duration-str as xs:string) as xs:int {
@@ -132,7 +199,23 @@ declare function local:duration-in-sec($duration-str as xs:string) as xs:int {
 };
 \end{lstlisting}
 
-Option 1: without \textbf{let}-binding\\\vspace{5pt}
+\end{frame}
+
+\begin{frame}[fragile]{Question 1.2 Cont.}
+Let's write the XQuery statement in FLWOR format.\\\vspace{5pt}
+
+Option 1: with \textbf{let}-binding\\\vspace{5pt}
+\begin{lstlisting}[style=xml-small]
+<songs>{
+	for $song in doc("library.xml")/child::library/child::album[child::artists/child::artist/
+		child::country = 'Indonesia']/child::songs/child::song
+		let $duration := local:duration-in-sec($song/child::duration)
+		order by $duration descending
+		return $song
+}</songs>
+\end{lstlisting}
+
+Option 2: without \textbf{let}-binding\\\vspace{5pt}
 \begin{lstlisting}[style=xml-small]
 <songs>{
 	for $song in doc("library.xml")/child::library/child::album[child::artists/child::artist/
@@ -144,51 +227,43 @@ Option 1: without \textbf{let}-binding\\\vspace{5pt}
 
 \end{frame}
 
-\begin{frame}[fragile]{Question 1.2 Cont.}
-Option 2: with \textbf{let}-binding\\\vspace{5pt}
-\begin{lstlisting}[style=xml-small]
-<songs>{
-	for $song in doc("library.xml")/child::library/child::album[child::artists/child::artist/
-		child::country = 'Indonesia']/child::songs/child::song
-		let $duration := local:duration-in-sec($song/child::duration)
-		order by $duration descending
-		return $song
-}</songs>
-\end{lstlisting}
-
-\end{frame}
-
-\begin{frame}[fragile]{Question 1.3}
+\begin{frame}[fragile]{Question 1.3 (Nested FLWOR)}
 Show the list of titles of the albums made by Indonesian artists sorted by title. For each album show the songs sorted by duration in descending order.\\\vspace{5pt}
 For reference, your HTML output when rendered should look somewhat similar to this: \\\vspace{-5pt}
+\begin{columns}
+\column{0.4\textwidth}
 \begin{figure}
-	\includegraphics[width=0.5\textwidth,frame]{4221-t8/q3-output.png}
-\end{figure}
+	\includegraphics[width=1\textwidth,frame]{4221-t8/q3-output.png}
+\end{figure}\vspace{-5pt}
+(HTML code view)
+\column{0.35\textwidth}
+\begin{figure}
+	\includegraphics[width=1\textwidth,frame]{4221-t8/q3-output-direct.png}
+\end{figure}\vspace{-5pt}
+(Direct output (as shown in eXide))
+\end{columns}
 \end{frame}
 
 \begin{frame}[fragile]{Question 1.3 Cont.}
 
-\textbf{Solution}: \\
+First of all, let's construct a draft. \\
 \begin{lstlisting}[style=xml-small]
-declare function local:duration-in-sec($duration-str as xs:string) as xs:int {
-	let $min-secs := tokenize($duration-str, ':')
-	return 60 * xs:int($min-secs[1]) + xs:int($min-secs[2])
-};
 <html>
 	<body>
 		<ul>{
-			for $album in doc("library.xml")/child::library/child::album[child::artists/child::artist/
-				child::country = 'Indonesia']
-				let $album-title := $album/child::title/text()
+			<!-- We only want albums made by Indonesian artists -->
+			for $album in doc("library.xml")//artist/country = 'Indonesia']
+				let $album-title := $album/title/text()
 				order by $album-title
 				return
 					<li>
+					<!-- For each album we want to output all songs titles and duration, sorted by their duration in descending order -->
 					<h2>{$album-title}</h2>
 					<ul>{
-						for $song in $album/child::songs/child::song
-						order by local:duration-in-sec($song/child::duration) descending
+						for $song in $album//song
+						order by local:duration-in-sec($song/duration) descending
 						return
-						<li>{$song/child::duration/text()} - {$song/child::title/text()}</li>
+						<li>{$song/duration/text()} - {$song/title/text()}</li>
 					}</ul>
 					</li>
 		}</ul>
@@ -199,17 +274,62 @@ declare function local:duration-in-sec($duration-str as xs:string) as xs:int {
 
 \end{frame}
 
+\begin{frame}[fragile]{Question 1.3 Cont.}
+	
+\textbf{Solution}: (Always use complete writing with ``\textbf{child::}'' in the exam/test.)\\
+\begin{lstlisting}[style=xml-small-nomargin]
+declare function local:duration-in-sec($duration-str as xs:string) as xs:int {
+		let $min-secs := tokenize($duration-str, ':')
+		return 60 * xs:int($min-secs[1]) + xs:int($min-secs[2])
+};
+<html>
+	<body>
+		<ul>{
+			for $album in doc("library.xml")/child::library/child::album[child::artists/child::artist/child::country = 'Indonesia']
+				let $album-title := $album/child::title/text()
+				order by $album-title
+				return
+					<li>
+						<h2>{$album-title}</h2>
+						<ul>{
+							for $song in $album/child::songs/child::song
+								order by local:duration-in-sec($song/child::duration) descending
+							return
+								<li>{$song/child::duration/text()} - $song/child::title/text()}</li>
+						}</ul>
+					</li>
+		}</ul>
+	</body>
+</html>
+\end{lstlisting}
+	
+	
+\end{frame}
 
-\begin{frame}[fragile]{Question 1.4}
-Color the songs with a duration greater than or equal to 600 seconds green and otherwise red.\\\vspace{5pt}
-Note that ``||'' is used in XQuery for string concatenation. For reference, your HTML output when rendered should look somewhat similar to this: \\\vspace{15pt}
+\begin{frame}[fragile]{Question 1.4 (XQuery with Styled Output)}
+Color the songs with a duration greater than or equal to \textcolor{red}{\cancel{600}} \textbf{300} seconds green and otherwise red.\\\vspace{5pt}
+Note that ``||'' is used in XQuery for string concatenation. For reference, your HTML output when rendered should look somewhat similar to this: \\\vspace{0pt}
+
+\begin{columns}
+	\column{0.5\textwidth}
+	\begin{figure}
+		\includegraphics[width=1\textwidth,frame]{4221-t8/q4-output.png}
+	\end{figure}\vspace{-5pt}
+	(HTML code view)
+	\column{0.35\textwidth}
+	\begin{figure}
+		\includegraphics[width=1\textwidth,frame]{4221-t8/q4-output-direct.png}
+	\end{figure}\vspace{-5pt}
+	(Direct output)
+\end{columns}
+\vspace{5pt}
 \textbf{Solution shown in the next slide.}
 \end{frame}
 	
-\begin{frame}[fragile]{Question 4 Cont.}
-
-\begin{lstlisting}[style=xml-small-nomargin]
-<!-- We keep the function local:duration-in-sec unchanged -->
+\begin{frame}[fragile]{Question 1.4 Cont.}
+\vspace{-5pt}
+\begin{lstlisting}[style=xml-small]
+<!-- We keep the function local:duration-in-sec unchanged --><!-- omitted -->
 <html>
 	<body>
 		<ul>{
@@ -222,14 +342,12 @@ Note that ``||'' is used in XQuery for string concatenation. For reference, your
 				<ul>{
 					for $song in $album/child::songs/child::song
 						let $duration := local:duration-in-sec($song/child::duration)
+						let $li-color := (if ($duration >= 300) then 'green' else 'red')
 						order by $duration descending
 						return
-						element li {
-							attribute style {
-								if ($duration >= 600) then 'color:green;' else 'color:red;'
-							},
-							$song/child::duration/text() || ' - ' || $song/child::title/text()
-						}
+							<li style="color:{$li-color};">
+								{$song/child::duration/text()} - {$song/child::title/text()}
+							</li>
 				}</ul>
 				</li>
 		}</ul>
@@ -238,6 +356,30 @@ Note that ``||'' is used in XQuery for string concatenation. For reference, your
 \end{lstlisting}\vspace{5pt}
 \end{frame}
 
+\begin{frame}[fragile]{Question 1.4 Cont.}
+You can also get rid of let clause (\$li\_color) by defining color in the return:\\
+\begin{lstlisting}[style=xml-small-nomargin]
+...
+return
+	<li style="color:{(if ($duration >= 300) then 'green' else 'red')};"> 
+		{$song/child::duration/text()} - {$song/child::title/text()}
+	</li>
+\end{lstlisting}
+	
+The element-wise approach alternative can be written as:\\
+\begin{lstlisting}[style=xml-small-nomargin]
+...
+return
+	element li {
+		attribute style {
+			if ($duration >= 600) then 'color:green;' else 'color:red;'
+		},
+		$song/child::duration/text() || ' - ' || $song/child::title/text()
+	}
+\end{lstlisting}
+	
+\end{frame}
+	
 \begin{frame}[fragile]{Question 1.5}
 Find the albums where the total listening duration (the sum of all the album's songs' duration) is greater than 1100 seconds. The albums should be sorted by title. In the XML output, you should return the album elements that satisfy the constraint with the title and an extra attribute duration. Your main code should be formed as a FLWOR expression. You may use functions you have declared in previous questions.\\\vspace{5pt}
 For reference, your XML output should look somewhat similar to this:\\\vspace{5pt}
@@ -296,10 +438,19 @@ Prefer XSLT template matching with ``\textbf{value-of}'' and ``\textbf{apply-tem
 \end{frame}
 
 \begin{frame}[fragile]{Question (XSL) 2.1 Cont.}
+\textbf{Brief:}\\\vspace{10pt}
+XSLT is another technique to make query.\\\vspace{5pt}
+XSL is still an (special) XML file with its own syntax.\\ \vspace{5pt}
+XSL can be used to \textbf{navigate}, \textbf{query} and \textbf{transform} the data in the XML library.\\\vspace{5pt}
+XSLT describes the \textbf{transformation process} of a given XSL over the existing data. 
+\end{frame}
+
+\begin{frame}[fragile]{Question (XSL) 2.1 Cont.}
 \textbf{Solution}: (Save the code below into an \textbf{.xsl} file)\\
 \begin{lstlisting}[style=xml-small-nomargin]
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">
+<!-- We generally always start with the root -->
 <xsl:template match="/">
 	<html>
 		<body>
@@ -330,9 +481,48 @@ Perform XLST transformation through eXist-db using the XLST file you just create
 transform:transform(doc("library.xml"), doc("library.xsl"), ())
 \end{lstlisting}\vspace{5pt}
 
+We don't need parameters in XSLT for this module.
+
 \begin{block}{To read more...}
 	The XSLT Tutorial on W3 School: \url{https://www.w3schools.com/xml/xsl_intro.asp}
 \end{block}	
+\end{frame}
+
+
+\begin{frame}[fragile]{To wrap-up: the big picture of XPath, XQuery and XSLT}
+\begin{columns}
+
+\column{0.25\textwidth}
+\begin{figure}
+	\includegraphics[width=1\textwidth]{4221-t8/what-small.png}
+\end{figure}\vspace{5pt}
+
+\column{0.73\textwidth}
+
+\textbf{Can you implement the Question 2 in XQuery?}\\\vspace{5pt}
+\begin{lstlisting}[style=xml-small-nomargin]
+<html>
+	<body>
+	<ul>{
+		for $album in doc("library.xml")//album[genres/genre = 'Pop']
+		let $album-title := $album/title/text()
+		let $album-year := $album/year/text()
+		return
+			<li> Album {$album-title} ({$album-year}) </li>
+	}</ul>
+	</body>
+</html>
+\end{lstlisting}
+In fact, you can find the XQuery approach is simpler.
+\end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{More exercise}
+	
+\begin{block}{Optional}
+Zemmy post a thread on the Luminus Forum for extra exercise on XQuery/XSLT. Feel free to have a try.
+\end{block}
+
 \end{frame}
 
 \begin{frame}{}

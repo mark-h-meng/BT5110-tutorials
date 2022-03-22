@@ -13,6 +13,22 @@
 		</album>
 }</albums>
 
+(: Element-wise writing of the Return clause :)
+
+<albums>{
+	for $album in doc("library.xml")/child::library/child::album
+	let $title := $album/child::title/text()
+	let $count := count($album/child::songs/child::song)
+	where $count ge 3
+	order by $count descending
+	return
+        element album{
+			element title {$title},
+			element count {$count}
+		}
+}</albums>
+
+
 {Q1.2}
 
 declare function local:duration-in-sec($duration-str as xs:string) as xs:int {
@@ -85,10 +101,10 @@ declare function local:duration-in-sec($duration-str as xs:string) as xs:int {
 		let $duration := local:duration-in-sec($song/child::duration)
 		order by $duration descending
 		return
-		element li {
-		attribute style {if ($duration >= 600) then 'color:green;' else 'color:red;'},
-		$song/child::duration/text() || ' - ' || $song/child::title/text()
-		}
+			element li {
+			attribute style {if ($duration >= 600) then 'color:green;' else 'color:red;'},
+			$song/child::duration/text() || ' - ' || $song/child::title/text()
+			}
 		}</ul>
 		</li>
 		}</ul>
@@ -98,10 +114,28 @@ declare function local:duration-in-sec($duration-str as xs:string) as xs:int {
 
 (: Alternative :)
 
-declare function local:duration-in-sec($duration-str as xs:string) as xs:int {
-	let $min-secs := tokenize($duration-str, ':')
-	return 60 * xs:int($min-secs[1]) + xs:int($min-secs[2])
-};
+<html>
+	<body>
+		<ul>{
+			for $album in doc("library.xml")/child::library/child::album[child::artists/child::artist/
+			child::country = 'Indonesia']
+			let $album-title := $album/child::title/text()
+			order by $album-title
+			return
+				<li>
+					<h2>{$album-title}</h2>
+				<ul>{
+					for $song in $album/child::songs/child::song
+            		let $duration := local:duration-in-sec($song/child::duration)
+					let $li-color := (if ($duration >= 300) then 'green' else 'red')
+					order by local:duration-in-sec($song/child::duration) descending
+					return
+						<li style="color:{$li-color};"> {$song/child::duration/text()} - {$song/child::title/text()}</li>
+				}</ul>
+				</li>
+		}</ul>
+	</body>
+</html>
 
 <html>
 	<body>
@@ -173,3 +207,19 @@ declare function local:duration-in-sec($duration-str as xs:string) as xs:int {
 {Q2.2}
 
 transform:transform(doc("library.xml"), doc("library.xsl"), ())
+
+{Q2 XQuery Alternative}
+
+<html>
+	<body>
+		<ul>{
+			for $album in doc("library.xml")//album[genres/genre = 'Pop']
+			let $album-title := $album/title/text()
+			let $album-year := $album/year/text()
+			return
+				<li>
+				Album {$album-title} ({$album-year})
+				</li>
+		}</ul>
+	</body>
+</html>
