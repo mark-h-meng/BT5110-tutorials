@@ -252,7 +252,7 @@ First of all, let's construct a draft. \\
 	<body>
 		<ul>{
 			<!-- We only want albums made by Indonesian artists -->
-			for $album in doc("library.xml")//artist/country = 'Indonesia']
+			for $album in doc("library.xml")//album[artist/country = 'Indonesia']
 				let $album-title := $album/title/text()
 				order by $album-title
 				return
@@ -440,7 +440,7 @@ Prefer XSLT template matching with ``\textbf{value-of}'' and ``\textbf{apply-tem
 \begin{frame}[fragile]{Question (XSL) 2.1 Cont.}
 \textbf{Brief:}\\\vspace{10pt}
 XSLT is another technique to make query.\\\vspace{5pt}
-XSL is still an (special) XML file with its own syntax.\\ \vspace{5pt}
+XSL is still a (special) XML file with its own syntax.\\ \vspace{5pt}
 XSL can be used to \textbf{navigate}, \textbf{query} and \textbf{transform} the data in the XML library.\\\vspace{5pt}
 XSLT describes the \textbf{transformation process} of a given XSL over the existing data. 
 \end{frame}
