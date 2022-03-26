@@ -173,7 +173,7 @@ declare function local:duration-in-sec($duration-str as xs:string) as xs:int {
 		let $title := $album/child::title/text()
 		let $durations := $album/child::songs/child::song/child::duration
 		let $total-duration := sum(for $duration in $durations return local:duration-in-sec($duration))
-		where $total-duration gt 1100
+		where $total-duration gt 1000
 		order by $title
 		return
 			<album>
